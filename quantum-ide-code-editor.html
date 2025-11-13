@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Quantum IDE</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300..700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet"/>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings:
+            'FILL' 0,
+            'wght' 400,
+            'GRAD' 0,
+            'opsz' 24
+        }
+        .code-keyword { color: #c586c0; }
+        .code-function { color: #dcdcaa; }
+        .code-string { color: #ce9178; }
+        .code-number { color: #b5cea8; }
+        .code-comment { color: #6a9955; }
+        .code-variable { color: #9cdcfe; }
+        .code-operator { color: #d4d4d4; }
+        .code-linenumber { color: #858585; padding-right: 1.5rem; text-align: right; user-select: none; }
+
+        /* Tooltip styles */
+        .tooltip {
+            position: relative;
+        }
+
+        .tooltip::after {
+            content: attr(data-tooltip);
+            position: absolute;
+            left: 100%;
+            top: 50%;
+            transform: translateY(-50%);
+            margin-left: 12px;
+            padding: 6px 12px;
+            background-color: #1a1128;
+            color: #e0e0ff;
+            font-size: 12px;
+            white-space: nowrap;
+            border-radius: 4px;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.2s;
+            z-index: 1000;
+            border: 1px solid #2d2438;
+        }
+
+        .tooltip:hover::after {
+            opacity: 1;
+        }
+
+        /* File explorer slide animation */
+        #fileExplorer {
+            transition: margin-left 0.3s ease-in-out, opacity 0.3s ease-in-out;
+        }
+
+        #fileExplorer.hidden {
+            margin-left: -256px;
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        /* AI Assistant slide animation */
+        #aiAssistant {
+            transition: transform 0.3s ease-in-out, opacity 0.3s ease-in-out;
+        }
+
+        #aiAssistant.hidden {
+            transform: translateX(100%);
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        /* Floating AI button */
+        #aiToggleButton {
+            position: fixed;
+            top: 80px;
+            right: 20px;
+            z-index: 100;
+            box-shadow: 0 4px 12px rgba(149, 17, 212, 0.3);
+        }
+    </style>
+<script>tailwind.config = {darkMode: "class", theme: {extend: {colors: {primary: "#9511d4", "background-dark": "#0a0118", "panel-dark": "#1a1128", "border-dark": "#2d2438", "text-primary-dark": "#e0e0ff", "text-secondary-dark": "#8a8aab"}, fontFamily: {display: "Space Grotesk"}, borderRadius: {DEFAULT: "0.25rem", lg: "0.5rem", xl: "0.75rem", full: "9999px"}}}};</script>
+</head>
+<body class="bg-background-dark font-display text-text-primary-dark">
+<div class="flex flex-col h-screen w-full">
+<header class="flex items-center justify-between whitespace-nowrap border-b border-solid border-border-dark px-6 py-2 bg-panel-dark/50 flex-none">
+<div class="flex items-center gap-4">
+<span class="material-symbols-outlined text-primary text-2xl">hub</span>
+<h2 class="text-lg font-bold">Quantum IDE</h2>
+<div class="hidden md:flex items-center gap-6 ml-6">
+<a class="text-sm font-medium leading-normal hover:text-primary transition-colors" href="#">File</a>
+<a class="text-sm font-medium leading-normal hover:text-primary transition-colors" href="#">Edit</a>
+<a class="text-sm font-medium leading-normal hover:text-primary transition-colors" href="#">Selection</a>
+<a class="text-sm font-medium leading-normal hover:text-primary transition-colors" href="#">View</a>
+<a class="text-sm font-medium leading-normal hover:text-primary transition-colors" href="#">Go</a>
+<a class="text-sm font-medium leading-normal hover:text-primary transition-colors" href="#">Run</a>
+<a class="text-sm font-medium leading-normal hover:text-primary transition-colors" href="#">Terminal</a>
+<a class="text-sm font-medium leading-normal hover:text-primary transition-colors" href="#">Help</a>
+</div>
+</div>
+<div class="flex items-center gap-4">
+<div class="flex gap-2">
+<button class="flex min-w-[84px] cursor-pointer items-center justify-center gap-2 overflow-hidden rounded-lg h-9 px-4 bg-primary text-white text-sm font-bold leading-normal tracking-[0.015em] hover:bg-primary/90 transition-colors">
+<span class="material-symbols-outlined text-base">play_arrow</span>
+<span class="truncate">Run</span>
+</button>
+<button class="flex min-w-[84px] cursor-pointer items-center justify-center gap-2 overflow-hidden rounded-lg h-9 px-4 bg-panel-dark/80 text-white text-sm font-bold leading-normal tracking-[0.015em] hover:bg-panel-dark transition-colors">
+<span class="material-symbols-outlined text-base">bug_report</span>
+<span class="truncate">Debug</span>
+</button>
+</div>
+<div class="bg-center bg-no-repeat aspect-square bg-cover rounded-full size-9" data-alt="User profile picture with abstract purple and blue gradient" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuD97Un2HFIC6EjtF2xYESBmHyB9gjgG1zECl0g2lvC0ZWgJANTq-tB5uBjV3dw3tCfo7oWjieVGYipp78S3jQqAyXBdH7Yc_dd8XNhNWWDPESYOOXzpq89Ce1rs0BviiPSvotSwXiRhSTmFnp5q8-fAo9AJK9K3DdPXrA_0ia42kOFAscv7YxwR_7-LKf6u_RVL6EFuYeOoPngcBpALeYcQg9-vwOoo-okpKl9nDIfzfN3sW-BcUeqpAaSb5GAg5XZhotlqoCVW2A");'></div>
+</div>
+</header>
+<div class="flex flex-1 overflow-hidden">
+<aside class="flex h-full flex-col justify-between bg-panel-dark p-3 border-r border-solid border-border-dark">
+<div class="flex flex-col gap-2">
+<button id="fileExplorerToggle" class="tooltip flex items-center justify-center rounded-lg bg-primary/20 text-primary p-3" data-tooltip="File Explorer">
+<span class="material-symbols-outlined text-2xl">folder</span>
+</button>
+<a href="quantum-ide-job-monitor.html" class="tooltip flex items-center justify-center rounded-lg text-text-secondary-dark hover:bg-surface-dark hover:text-text-primary-dark p-3" data-tooltip="Jobs">
+<span class="material-symbols-outlined text-2xl">work</span>
+</a>
+<a href="quantum-ide-export.html" class="tooltip flex items-center justify-center rounded-lg text-text-secondary-dark hover:bg-surface-dark hover:text-text-primary-dark p-3" data-tooltip="Export">
+<span class="material-symbols-outlined text-2xl">upload</span>
+</a>
+<a href="quantum-ide-marketplace.html" class="tooltip flex items-center justify-center rounded-lg text-text-secondary-dark hover:bg-surface-dark hover:text-text-primary-dark p-3" data-tooltip="Marketplace">
+<span class="material-symbols-outlined text-2xl">store</span>
+</a>
+<a href="quantum-ide-learning.html" class="tooltip flex items-center justify-center rounded-lg text-text-secondary-dark hover:bg-surface-dark hover:text-text-primary-dark p-3" data-tooltip="Help & Learn">
+<span class="material-symbols-outlined text-2xl">school</span>
+</a>
+</div>
+<div class="flex flex-col gap-2">
+<button class="tooltip flex items-center justify-center rounded-lg text-text-secondary-dark hover:bg-surface-dark hover:text-text-primary-dark p-3" data-tooltip="Settings">
+<span class="material-symbols-outlined text-2xl">settings</span>
+</button>
+</div>
+</aside>
+<aside id="fileExplorer" class="hidden flex h-full w-64 flex-col bg-panel-dark/30 border-r border-solid border-border-dark">
+<div class="flex flex-col h-full">
+<div class="p-4 border-b border-border-dark">
+<a href="quantum-ide-workflow.html" class="flex items-center gap-2 text-text-primary-dark hover:text-primary transition-colors">
+<span class="material-symbols-outlined text-lg">account_tree</span>
+<span class="text-sm font-medium">Workflow</span>
+</a>
+</div>
+<div class="flex-1 p-4 overflow-y-auto">
+<div class="flex flex-col gap-1">
+<div class="flex items-center gap-2 mb-2">
+<span class="material-symbols-outlined text-lg">expand_more</span>
+<span class="material-symbols-outlined text-primary text-lg">folder</span>
+<span class="font-medium text-sm">My Project</span>
+</div>
+<div class="pl-7 flex flex-col gap-1">
+<a href="quantum-ide-circuit.html" class="flex items-center gap-2 p-1 rounded hover:bg-primary/20 text-sm">
+<span class="material-symbols-outlined text-base text-blue-400">description</span>
+<span>circuit.wf</span>
+</a>
+<a href="quantum-ide-code-editor.html" class="flex items-center gap-2 p-1 rounded bg-primary/30 text-sm font-semibold">
+<span class="material-symbols-outlined text-base text-green-400">code</span>
+<span>grover.py</span>
+</a>
+<a href="quantum-ide-jupyter.html" class="flex items-center gap-2 p-1 rounded hover:bg-primary/20 text-sm">
+<span class="material-symbols-outlined text-base text-yellow-400">description</span>
+<span>grover.ipynb</span>
+</a>
+</div>
+</div>
+</div>
+</div>
+</aside>
+<main class="flex-1 flex flex-col min-w-0">
+<div class="flex-1 flex flex-col bg-background-dark">
+<div class="flex border-b border-border-dark flex-none">
+<a class="flex items-center gap-2 border-b-2 border-primary text-text-primary-dark px-4 py-2 bg-panel-dark" href="#">
+<span class="material-symbols-outlined text-base text-green-400">code</span>
+<p class="text-sm font-medium">main.qpy</p>
+</a>
+<a class="flex items-center gap-2 border-b-2 border-transparent text-text-secondary-dark px-4 py-2 hover:bg-panel-dark/80 transition-colors" href="#">
+<span class="material-symbols-outlined text-base text-yellow-400">data_object</span>
+<p class="text-sm font-medium">config.json</p>
+</a>
+</div>
+<div class="flex-1 p-4 overflow-auto font-mono text-sm leading-relaxed">
+<pre class="whitespace-pre"><code><table><tbody><tr><td class="code-linenumber">1</td><td><span class="code-comment"># Grover's Algorithm Example</span></td></tr><tr><td class="code-linenumber">2</td><td><span class="code-keyword">from</span> <span class="code-variable">qiskit</span> <span class="code-keyword">import</span> <span class="code-variable">QuantumCircuit, Aer, execute</span></td></tr><tr><td class="code-linenumber">3</td><td></td></tr><tr><td class="code-linenumber">4</td><td><span class="code-keyword">def</span> <span class="code-function">initialize_s</span>(<span class="code-variable">qc</span>, <span class="code-variable">qubits</span>):</td></tr><tr><td class="code-linenumber">5</td><td><span class="code-operator">    """Apply a H-gate to all qubits."""</span></td></tr><tr><td class="code-linenumber">6</td><td><span class="code-keyword">    for</span> <span class="code-variable">q</span> <span class="code-keyword">in</span> <span class="code-variable">qubits</span>:</td></tr><tr><td class="code-linenumber">7</td><td>        <span class="code-variable">qc</span>.<span class="code-function">h</span>(<span class="code-variable">q</span>)</td></tr><tr><td class="code-linenumber">8</td><td>    <span class="code-keyword">return</span> <span class="code-variable">qc</span></td></tr><tr><td class="code-linenumber">9</td><td></td></tr><tr><td class="code-linenumber">10</td><td><span class="code-variable">n</span> = <span class="code-number">3</span></td></tr><tr><td class="code-linenumber">11</td><td><span class="code-variable">grover_circuit</span> = <span class="code-function">QuantumCircuit</span>(<span class="code-variable">n</span>)</td></tr><tr><td class="code-linenumber">12</td><td></td></tr><tr><td class="code-linenumber">13</td><td><span class="code-comment"># Initialize state</span></td></tr><tr><td class="code-linenumber">14</td><td><span class="code-variable">grover_circuit</span> = <span class="code-function">initialize_s</span>(<span class="code-variable">grover_circuit</span>, [<span class="code-number">0</span>, <span class="code-number">1</span>, <span class="code-number">2</span>])</td></tr><tr><td class="code-linenumber">15</td><td></td></tr><tr><td class="code-linenumber">16</td><td><span class="code-comment"># Apply oracle</span></td></tr><tr><td class="code-linenumber">17</td><td><span class="code-variable">grover_circuit</span>.<span class="code-function">cz</span>(<span class="code-number">0</span>, <span class="code-number">2</span>)</td></tr><tr><td class="code-linenumber">18</td><td><span class="code-variable">grover_circuit</span>.<span class="code-function">cz</span>(<span class="code-number">1</span>, <span class="code-number">2</span>)</td></tr><tr><td class="code-linenumber">19</td><td></td></tr><tr><td class="code-linenumber">20</td><td><span class="code-variable">grover_circuit</span>.<span class="code-function">draw</span>()</td></tr></tbody></table></code></pre>
+</div>
+</div>
+<div class="h-48 flex-none bg-panel-dark border-t border-border-dark flex flex-col">
+<div class="flex border-b border-border-dark">
+<a class="text-sm font-medium px-4 py-2 border-b-2 border-primary text-text-primary-dark" href="#">TERMINAL</a>
+<a class="text-sm font-medium px-4 py-2 border-b-2 border-transparent text-text-secondary-dark hover:text-text-primary-dark transition-colors" href="#">OUTPUT</a>
+<a class="text-sm font-medium px-4 py-2 border-b-2 border-transparent text-text-secondary-dark hover:text-text-primary-dark transition-colors" href="#">LOGS</a>
+</div>
+<div class="flex-1 p-4 font-mono text-xs overflow-auto">
+<p class="text-green-400">&gt; Executing main.qpy...</p>
+<p>&gt; Quantum circuit compilation successful.</p>
+<p>&gt; Simulation started on local Aer simulator.</p>
+<p class="text-cyan-400">... Simulation complete.</p>
+<p>Result: {'101': 1024}</p>
+<p class="text-green-400">&gt; Done.</p>
+<div class="flex items-center">
+<span class="text-primary mr-2">&gt;</span>
+<span class="bg-primary/50 w-2 h-4 animate-pulse"></span>
+</div>
+</div>
+</div>
+</main>
+<aside id="aiAssistant" class="hidden w-80 bg-panel-dark/60 p-4 flex-none border-l border-border-dark flex flex-col">
+<div class="flex items-center justify-between mb-4 flex-none">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-primary">smart_toy</span>
+<h3 class="text-sm font-bold uppercase tracking-wider text-text-secondary-dark">AI Assistant</h3>
+</div>
+<button id="aiCloseButton" class="text-text-secondary-dark hover:text-text-primary-dark">
+<span class="material-symbols-outlined">close</span>
+</button>
+</div>
+<div class="flex-1 space-y-6 overflow-y-auto pr-2">
+<div class="flex gap-3">
+<div class="bg-panel-dark text-xl flex-none size-8 rounded-full flex items-center justify-center">🤖</div>
+<div class="flex flex-1 flex-col items-start gap-2 bg-panel-dark p-3 rounded-lg rounded-tl-none">
+<p class="text-text-primary-dark text-sm font-normal">
+                                Welcome! I'm your Quantum AI Assistant. How can I help you today? You can ask me to explain code, optimize a circuit, or generate an algorithm.
+                            </p>
+</div>
+</div>
+<div class="flex gap-3">
+<div class="flex-1 flex flex-col items-end gap-2 bg-primary/80 p-3 rounded-lg rounded-tr-none">
+<p class="text-white text-sm font-normal">
+                                Explain the 'cz' gate used in the code.
+                            </p>
+</div>
+<div class="bg-center bg-no-repeat aspect-square bg-cover rounded-full size-8 flex-none" data-alt="User avatar with a light lavender gradient" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuD4IxFTh7erPnLe_l1h53O16_qMkt480wz1OxTHC4kHOrqUSbRYWU4kg1558aRE69PwMH1gOMVLolvB0UmmCo2ubTsDogwcUiK1EjuNMNszNesI3xDpM9ESl5xLzWQKHlMR7OeoGDzyeHbZ1RYi-qd8M55rP8K89g0llQCjvpuQHm6HaOBamI0a_lkKGGq8bfpzemTGz9KcWOFWocZ6f7rzOYBLt09_j86M3gSskAVmMLn3jIr2RXHaP9x9kqPMJsKcd5hStfGkAw");'></div>
+</div>
+<div class="flex gap-3">
+<div class="bg-panel-dark text-xl flex-none size-8 rounded-full flex items-center justify-center">🤖</div>
+<div class="flex flex-1 flex-col items-start gap-2 bg-panel-dark p-3 rounded-lg rounded-tl-none">
+<p class="text-text-primary-dark text-sm font-normal">
+                                Of course. The Controlled-Z (CZ) gate is a two-qubit gate. It flips the phase of the target qubit if and only if the control qubit is in the state |1⟩. It's a key component in many quantum algorithms.
+                            </p>
+<div class="w-full bg-background-dark p-2 rounded text-xs font-mono">
+<span class="code-comment"># CZ gate applied to control qubit 0 and target qubit 2</span><br/>
+<span class="code-variable">circuit</span>.<span class="code-function">cz</span>(<span class="code-number">0</span>, <span class="code-number">2</span>)
+                            </div>
+</div>
+</div>
+</div>
+<div class="mt-4 flex-none">
+<div class="relative">
+<input class="w-full bg-panel-dark border border-border-dark rounded-lg py-2 pl-4 pr-10 text-sm focus:ring-2 focus:ring-primary focus:border-primary transition-all" placeholder="Ask the AI assistant..." type="text"/>
+<button class="absolute inset-y-0 right-0 flex items-center pr-3 cursor-pointer text-text-secondary-dark hover:text-primary transition-colors">
+<span class="material-symbols-outlined">send</span>
+</button>
+</div>
+</div>
+</aside>
+</div>
+</div>
+
+<!-- Floating AI Toggle Button -->
+<button id="aiToggleButton" class="flex h-14 w-14 items-center justify-center rounded-full bg-primary text-white hover:bg-primary/90 transition-all hover:scale-110">
+<span class="material-symbols-outlined text-2xl">auto_awesome</span>
+</button>
+
+<script>
+  // Toggle file explorer visibility
+  document.getElementById('fileExplorerToggle').addEventListener('click', function() {
+    const fileExplorer = document.getElementById('fileExplorer');
+    fileExplorer.classList.toggle('hidden');
+  });
+
+  // Toggle AI Assistant visibility
+  const aiToggleButton = document.getElementById('aiToggleButton');
+  const aiAssistant = document.getElementById('aiAssistant');
+  const aiCloseButton = document.getElementById('aiCloseButton');
+
+  aiToggleButton.addEventListener('click', function() {
+    aiAssistant.classList.remove('hidden');
+    aiToggleButton.style.display = 'none';
+  });
+
+  aiCloseButton.addEventListener('click', function() {
+    aiAssistant.classList.add('hidden');
+    aiToggleButton.style.display = 'flex';
+  });
+</script>
+
+</body></html>

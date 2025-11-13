@@ -1,0 +1,362 @@
+<!DOCTYPE html>
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>QuantumIDE - Grover's Algorithm</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300..700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet"/>
+<style>
+      .material-symbols-outlined {
+        font-variation-settings:
+        'FILL' 0,
+        'wght' 400,
+        'GRAD' 0,
+        'opsz' 24
+      }
+
+      /* Tooltip styles */
+      .tooltip {
+        position: relative;
+      }
+
+      .tooltip::after {
+        content: attr(data-tooltip);
+        position: absolute;
+        left: 100%;
+        top: 50%;
+        transform: translateY(-50%);
+        margin-left: 12px;
+        padding: 6px 12px;
+        background-color: #1a1128;
+        color: #e0e0ff;
+        font-size: 12px;
+        white-space: nowrap;
+        border-radius: 4px;
+        opacity: 0;
+        pointer-events: none;
+        transition: opacity 0.2s;
+        z-index: 1000;
+        border: 1px solid #2d2438;
+      }
+
+      .tooltip:hover::after {
+        opacity: 1;
+      }
+
+      /* File explorer slide animation */
+      #fileExplorer {
+        transition: margin-left 0.3s ease-in-out, opacity 0.3s ease-in-out;
+      }
+
+      #fileExplorer.hidden {
+        margin-left: -256px;
+        opacity: 0;
+        pointer-events: none;
+      }
+
+      /* AI Assistant slide animation */
+      #aiAssistant {
+        transition: transform 0.3s ease-in-out, opacity 0.3s ease-in-out;
+      }
+
+      #aiAssistant.hidden {
+        transform: translateX(100%);
+        opacity: 0;
+        pointer-events: none;
+      }
+
+      /* Floating AI button */
+      #aiToggleButton {
+        position: fixed;
+        top: 80px;
+        right: 20px;
+        z-index: 100;
+        box-shadow: 0 4px 12px rgba(149, 17, 212, 0.3);
+      }
+    </style>
+<script>
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            colors: {
+              "primary": "#9511d4",
+              "background-dark": "#0a0118",
+              "panel-dark": "#1a1128",
+              "border-dark": "#2d2438",
+              "surface-dark": "#14101f",
+              "text-primary-dark": "#e0e0ff",
+              "text-secondary-dark": "#8a8aab",
+            },
+            fontFamily: {
+              "display": ["Space Grotesk", "sans-serif"]
+            },
+            borderRadius: {"DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px"},
+          },
+        },
+      }
+    </script>
+</head>
+<body class="bg-background-dark font-display text-text-primary-dark">
+<div class="flex h-screen w-full flex-col">
+<header class="flex items-center justify-between whitespace-nowrap border-b border-solid border-border-dark px-6 py-2 bg-panel-dark/50 flex-none">
+<div class="flex items-center gap-4">
+<span class="material-symbols-outlined text-primary text-2xl">hub</span>
+<h2 class="text-lg font-bold">Quantum IDE</h2>
+<div class="hidden md:flex items-center gap-6 ml-6">
+<a class="text-sm font-medium leading-normal hover:text-primary transition-colors" href="#">File</a>
+<a class="text-sm font-medium leading-normal hover:text-primary transition-colors" href="#">Edit</a>
+<a class="text-sm font-medium leading-normal hover:text-primary transition-colors" href="#">Selection</a>
+<a class="text-sm font-medium leading-normal hover:text-primary transition-colors" href="#">View</a>
+<a class="text-sm font-medium leading-normal hover:text-primary transition-colors" href="#">Go</a>
+<a class="text-sm font-medium leading-normal hover:text-primary transition-colors" href="#">Run</a>
+<a class="text-sm font-medium leading-normal hover:text-primary transition-colors" href="#">Terminal</a>
+<a class="text-sm font-medium leading-normal hover:text-primary transition-colors" href="#">Help</a>
+</div>
+</div>
+<div class="flex items-center gap-4">
+<div class="flex gap-2">
+<button class="flex min-w-[84px] cursor-pointer items-center justify-center gap-2 overflow-hidden rounded-lg h-9 px-4 bg-primary text-white text-sm font-bold leading-normal tracking-[0.015em] hover:bg-primary/90 transition-colors">
+<span class="material-symbols-outlined text-base">play_arrow</span>
+<span class="truncate">Run</span>
+</button>
+<button class="flex min-w-[84px] cursor-pointer items-center justify-center gap-2 overflow-hidden rounded-lg h-9 px-4 bg-panel-dark/80 text-white text-sm font-bold leading-normal tracking-[0.015em] hover:bg-panel-dark transition-colors">
+<span class="material-symbols-outlined text-base">bug_report</span>
+<span class="truncate">Debug</span>
+</button>
+</div>
+<div class="bg-center bg-no-repeat aspect-square bg-cover rounded-full size-9" data-alt="User avatar image" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuAFdiP-Ym9VJlQqmuSNm76GWL-qC7893k4svLKa9za0kySenIB8i7iGvM1oB5NNALRk4Cn9LUwL3uYTzYZyeR_tXm_MWXBBz0r_llrohEdW712GT6X7z3UYUAm2uhCLSkWap8PzDeP9SY7ZLE3miyj_t8krdxRWMG0SX5P_BsaE7bz_q_0bvTciANZakhpRoMnVk1Baoh7Ee-roZLpCh4HmUgat2fmTHn13eNh7t0bADscrVXDnPHDC9d74sQ-q4m_4q8GU1fXmyQ");'></div>
+</div>
+</header>
+<div class="flex flex-1 overflow-hidden">
+<aside class="flex h-full flex-col justify-between bg-panel-dark p-3 border-r border-solid border-border-dark">
+<div class="flex flex-col gap-2">
+<button id="fileExplorerToggle" class="tooltip flex items-center justify-center rounded-lg bg-primary/20 text-primary p-3" data-tooltip="File Explorer">
+<span class="material-symbols-outlined text-2xl">folder</span>
+</button>
+<a href="quantum-ide-job-monitor.html" class="tooltip flex items-center justify-center rounded-lg text-text-secondary-dark hover:bg-surface-dark hover:text-text-primary-dark p-3" data-tooltip="Jobs">
+<span class="material-symbols-outlined text-2xl">work</span>
+</a>
+<a href="quantum-ide-export.html" class="tooltip flex items-center justify-center rounded-lg text-text-secondary-dark hover:bg-surface-dark hover:text-text-primary-dark p-3" data-tooltip="Export">
+<span class="material-symbols-outlined text-2xl">upload</span>
+</a>
+<a href="quantum-ide-marketplace.html" class="tooltip flex items-center justify-center rounded-lg text-text-secondary-dark hover:bg-surface-dark hover:text-text-primary-dark p-3" data-tooltip="Marketplace">
+<span class="material-symbols-outlined text-2xl">store</span>
+</a>
+<a href="quantum-ide-learning.html" class="tooltip flex items-center justify-center rounded-lg text-text-secondary-dark hover:bg-surface-dark hover:text-text-primary-dark p-3" data-tooltip="Help & Learn">
+<span class="material-symbols-outlined text-2xl">school</span>
+</a>
+</div>
+<div class="flex flex-col gap-2">
+<button class="tooltip flex items-center justify-center rounded-lg text-text-secondary-dark hover:bg-surface-dark hover:text-text-primary-dark p-3" data-tooltip="Settings">
+<span class="material-symbols-outlined text-2xl">settings</span>
+</button>
+</div>
+</aside>
+<aside id="fileExplorer" class="hidden flex h-full w-64 flex-col bg-panel-dark/30 border-r border-solid border-border-dark">
+<div class="flex flex-col h-full">
+<div class="p-4 border-b border-border-dark">
+<a href="quantum-ide-workflow.html" class="flex items-center gap-2 text-text-primary-dark hover:text-primary transition-colors">
+<span class="material-symbols-outlined text-lg">account_tree</span>
+<span class="text-sm font-medium">Workflow</span>
+</a>
+</div>
+<div class="flex-1 p-4 overflow-y-auto">
+<div class="flex flex-col gap-1">
+<div class="flex items-center gap-2 mb-2">
+<span class="material-symbols-outlined text-lg">expand_more</span>
+<span class="material-symbols-outlined text-primary text-lg">folder</span>
+<span class="font-medium text-sm">My Project</span>
+</div>
+<div class="pl-7 flex flex-col gap-1">
+<a href="quantum-ide-circuit.html" class="flex items-center gap-2 p-1 rounded hover:bg-primary/20 text-sm">
+<span class="material-symbols-outlined text-base text-blue-400">description</span>
+<span>circuit.wf</span>
+</a>
+<a href="quantum-ide-code-editor.html" class="flex items-center gap-2 p-1 rounded hover:bg-primary/20 text-sm">
+<span class="material-symbols-outlined text-base text-green-400">code</span>
+<span>grover.py</span>
+</a>
+<a href="quantum-ide-jupyter.html" class="flex items-center gap-2 p-1 rounded bg-primary/30 text-sm font-semibold">
+<span class="material-symbols-outlined text-base text-yellow-400">description</span>
+<span>grover.ipynb</span>
+</a>
+</div>
+</div>
+</div>
+</div>
+</aside>
+<main class="flex-1 overflow-y-auto bg-background-dark p-4 sm:p-6 lg:p-8">
+<div class="mx-auto max-w-4xl space-y-6">
+<div class="flex flex-wrap items-center justify-between gap-3">
+<h1 class="text-3xl font-bold tracking-tight">Grover's Algorithm Implementation</h1>
+<div class="flex items-center gap-2 text-sm text-green-400">
+<span class="material-symbols-outlined text-base">circle</span>
+<span>Kernel Idle</span>
+</div>
+</div>
+<div class="group relative rounded-lg border border-transparent p-4 transition-colors hover:border-border-dark">
+<div class="absolute -left-12 top-4 hidden group-hover:flex flex-col gap-1">
+<button class="flex h-7 w-7 items-center justify-center rounded text-text-secondary-dark hover:bg-surface-dark hover:text-text-primary-dark"><span class="material-symbols-outlined text-lg">arrow_upward</span></button>
+<button class="flex h-7 w-7 items-center justify-center rounded text-text-secondary-dark hover:bg-surface-dark hover:text-text-primary-dark"><span class="material-symbols-outlined text-lg">arrow_downward</span></button>
+<button class="flex h-7 w-7 items-center justify-center rounded text-red-500/80 hover:bg-red-500/20 hover:text-red-500"><span class="material-symbols-outlined text-lg">delete</span></button>
+</div>
+<p class="text-base font-normal leading-relaxed text-text-secondary-dark">This notebook demonstrates a basic implementation of Grover's algorithm for unstructured search. We will construct a quantum circuit to find a marked item in a small database.</p>
+</div>
+<div class="group relative rounded-xl border-2 border-primary bg-surface-dark">
+<div class="absolute -left-12 top-4 hidden group-hover:flex flex-col gap-1">
+<button class="flex h-7 w-7 items-center justify-center rounded text-text-secondary-dark hover:bg-surface-dark hover:text-text-primary-dark"><span class="material-symbols-outlined text-lg">arrow_upward</span></button>
+<button class="flex h-7 w-7 items-center justify-center rounded text-text-secondary-dark hover:bg-surface-dark hover:text-text-primary-dark"><span class="material-symbols-outlined text-lg">arrow_downward</span></button>
+<button class="flex h-7 w-7 items-center justify-center rounded text-red-500/80 hover:bg-red-500/20 hover:text-red-500"><span class="material-symbols-outlined text-lg">delete</span></button>
+</div>
+<div class="flex items-start p-4">
+<div class="flex flex-col items-center pr-4">
+<button class="flex h-8 w-8 items-center justify-center rounded-full text-primary hover:bg-primary/20">
+<span class="material-symbols-outlined text-2xl">play_arrow</span>
+</button>
+<span class="mt-2 text-xs text-text-secondary-dark">[1]:</span>
+</div>
+<div class="flex-1">
+<p class="text-sm font-medium leading-normal pb-2 text-text-secondary-dark">Code Cell 1: Import Libraries</p>
+<div class="bg-panel-dark p-4 rounded-lg font-mono text-sm">
+<pre><code><span style="color: #9511d4;">from</span> qiskit <span style="color: #9511d4;">import</span> QuantumCircuit, Aer, execute
+<span style="color: #9511d4;">from</span> qiskit.visualization <span style="color: #9511d4;">import</span> plot_histogram
+<span style="color: #5ce1e6;">import</span> numpy <span style="color: #9511d4;">as</span> np</code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="group relative rounded-xl border border-transparent transition-colors hover:border-border-dark">
+<div class="absolute -left-12 top-4 hidden group-hover:flex flex-col gap-1">
+<button class="flex h-7 w-7 items-center justify-center rounded text-text-secondary-dark hover:bg-surface-dark hover:text-text-primary-dark"><span class="material-symbols-outlined text-lg">arrow_upward</span></button>
+<button class="flex h-7 w-7 items-center justify-center rounded text-text-secondary-dark hover:bg-surface-dark hover:text-text-primary-dark"><span class="material-symbols-outlined text-lg">arrow_downward</span></button>
+<button class="flex h-7 w-7 items-center justify-center rounded text-red-500/80 hover:bg-red-500/20 hover:text-red-500"><span class="material-symbols-outlined text-lg">delete</span></button>
+</div>
+<div class="flex items-start p-4">
+<div class="flex flex-col items-center pr-4">
+<button class="flex h-8 w-8 items-center justify-center rounded-full text-text-secondary-dark hover:bg-primary/20 hover:text-primary">
+<span class="material-symbols-outlined text-2xl">play_arrow</span>
+</button>
+<span class="mt-2 text-xs text-text-secondary-dark">[2]:</span>
+</div>
+<div class="flex-1">
+<p class="text-sm font-medium leading-normal pb-2 text-text-secondary-dark">Code Cell 2: Define Quantum Circuit</p>
+<div class="bg-panel-dark p-4 rounded-lg font-mono text-sm">
+<pre><code><span style="color: #6a9955;"># Define the number of qubits</span>
+n = 2
+qc = QuantumCircuit(n)
+<span style="color: #6a9955;"># Apply Hadamard gates to all qubits</span>
+<span style="color: #9511d4;">for</span> qubit <span style="color: #9511d4;">in</span> range(n):
+    qc.h(qubit)
+<span style="color: #6a9955;"># Oracle for marked state |11&gt;</span>
+qc.cz(0, 1)
+<span style="color: #6a9955;"># Display the circuit</span>
+qc.draw('mpl')</code></pre>
+</div>
+</div>
+</div>
+<div class="border-t border-border-dark mt-4 px-4 py-4 pl-16">
+<p class="text-xs text-text-secondary-dark mb-2">Output:</p>
+<div class="flex justify-center rounded-lg bg-white p-4">
+<img class="w-full max-w-md" data-alt="A diagram of a quantum circuit" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBzuQ5Z6sJVwZdnmAntuEiHAhse76lwr8ABPOIQu3kZEOXtV2OA3Jx92_6163YfqGdX2VVQ9l1L3M0LurgzZ99csC7AfM_NKo-ABJ8HsCjtdnCF-abXdvK2GQpXrQZej4h7VEkCCMx3X1vNC-g7pvu99IdWXKv8A_8mIYw1fjOwuPiOo2OIXV5QrFOI1pd3tDrCobyWDNyBzosRFUiYA3GMOR5145YfPXr_fgI8QdRvTuhgCo5_xoY5pcGlDnIeANOgmmraYq3uMg"/>
+</div>
+</div>
+</div>
+<div class="group relative rounded-xl border border-transparent transition-colors hover:border-border-dark">
+<div class="absolute -left-12 top-4 hidden group-hover:flex flex-col gap-1">
+<button class="flex h-7 w-7 items-center justify-center rounded text-text-secondary-dark hover:bg-surface-dark hover:text-text-primary-dark"><span class="material-symbols-outlined text-lg">arrow_upward</span></button>
+<button class="flex h-7 w-7 items-center justify-center rounded text-text-secondary-dark hover:bg-surface-dark hover:text-text-primary-dark"><span class="material-symbols-outlined text-lg">arrow_downward</span></button>
+<button class="flex h-7 w-7 items-center justify-center rounded text-red-500/80 hover:bg-red-500/20 hover:text-red-500"><span class="material-symbols-outlined text-lg">delete</span></button>
+</div>
+<div class="flex items-start p-4">
+<div class="flex flex-col items-center pr-4">
+<button class="flex h-8 w-8 items-center justify-center rounded-full text-text-secondary-dark hover:bg-primary/20 hover:text-primary">
+<span class="material-symbols-outlined text-2xl">play_arrow</span>
+</button>
+<span class="mt-2 text-xs text-text-secondary-dark">[3]:</span>
+</div>
+<div class="flex-1">
+<p class="text-sm font-medium leading-normal pb-2 text-text-secondary-dark">Code Cell 3: Run Simulation and Get Results</p>
+<div class="bg-panel-dark p-4 rounded-lg font-mono text-sm">
+<pre><code><span style="color: #6a9955;"># Measure the qubits</span>
+qc.measure_all()
+<span style="color: #6a9955;"># Execute the circuit</span>
+simulator = Aer.get_backend('qasm_simulator')
+counts = execute(qc, simulator, shots=1024).result().get_counts()
+<span style="color: #6a9955;"># Plot the results</span>
+plot_histogram(counts)</code></pre>
+</div>
+</div>
+</div>
+<div class="border-t border-border-dark mt-4 px-4 py-4 pl-16">
+<p class="text-xs text-text-secondary-dark mb-2">Output:</p>
+<div class="flex justify-center rounded-lg bg-white p-4">
+<img class="w-full max-w-md" data-alt="A histogram plot" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDCweiFAGuvvy_pjB9BxIQD_Rd0T95HblGEfmeUd3D4IViXPJ1A17K6JWchgd5s-TzPSur9qiC8lvq9ZdA48f-HYqCpRy_qcVNazfBn_t8GfXt19X0VeEmcDGZchdziNeh50Wn96uzBm25FiKEbrErqUygzgNOgzN3R3SCr_HHrlhJ6N14o57OK1x8Tg9T5LwXKSnO-hT1p3d2VBFrc3WgX7tlxv_4E2Y50lK9z47G4ilCy-6iLfgabONX_mzdnGe1Y5FqtCQXreA"/>
+</div>
+</div>
+</div>
+</div>
+</main>
+<aside id="aiAssistant" class="hidden w-96 flex-shrink-0 border-l border-solid border-border-dark bg-panel-dark p-4 flex flex-col h-full">
+<div class="flex items-center justify-between pb-4">
+<h3 class="text-lg font-bold">AI Assistant</h3>
+<button id="aiCloseButton" class="text-text-secondary-dark hover:text-text-primary-dark">
+<span class="material-symbols-outlined">close</span>
+</button>
+</div>
+<div class="flex-1 overflow-y-auto space-y-4 pr-2">
+<div class="flex gap-3">
+<div class="flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-full bg-primary">
+<span class="material-symbols-outlined text-lg">auto_awesome</span>
+</div>
+<div class="rounded-lg rounded-tl-none bg-surface-dark p-3 text-sm">
+<p>Hello! How can I help with your quantum algorithm today?</p>
+</div>
+</div>
+<div class="flex flex-col items-start gap-2 pl-11">
+<button class="text-sm text-primary/80 hover:text-primary border border-primary/40 hover:border-primary/80 px-3 py-1.5 rounded-full transition-colors">"Explain Grover's algorithm"</button>
+<button class="text-sm text-primary/80 hover:text-primary border border-primary/40 hover:border-primary/80 px-3 py-1.5 rounded-full transition-colors">"Optimize this quantum circuit"</button>
+</div>
+</div>
+<div class="mt-4 pt-4 border-t border-solid border-border-dark">
+<div class="relative">
+<textarea class="form-input w-full resize-none rounded-lg border-none bg-surface-dark p-3 pr-10 text-sm placeholder:text-text-secondary-dark focus:outline-none focus:ring-2 focus:ring-primary" placeholder="Ask a question..." rows="3"></textarea>
+<button class="absolute bottom-2.5 right-2.5 flex h-7 w-7 items-center justify-center rounded-md bg-primary text-white hover:bg-primary/80">
+<span class="material-symbols-outlined text-lg">send</span>
+</button>
+</div>
+</div>
+</aside>
+</div>
+</div>
+
+<!-- Floating AI Toggle Button -->
+<button id="aiToggleButton" class="flex h-14 w-14 items-center justify-center rounded-full bg-primary text-white hover:bg-primary/90 transition-all hover:scale-110">
+<span class="material-symbols-outlined text-2xl">auto_awesome</span>
+</button>
+
+<script>
+  // Toggle file explorer visibility
+  document.getElementById('fileExplorerToggle').addEventListener('click', function() {
+    const fileExplorer = document.getElementById('fileExplorer');
+    fileExplorer.classList.toggle('hidden');
+  });
+
+  // Toggle AI Assistant visibility
+  const aiToggleButton = document.getElementById('aiToggleButton');
+  const aiAssistant = document.getElementById('aiAssistant');
+  const aiCloseButton = document.getElementById('aiCloseButton');
+
+  aiToggleButton.addEventListener('click', function() {
+    aiAssistant.classList.remove('hidden');
+    aiToggleButton.style.display = 'none';
+  });
+
+  aiCloseButton.addEventListener('click', function() {
+    aiAssistant.classList.add('hidden');
+    aiToggleButton.style.display = 'flex';
+  });
+</script>
+
+</body></html>

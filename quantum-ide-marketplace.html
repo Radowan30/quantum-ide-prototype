@@ -1,0 +1,398 @@
+<!DOCTYPE html>
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Quantum IDE - Plugin Marketplace</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300..700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet"/>
+<script>
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#9511d4",
+                        "background-dark": "#0a0118",
+                        "panel-dark": "#1a1128",
+                        "border-dark": "#2d2438",
+                        "surface-dark": "#14101f",
+                        "text-primary-dark": "#e0e0ff",
+                        "text-secondary-dark": "#8a8aab",
+                    },
+                    fontFamily: {
+                        "display": ["Space Grotesk", "sans-serif"]
+                    },
+                    borderRadius: {
+                        "DEFAULT": "0.5rem",
+                        "lg": "0.75rem",
+                        "xl": "1rem",
+                        "full": "9999px"
+                    },
+                },
+            },
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings:
+                'FILL' 0,
+                'wght' 400,
+                'GRAD' 0,
+                'opsz' 24
+        }
+
+        /* Tooltip styles */
+        .tooltip {
+          position: relative;
+        }
+
+        .tooltip::after {
+          content: attr(data-tooltip);
+          position: absolute;
+          left: 100%;
+          top: 50%;
+          transform: translateY(-50%);
+          margin-left: 12px;
+          padding: 6px 12px;
+          background-color: #1a1128;
+          color: #e0e0ff;
+          font-size: 12px;
+          white-space: nowrap;
+          border-radius: 4px;
+          opacity: 0;
+          pointer-events: none;
+          transition: opacity 0.2s;
+          z-index: 1000;
+          border: 1px solid #2d2438;
+        }
+
+        .tooltip:hover::after {
+          opacity: 1;
+        }
+
+        /* File explorer slide animation */
+        #fileExplorer {
+          transition: margin-left 0.3s ease-in-out, opacity 0.3s ease-in-out;
+        }
+
+        #fileExplorer.hidden {
+          margin-left: -256px;
+          opacity: 0;
+          pointer-events: none;
+        }
+
+        /* AI Assistant slide animation */
+        #aiAssistant {
+          transition: transform 0.3s ease-in-out, opacity 0.3s ease-in-out;
+        }
+
+        #aiAssistant.hidden {
+          transform: translateX(100%);
+          opacity: 0;
+          pointer-events: none;
+        }
+
+        /* Floating AI button */
+        #aiToggleButton {
+          position: fixed;
+          top: 80px;
+          right: 20px;
+          z-index: 100;
+          box-shadow: 0 4px 12px rgba(149, 17, 212, 0.3);
+        }
+    </style>
+</head>
+<body class="font-display bg-background-dark text-text-primary-dark">
+<div class="flex h-screen w-full flex-col">
+<header class="flex items-center justify-between whitespace-nowrap border-b border-solid border-border-dark px-6 py-2 bg-panel-dark/50 flex-none">
+<div class="flex items-center gap-4">
+<span class="material-symbols-outlined text-primary text-2xl">hub</span>
+<h2 class="text-lg font-bold">Quantum IDE</h2>
+<div class="hidden md:flex items-center gap-6 ml-6">
+<a class="text-sm font-medium leading-normal hover:text-primary transition-colors" href="#">File</a>
+<a class="text-sm font-medium leading-normal hover:text-primary transition-colors" href="#">Edit</a>
+<a class="text-sm font-medium leading-normal hover:text-primary transition-colors" href="#">Selection</a>
+<a class="text-sm font-medium leading-normal hover:text-primary transition-colors" href="#">View</a>
+<a class="text-sm font-medium leading-normal hover:text-primary transition-colors" href="#">Go</a>
+<a class="text-sm font-medium leading-normal hover:text-primary transition-colors" href="#">Run</a>
+<a class="text-sm font-medium leading-normal hover:text-primary transition-colors" href="#">Terminal</a>
+<a class="text-sm font-medium leading-normal hover:text-primary transition-colors" href="#">Help</a>
+</div>
+</div>
+<div class="flex items-center gap-4">
+<div class="flex gap-2">
+<button class="flex min-w-[84px] cursor-pointer items-center justify-center gap-2 overflow-hidden rounded-lg h-9 px-4 bg-primary text-white text-sm font-bold leading-normal tracking-[0.015em] hover:bg-primary/90 transition-colors">
+<span class="material-symbols-outlined text-base">play_arrow</span>
+<span class="truncate">Run</span>
+</button>
+<button class="flex min-w-[84px] cursor-pointer items-center justify-center gap-2 overflow-hidden rounded-lg h-9 px-4 bg-panel-dark/80 text-white text-sm font-bold leading-normal tracking-[0.015em] hover:bg-panel-dark transition-colors">
+<span class="material-symbols-outlined text-base">bug_report</span>
+<span class="truncate">Debug</span>
+</button>
+</div>
+<div class="bg-center bg-no-repeat aspect-square bg-cover rounded-full size-9" data-alt="User avatar" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuD97Un2HFIC6EjtF2xYESBmHyB9gjgG1zECl0g2lvC0ZWgJANTq-tB5uBjV3dw3tCfo7oWjieVGYipp78S3jQqAyXBdH7Yc_dd8XNhNWWDPESYOOXzpq89Ce1rs0BviiPSvotSwXiRhSTmFnp5q8-fAo9AJK9K3DdPXrA_0ia42kOFAscv7YxwR_7-LKf6u_RVL6EFuYeOoPngcBpALeYcQg9-vwOoo-okpKl9nDIfzfN3sW-BcUeqpAaSb5GAg5XZhotlqoCVW2A");'></div>
+</div>
+</header>
+<div class="flex flex-1 overflow-hidden">
+<aside class="flex h-full flex-col justify-between bg-panel-dark p-3 border-r border-solid border-border-dark">
+<div class="flex flex-col gap-2">
+<button id="fileExplorerToggle" class="tooltip flex items-center justify-center rounded-lg text-text-secondary-dark hover:bg-surface-dark hover:text-text-primary-dark p-3" data-tooltip="File Explorer">
+<span class="material-symbols-outlined text-2xl">folder</span>
+</button>
+<a href="quantum-ide-job-monitor.html" class="tooltip flex items-center justify-center rounded-lg text-text-secondary-dark hover:bg-surface-dark hover:text-text-primary-dark p-3" data-tooltip="Jobs">
+<span class="material-symbols-outlined text-2xl">work</span>
+</a>
+<a href="quantum-ide-export.html" class="tooltip flex items-center justify-center rounded-lg text-text-secondary-dark hover:bg-surface-dark hover:text-text-primary-dark p-3" data-tooltip="Export">
+<span class="material-symbols-outlined text-2xl">upload</span>
+</a>
+<a href="quantum-ide-marketplace.html" class="tooltip flex items-center justify-center rounded-lg bg-primary/20 text-primary p-3" data-tooltip="Marketplace">
+<span class="material-symbols-outlined text-2xl">store</span>
+</a>
+<a href="quantum-ide-learning.html" class="tooltip flex items-center justify-center rounded-lg text-text-secondary-dark hover:bg-surface-dark hover:text-text-primary-dark p-3" data-tooltip="Help & Learn">
+<span class="material-symbols-outlined text-2xl">school</span>
+</a>
+</div>
+<div class="flex flex-col gap-2">
+<button class="tooltip flex items-center justify-center rounded-lg text-text-secondary-dark hover:bg-surface-dark hover:text-text-primary-dark p-3" data-tooltip="Settings">
+<span class="material-symbols-outlined text-2xl">settings</span>
+</button>
+</div>
+</aside>
+<aside id="fileExplorer" class="hidden flex h-full w-64 flex-col bg-panel-dark/30 border-r border-solid border-border-dark">
+<div class="flex flex-col h-full">
+<div class="p-4 border-b border-border-dark">
+<a href="quantum-ide-workflow.html" class="flex items-center gap-2 text-text-primary-dark hover:text-primary transition-colors">
+<span class="material-symbols-outlined text-lg">account_tree</span>
+<span class="text-sm font-medium">Workflow</span>
+</a>
+</div>
+<div class="flex-1 p-4 overflow-y-auto">
+<div class="flex flex-col gap-1">
+<div class="flex items-center gap-2 mb-2">
+<span class="material-symbols-outlined text-lg">expand_more</span>
+<span class="material-symbols-outlined text-primary text-lg">folder</span>
+<span class="font-medium text-sm">My Project</span>
+</div>
+<div class="pl-7 flex flex-col gap-1">
+<a href="quantum-ide-circuit.html" class="flex items-center gap-2 p-1 rounded hover:bg-primary/20 text-sm">
+<span class="material-symbols-outlined text-base text-blue-400">description</span>
+<span>circuit.wf</span>
+</a>
+<a href="quantum-ide-code-editor.html" class="flex items-center gap-2 p-1 rounded hover:bg-primary/20 text-sm">
+<span class="material-symbols-outlined text-base text-green-400">code</span>
+<span>grover.py</span>
+</a>
+<a href="quantum-ide-jupyter.html" class="flex items-center gap-2 p-1 rounded hover:bg-primary/20 text-sm">
+<span class="material-symbols-outlined text-base text-yellow-400">description</span>
+<span>grover.ipynb</span>
+</a>
+</div>
+</div>
+</div>
+</div>
+</aside>
+<main class="flex-1 flex flex-col overflow-y-auto">
+<div class="p-8 flex-1 overflow-y-auto">
+<div class="max-w-7xl mx-auto flex flex-col gap-6">
+<header class="flex flex-wrap justify-between gap-4 items-center">
+<div class="flex flex-col gap-2">
+<h1 class="text-text-primary-dark text-4xl font-black leading-tight tracking-[-0.033em]">Plugin Marketplace</h1>
+<p class="text-text-secondary-dark text-base font-normal leading-normal">Discover, install, and contribute quantum algorithms and tools</p>
+</div>
+</header>
+<div class="w-full">
+<label class="flex flex-col min-w-40 h-12 w-full">
+<div class="flex w-full flex-1 items-stretch rounded-lg h-full bg-panel-dark border border-border-dark">
+<div class="text-text-secondary-dark flex items-center justify-center pl-4">
+<span class="material-symbols-outlined text-2xl">search</span>
+</div>
+<input class="form-input flex w-full min-w-0 flex-1 resize-none overflow-hidden text-text-primary-dark focus:outline-0 focus:ring-0 border-none bg-transparent h-full placeholder:text-text-secondary-dark px-4 pl-2 text-base font-normal leading-normal" placeholder="Search for plugins by name or keyword..." value=""/>
+</div>
+</label>
+</div>
+<div class="flex gap-3 flex-wrap">
+<button class="flex h-9 shrink-0 items-center justify-center gap-x-2 rounded-lg bg-panel-dark border border-border-dark pl-4 pr-3 text-text-secondary-dark hover:text-primary hover:border-primary transition-colors">
+<p class="text-sm font-medium leading-normal">Quantum Algorithms</p>
+<span class="material-symbols-outlined text-xl">expand_more</span>
+</button>
+<button class="flex h-9 shrink-0 items-center justify-center gap-x-2 rounded-lg bg-panel-dark border border-border-dark pl-4 pr-3 text-text-secondary-dark hover:text-primary hover:border-primary transition-colors">
+<p class="text-sm font-medium leading-normal">Visualization Tools</p>
+<span class="material-symbols-outlined text-xl">expand_more</span>
+</button>
+<button class="flex h-9 shrink-0 items-center justify-center gap-x-2 rounded-lg bg-primary/20 border border-primary text-primary pl-4 pr-3">
+<p class="text-sm font-medium leading-normal">AI Integrations</p>
+<span class="material-symbols-outlined text-xl">expand_more</span>
+</button>
+<button class="flex h-9 shrink-0 items-center justify-center gap-x-2 rounded-lg bg-panel-dark border border-border-dark pl-4 pr-3 text-text-secondary-dark hover:text-primary hover:border-primary transition-colors">
+<p class="text-sm font-medium leading-normal">Utilities</p>
+<span class="material-symbols-outlined text-xl">expand_more</span>
+</button>
+<button class="flex h-9 shrink-0 items-center justify-center gap-x-2 rounded-lg bg-panel-dark border border-border-dark pl-4 pr-3 text-text-secondary-dark hover:text-primary hover:border-primary transition-colors">
+<p class="text-sm font-medium leading-normal">All Categories</p>
+<span class="material-symbols-outlined text-xl">expand_more</span>
+</button>
+</div>
+<div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+<div class="flex flex-col gap-4 p-4 bg-surface-dark rounded-xl border border-border-dark group hover:shadow-2xl hover:shadow-primary/20 hover:border-primary/50 transition-all duration-300">
+<div class="w-full bg-center bg-no-repeat aspect-square bg-cover rounded-lg" data-alt="Abstract visualization of quantum simulation" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuBPL0fa8HAhdNi-ij52giC-IML_LoiAtxpFzBFEQiPYN__G8hRiiTktrvLODNzZdzxW4_AR8GnPD0lLMC5lSXp4rCEjolcbhRfgaIasAWuvipGcmxyuP5R7lGOagJ6gjlVmGSmdugiQ4VoJTkl0zLKV8p9zPA56k3QNrQgkSb1V_Tzgc_zh7UzR7XfF2xWul5lThIRS-Hv9-_3eFDBsw6Pm1TsRQ2Q0Sl6WGP_C9Fm8oXBikgrg1CLpZDSbsyjv-9VxAVLxCq5onQ");'></div>
+<div class="flex flex-col gap-1">
+<p class="text-text-primary-dark text-base font-bold leading-normal">Q-Simulate</p>
+<p class="text-text-secondary-dark text-sm font-normal leading-normal">By Anna Turing</p>
+<div class="flex items-center gap-1 text-text-secondary-dark text-sm font-normal leading-normal">
+<span>4.8</span>
+<span class="material-symbols-outlined text-base text-amber-400" style="font-variation-settings: 'FILL' 1;">star</span>
+</div>
+</div>
+<button class="w-full flex items-center justify-center h-9 px-3 bg-primary/20 text-primary rounded-lg text-sm font-bold hover:bg-primary/30 transition-colors">Install</button>
+</div>
+<div class="flex flex-col gap-4 p-4 bg-surface-dark rounded-xl border border-border-dark group hover:shadow-2xl hover:shadow-primary/20 hover:border-primary/50 transition-all duration-300">
+<div class="w-full bg-center bg-no-repeat aspect-square bg-cover rounded-lg" data-alt="Stylized waveform graph" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuDtGemwlBnwxjAB_3YkAsOiOxsfscVMOdYsCOoIEJd40-185RHG7PIfwpjZPFRDXZY5G3LCz2mI4oGQoylLA5h9ZjOdVCirj8ZhkY27UeXEUa3bQug6rODC6oHtReTDYLEBBaMVexaYbE48iA0ZgGZI4auVY5hMQBhNRruj2ccGdAW9P8KWwWi9Xkfb_HCKaSiaQuupBFFKyYlIR3CPQlKjzUITC6qQofXnkiWx9mUJpXNfFgESL9Db0QPsCC5y7cYBcm24hHA9NA");'></div>
+<div class="flex flex-col gap-1">
+<p class="text-text-primary-dark text-base font-bold leading-normal">Waveform Visualizer</p>
+<p class="text-text-secondary-dark text-sm font-normal leading-normal">By Richard Feynman</p>
+<div class="flex items-center gap-1 text-text-secondary-dark text-sm font-normal leading-normal">
+<span>4.7</span>
+<span class="material-symbols-outlined text-base text-amber-400" style="font-variation-settings: 'FILL' 1;">star</span>
+</div>
+</div>
+<button class="w-full flex items-center justify-center h-9 px-3 bg-primary text-white rounded-lg text-sm font-bold hover:bg-primary/90 transition-colors">Install</button>
+</div>
+<div class="flex flex-col gap-4 p-4 bg-surface-dark rounded-xl border border-border-dark group hover:shadow-2xl hover:shadow-primary/20 hover:border-primary/50 transition-all duration-300">
+<div class="w-full bg-center bg-no-repeat aspect-square bg-cover rounded-lg" data-alt="Neural network graphical representation" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuAY6xGLSXyC0VpjKziOmIvVL4-pLnIHtDdIUO-KNV_E24vvPmwWS1WruFR6FF5_lujFuaGQ5ZmgKzwQ_h5wsCKP7K16MyYmyszE_NzaYBxIJPAXfbIWA3OMuu5_i1YQTNfLN5Bce0R2th1c-dJ_5tcOy0ryhFGh4JUH4CDnR1TwMCesoG3c5UGMAFoRZJ9g2bA0lieItkSOfcGjjletXeRh6gUevcStjm7TTBrYfglifnw2XVOMKW9E3-JfZJOXTx1hxylOEofYEw");'></div>
+<div class="flex flex-col gap-1">
+<p class="text-text-primary-dark text-base font-bold leading-normal">TensorFlow Quantum</p>
+<p class="text-text-secondary-dark text-sm font-normal leading-normal">By Ada Lovelace</p>
+<div class="flex items-center gap-1 text-text-secondary-dark text-sm font-normal leading-normal">
+<span>4.5</span>
+<span class="material-symbols-outlined text-base text-amber-400" style="font-variation-settings: 'FILL' 1;">star</span>
+</div>
+</div>
+<button class="w-full flex items-center justify-center h-9 px-3 bg-green-500/20 text-green-400 rounded-lg text-sm font-bold cursor-default">Installed</button>
+</div>
+<div class="flex flex-col gap-4 p-4 bg-surface-dark rounded-xl border border-border-dark group hover:shadow-2xl hover:shadow-primary/20 hover:border-primary/50 transition-all duration-300">
+<div class="w-full bg-center bg-no-repeat aspect-square bg-cover rounded-lg" data-alt="Lines of code on a dark background" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuCgHG65gXlU-IiKbi0RkYgcnz0RtRCF2564xizFTKI7TLG5WCKwtYTl6iC4L6tWVijomRvmtA-nbTubxGVbIoVQVyVauE7JeEzNfvNZv2Dlu3u-utlVEJt-0mbk6dcuXmiwKlgQyMvyw963k_adDzM9TzaXvEcAg2RysQz6Wk3T_JCZXKNCnoe6SbKu3bAnHTgoPvHPY6_Dd7Bev5hwuQGcW0KoyI1-qdQAIwgEOnzwS-BYwQy3qDqaZGthjGt2646TRZ-RHZKy9w");'></div>
+<div class="flex flex-col gap-1">
+<p class="text-text-primary-dark text-base font-bold leading-normal">Q-Compiler</p>
+<p class="text-text-secondary-dark text-sm font-normal leading-normal">By Grace Hopper</p>
+<div class="flex items-center gap-1 text-text-secondary-dark text-sm font-normal leading-normal">
+<span>4.4</span>
+<span class="material-symbols-outlined text-base text-amber-400" style="font-variation-settings: 'FILL' 1;">star</span>
+</div>
+</div>
+<button class="w-full flex items-center justify-center h-9 px-3 bg-primary text-white rounded-lg text-sm font-bold hover:bg-primary/90 transition-colors">Install</button>
+</div>
+<div class="flex flex-col gap-4 p-4 bg-surface-dark rounded-xl border border-border-dark group hover:shadow-2xl hover:shadow-primary/20 hover:border-primary/50 transition-all duration-300">
+<div class="w-full bg-center bg-no-repeat aspect-square bg-cover rounded-lg" data-alt="Abstract network of interconnected nodes" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuBwCbIbROP7nedSKFLrmD19XCOzcJClI75pBdNCraXDA1YYg9rOW44g-rsqDZSA10jfEow_lMDMON49ciXAYFSB9CdVgoGcQLZ732wUIsRkUFDQz1RjW9Mi_8JrPA9wu6TGGNSHSAzMBveS8CY6ihQFN2KgPRPrd3MBMysc8eJHwBJ1YTy_BoesWsOHMmJwHzIWBO24JndpNacyHeRYYqnCs_GR54kcJAfO2yeO1HvPSnMfghvm4teiIS5eSAOxwIGUGNxg9VIzAQ");'></div>
+<div class="flex flex-col gap-1">
+<p class="text-text-primary-dark text-base font-bold leading-normal">Entanglement Viewer</p>
+<p class="text-text-secondary-dark text-sm font-normal leading-normal">By Charles Babbage</p>
+<div class="flex items-center gap-1 text-text-secondary-dark text-sm font-normal leading-normal">
+<span>4.9</span>
+<span class="material-symbols-outlined text-base text-amber-400" style="font-variation-settings: 'FILL' 1;">star</span>
+</div>
+</div>
+<button class="w-full flex items-center justify-center h-9 px-3 bg-primary text-white rounded-lg text-sm font-bold hover:bg-primary/90 transition-colors">Install</button>
+</div>
+<div class="flex flex-col gap-4 p-4 bg-surface-dark rounded-xl border border-border-dark group hover:shadow-2xl hover:shadow-primary/20 hover:border-primary/50 transition-all duration-300">
+<div class="w-full bg-center bg-no-repeat aspect-square bg-cover rounded-lg" data-alt="Abstract representation of machine learning process" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuDXL7Pt0C0DqIKNlzVs6UXZaGPyb-myPFTe6UBNRVQdV1RJrDid60XxMPZF7psiMKT2GqoFGqFAOfwXcF-Vos4ORpPw7h5VmOm5hQ4dJUn8r5kJD7gB3_VXhJ6uzIUIZZs5IV_7NiYF9cahazw1n40t-PVeymNEPz-OQaHfhExyL10wFz1levmyMQ8oCOWerc8cjo51RCabZ40QqeyaaMOVI3FOdRBDU2hmdjGA06Na3RZVnamYMlsAF3BZ5JY7CwPhm6UjPdRQ5g");'></div>
+<div class="flex flex-col gap-1">
+<p class="text-text-primary-dark text-base font-bold leading-normal">Quantum ML Kit</p>
+<p class="text-text-secondary-dark text-sm font-normal leading-normal">By John von Neumann</p>
+<div class="flex items-center gap-1 text-text-secondary-dark text-sm font-normal leading-normal">
+<span>4.6</span>
+<span class="material-symbols-outlined text-base text-amber-400" style="font-variation-settings: 'FILL' 1;">star</span>
+</div>
+</div>
+<button class="w-full flex items-center justify-center h-9 px-3 bg-primary text-white rounded-lg text-sm font-bold hover:bg-primary/90 transition-colors">Install</button>
+</div>
+<div class="flex flex-col gap-4 p-4 bg-surface-dark rounded-xl border border-border-dark group hover:shadow-2xl hover:shadow-primary/20 hover:border-primary/50 transition-all duration-300">
+<div class="w-full bg-center bg-no-repeat aspect-square bg-cover rounded-lg" data-alt="Microchip circuit board close-up" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuAF7Ej1N2O922JQ7yYWBHzChozb_pPczhO271CgWbrn37w2gZmVj9RZJCi_UTDb3XN6YwzN9lDMSBR1ba3jGDCUcdcJ_54amlwKnVGt4ABF0edhc9Y32BA3knOiI0bpC8TSQUIlbIO9sPE8JHNctr-plaPBVB3ROw5EaWx1JZ9_WqdxxDWuDL9tndZlBOHPBG9vHlnYuqGcdzZj4dxPxOh-_OpEPMDDBm7inwCWnmLNlOZxkoWTsHPd171q_SIQdyJ7EYqQReOM7A");'></div>
+<div class="flex flex-col gap-1">
+<p class="text-text-primary-dark text-base font-bold leading-normal">Circuit Optimizer</p>
+<p class="text-text-secondary-dark text-sm font-normal leading-normal">By Alan Turing</p>
+<div class="flex items-center gap-1 text-text-secondary-dark text-sm font-normal leading-normal">
+<span>4.3</span>
+<span class="material-symbols-outlined text-base text-amber-400" style="font-variation-settings: 'FILL' 1;">star</span>
+</div>
+</div>
+<button class="w-full flex items-center justify-center h-9 px-3 bg-primary text-white rounded-lg text-sm font-bold hover:bg-primary/90 transition-colors">Install</button>
+</div>
+<div class="flex flex-col gap-4 p-4 bg-surface-dark rounded-xl border border-border-dark group hover:shadow-2xl hover:shadow-primary/20 hover:border-primary/50 transition-all duration-300">
+<div class="w-full bg-center bg-no-repeat aspect-square bg-cover rounded-lg" data-alt="Colorful abstract data visualization" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuCTqH4dsdFr2q17ABTuOWn5UjlWFZQajXwQSfv-u31wso6w03thaGHwMUdoxzUo-uk2BewNR1d7fBwWf8tuk1ewH3r0LBs4i8yHS6ynu8OkTWaD-wmYXU_TQyT992hz8ziw7eh2QpFIpRYuxFAPWVm-ZjPU1xhepXfjkmHxg62Shuc3XpqE-YNCs8DPjSOuZH3OtnjmzIVzh8tMpMSpUjVKME8HRfZowL02Fro5A_h7g8rDRpSWLkmYm4bBjh9JRCHSaFjwhhJWVQ");'></div>
+<div class="flex flex-col gap-1">
+<p class="text-text-primary-dark text-base font-bold leading-normal">State Vector Plotter</p>
+<p class="text-text-secondary-dark text-sm font-normal leading-normal">By Marie Curie</p>
+<div class="flex items-center gap-1 text-text-secondary-dark text-sm font-normal leading-normal">
+<span>4.8</span>
+<span class="material-symbols-outlined text-base text-amber-400" style="font-variation-settings: 'FILL' 1;">star</span>
+</div>
+</div>
+<button class="w-full flex items-center justify-center h-9 px-3 bg-primary text-white rounded-lg text-sm font-bold hover:bg-primary/90 transition-colors">Install</button>
+</div>
+</div>
+</div>
+</div>
+</main>
+<aside id="aiAssistant" class="hidden w-96 flex-shrink-0 border-l border-solid border-border-dark bg-panel-dark p-4 flex flex-col h-full">
+<div class="flex items-center justify-between pb-4">
+<h3 class="text-lg font-bold">AI Assistant</h3>
+<button id="aiCloseButton" class="text-text-secondary-dark hover:text-text-primary-dark">
+<span class="material-symbols-outlined">close</span>
+</button>
+</div>
+<div class="flex-1 overflow-y-auto space-y-4 pr-2">
+<div class="flex gap-3">
+<div class="flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-full bg-primary">
+<span class="material-symbols-outlined text-lg">auto_awesome</span>
+</div>
+<div class="rounded-lg rounded-tl-none bg-surface-dark p-3 text-sm">
+<p>Welcome to the Quantum Plugin Marketplace! I can help you find the right plugins, compare features, or recommend tools for your quantum projects.</p>
+</div>
+</div>
+<div class="flex flex-col items-start gap-2 pl-11">
+<button class="text-sm text-primary/80 hover:text-primary border border-primary/40 hover:border-primary/80 px-3 py-1.5 rounded-full transition-colors">"Recommend visualization plugins"</button>
+<button class="text-sm text-primary/80 hover:text-primary border border-primary/40 hover:border-primary/80 px-3 py-1.5 rounded-full transition-colors">"Compare AI integrations"</button>
+</div>
+</div>
+<div class="mt-4 pt-4 border-t border-solid border-border-dark">
+<div class="relative">
+<textarea class="form-input w-full resize-none rounded-lg border-none bg-surface-dark p-3 pr-10 text-sm placeholder:text-text-secondary-dark focus:outline-none focus:ring-2 focus:ring-primary" placeholder="Ask a question..." rows="3"></textarea>
+<button class="absolute bottom-2.5 right-2.5 flex h-7 w-7 items-center justify-center rounded-md bg-primary text-white hover:bg-primary/80">
+<span class="material-symbols-outlined text-lg">send</span>
+</button>
+</div>
+</div>
+</aside>
+</div>
+</div>
+
+<!-- Floating AI Toggle Button -->
+<button id="aiToggleButton" class="flex h-14 w-14 items-center justify-center rounded-full bg-primary text-white hover:bg-primary/90 transition-all hover:scale-110">
+<span class="material-symbols-outlined text-2xl">auto_awesome</span>
+</button>
+
+<script>
+  // Toggle file explorer visibility
+  document.getElementById('fileExplorerToggle').addEventListener('click', function() {
+    const fileExplorer = document.getElementById('fileExplorer');
+    fileExplorer.classList.toggle('hidden');
+  });
+
+  // Toggle AI Assistant visibility
+  const aiToggleButton = document.getElementById('aiToggleButton');
+  const aiAssistant = document.getElementById('aiAssistant');
+  const aiCloseButton = document.getElementById('aiCloseButton');
+
+  aiToggleButton.addEventListener('click', function() {
+    aiAssistant.classList.remove('hidden');
+    aiToggleButton.style.display = 'none';
+  });
+
+  aiCloseButton.addEventListener('click', function() {
+    aiAssistant.classList.add('hidden');
+    aiToggleButton.style.display = 'flex';
+  });
+</script>
+
+</body></html>

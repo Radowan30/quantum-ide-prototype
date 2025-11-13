@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Quantum IDE Onboarding</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300..700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet"/>
+<script>
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#9511d4",
+                        "background-dark": "#0a0118",
+                        "panel-dark": "#1a1128",
+                        "border-dark": "#2d2438",
+                        "surface-dark": "#14101f",
+                        "text-primary-dark": "#e0e0ff",
+                        "text-secondary-dark": "#8a8aab",
+                    },
+                    fontFamily: {
+                        "display": ["Space Grotesk", "sans-serif"]
+                    },
+                    borderRadius: {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                },
+            },
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+            font-size: 24px;
+        }
+
+        /* AI Assistant slide animation */
+        #aiAssistant {
+          transition: transform 0.3s ease-in-out, opacity 0.3s ease-in-out;
+        }
+
+        #aiAssistant.hidden {
+          transform: translateX(100%);
+          opacity: 0;
+          pointer-events: none;
+        }
+
+        /* Floating AI button */
+        #aiToggleButton {
+          position: fixed;
+          top: 80px;
+          right: 20px;
+          z-index: 100;
+          box-shadow: 0 4px 12px rgba(149, 17, 212, 0.3);
+        }
+    </style>
+</head>
+<body class="font-display bg-background-dark">
+<div class="flex h-screen w-full">
+<aside class="flex h-full w-[240px] flex-col justify-between border-r border-border-dark bg-panel-dark p-4">
+<div class="flex flex-col gap-4">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-primary text-2xl">hub</span>
+<h2 class="text-lg font-bold text-text-primary-dark">Quantum IDE</h2>
+<div class="flex flex-col">
+</div>
+</div>
+<nav class="flex flex-col gap-2">
+<a class="flex items-center gap-3 rounded-lg bg-primary/20 px-3 py-2 text-text-primary-dark" href="#">
+<span class="material-symbols-outlined !text-2xl">folder_managed</span>
+<p class="text-sm font-medium leading-normal">File Explorer</p>
+</a>
+<a class="flex items-center gap-3 rounded-lg px-3 py-2 text-text-secondary-dark hover:bg-surface-dark" href="#">
+<span class="material-symbols-outlined !text-2xl">search</span>
+<p class="text-sm font-medium leading-normal">Search</p>
+</a>
+<a class="flex items-center gap-3 rounded-lg px-3 py-2 text-text-secondary-dark hover:bg-surface-dark" href="#">
+<span class="material-symbols-outlined !text-2xl">merge_type</span>
+<p class="text-sm font-medium leading-normal">Source Control</p>
+</a>
+<a class="flex items-center gap-3 rounded-lg px-3 py-2 text-text-secondary-dark hover:bg-surface-dark" href="#">
+<span class="material-symbols-outlined !text-2xl">bug_report</span>
+<p class="text-sm font-medium leading-normal">Run and Debug</p>
+</a>
+<a class="flex items-center gap-3 rounded-lg px-3 py-2 text-text-secondary-dark hover:bg-surface-dark" href="#">
+<span class="material-symbols-outlined !text-2xl">extension</span>
+<p class="text-sm font-medium leading-normal">Extensions</p>
+</a>
+</nav>
+</div>
+<div class="flex flex-col gap-1">
+<a class="flex items-center gap-3 rounded-lg px-3 py-2 text-text-secondary-dark hover:bg-surface-dark" href="#">
+<span class="material-symbols-outlined !text-2xl">account_circle</span>
+<p class="text-sm font-medium leading-normal">Accounts</p>
+</a>
+<a class="flex items-center gap-3 rounded-lg px-3 py-2 text-text-secondary-dark hover:bg-surface-dark" href="#">
+<span class="material-symbols-outlined !text-2xl">settings</span>
+<p class="text-sm font-medium leading-normal">Settings</p>
+</a>
+</div>
+</aside>
+<main class="flex h-full flex-1 flex-col">
+<header class="flex items-center justify-between whitespace-nowrap border-b border-solid border-border-dark px-6 py-2 bg-panel-dark/50 flex-none">
+<div class="flex items-center gap-4">
+<div class="hidden md:flex items-center gap-6 ml-6">
+<a class="text-sm font-medium leading-normal text-text-secondary-dark hover:text-primary transition-colors" href="#">File</a>
+<a class="text-sm font-medium leading-normal text-text-secondary-dark hover:text-primary transition-colors" href="#">Edit</a>
+<a class="text-sm font-medium leading-normal text-text-secondary-dark hover:text-primary transition-colors" href="#">View</a>
+<a class="text-sm font-medium leading-normal text-text-secondary-dark hover:text-primary transition-colors" href="#">Run</a>
+<a class="text-sm font-medium leading-normal text-text-secondary-dark hover:text-primary transition-colors" href="#">Help</a>
+</div>
+</div>
+<div class="flex items-center gap-4">
+<div class="flex gap-2">
+<button class="flex min-w-[84px] cursor-pointer items-center justify-center gap-2 overflow-hidden rounded-lg h-9 px-4 bg-primary text-white text-sm font-bold leading-normal tracking-[0.015em] hover:bg-primary/90 transition-colors">
+<span class="material-symbols-outlined text-base">play_arrow</span>
+<span class="truncate">Run</span>
+</button>
+<button class="flex min-w-[84px] cursor-pointer items-center justify-center gap-2 overflow-hidden rounded-lg h-9 px-4 bg-panel-dark/80 text-white text-sm font-bold leading-normal tracking-[0.015em] hover:bg-panel-dark transition-colors">
+<span class="material-symbols-outlined text-base">bug_report</span>
+<span class="truncate">Debug</span>
+</button>
+</div>
+<div class="bg-center bg-no-repeat aspect-square bg-cover rounded-full size-9" data-alt="User avatar" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuD97Un2HFIC6EjtF2xYESBmHyB9gjgG1zECl0g2lvC0ZWgJANTq-tB5uBjV3dw3tCfo7oWjieVGYipp78S3jQqAyXBdH7Yc_dd8XNhNWWDPESYOOXzpq89Ce1rs0BviiPSvotSwXiRhSTmFnp5q8-fAo9AJK9K3DdPXrA_0ia42kOFAscv7YxwR_7-LKf6u_RVL6EFuYeOoPngcBpALeYcQg9-vwOoo-okpKl9nDIfzfN3sW-BcUeqpAaSb5GAg5XZhotlqoCVW2A");'></div>
+</div>
+</header>
+<div class="flex flex-1 items-center justify-center p-8 overflow-y-auto">
+<div class="w-full max-w-2xl">
+<div class="flex w-full flex-col items-center gap-3 text-center">
+<h1 class="text-4xl font-black leading-tight tracking-[-0.033em] text-text-primary-dark">Welcome to Quantum IDE</h1>
+<p class="text-base font-normal leading-normal text-text-secondary-dark">Let's tailor your workspace to your needs.</p>
+</div>
+<div class="mt-8 flex flex-col gap-6">
+<div class="flex flex-col gap-3">
+<div class="flex items-center justify-between">
+<p class="text-base font-medium leading-normal text-text-primary-dark">Step 1 of 3</p>
+<p class="text-sm font-medium leading-normal text-text-secondary-dark">What best describes your background?</p>
+</div>
+<div class="h-2 rounded-full bg-border-dark">
+<div class="h-2 rounded-full bg-primary" style="width: 33%;"></div>
+</div>
+</div>
+<div class="flex flex-col gap-3">
+<label class="flex cursor-pointer items-center gap-4 rounded-lg border border-solid border-border-dark p-4 transition-colors hover:border-primary/80 has-[:checked]:border-primary has-[:checked]:bg-primary/10">
+<input checked="" class="form-radio h-5 w-5 border-2 border-border-dark bg-transparent text-primary focus:ring-0 focus:ring-offset-0" name="user_background" type="radio"/>
+<div class="flex grow flex-col">
+<p class="text-sm font-medium leading-normal text-text-primary-dark">Learning Quantum</p>
+<p class="text-sm font-normal leading-normal text-text-secondary-dark">Just starting out and exploring the basics.</p>
+</div>
+</label>
+<label class="flex cursor-pointer items-center gap-4 rounded-lg border border-solid border-border-dark p-4 transition-colors hover:border-primary/80 has-[:checked]:border-primary has-[:checked]:bg-primary/10">
+<input class="form-radio h-5 w-5 border-2 border-border-dark bg-transparent text-primary focus:ring-0 focus:ring-offset-0" name="user_background" type="radio"/>
+<div class="flex grow flex-col">
+<p class="text-sm font-medium leading-normal text-text-primary-dark">Academic Researcher</p>
+<p class="text-sm font-normal leading-normal text-text-secondary-dark">Conducting research and publishing papers.</p>
+</div>
+</label>
+<label class="flex cursor-pointer items-center gap-4 rounded-lg border border-solid border-border-dark p-4 transition-colors hover:border-primary/80 has-[:checked]:border-primary has-[:checked]:bg-primary/10">
+<input class="form-radio h-5 w-5 border-2 border-border-dark bg-transparent text-primary focus:ring-0 focus:ring-offset-0" name="user_background" type="radio"/>
+<div class="flex grow flex-col">
+<p class="text-sm font-medium leading-normal text-text-primary-dark">ML Engineer</p>
+<p class="text-sm font-normal leading-normal text-text-secondary-dark">Applying quantum principles to machine learning.</p>
+</div>
+</label>
+<label class="flex cursor-pointer items-center gap-4 rounded-lg border border-solid border-border-dark p-4 transition-colors hover:border-primary/80 has-[:checked]:border-primary has-[:checked]:bg-primary/10">
+<input class="form-radio h-5 w-5 border-2 border-border-dark bg-transparent text-primary focus:ring-0 focus:ring-offset-0" name="user_background" type="radio"/>
+<div class="flex grow flex-col">
+<p class="text-sm font-medium leading-normal text-text-primary-dark">Finance Analyst</p>
+<p class="text-sm font-normal leading-normal text-text-secondary-dark">Developing quantum models for financial markets.</p>
+</div>
+</label>
+<label class="flex cursor-pointer items-center gap-4 rounded-lg border border-solid border-border-dark p-4 transition-colors hover:border-primary/80 has-[:checked]:border-primary has-[:checked]:bg-primary/10">
+<input class="form-radio h-5 w-5 border-2 border-border-dark bg-transparent text-primary focus:ring-0 focus:ring-offset-0" name="user_background" type="radio"/>
+<div class="flex grow flex-col">
+<p class="text-sm font-medium leading-normal text-text-primary-dark">Quantum Startup Founder</p>
+<p class="text-sm font-normal leading-normal text-text-secondary-dark">Building a business with quantum technology.</p>
+</div>
+</label>
+</div>
+<div class="mt-4 flex items-center justify-between">
+<button class="text-sm font-medium text-text-secondary-dark hover:text-text-primary-dark">Skip for now</button>
+<button class="flex h-10 items-center justify-center gap-2 rounded-lg bg-primary px-5 text-sm font-bold text-white transition-colors hover:bg-primary/90">
+<span>Next</span>
+<span class="material-symbols-outlined !text-xl">arrow_forward</span>
+</button>
+</div>
+</div>
+</div>
+</div>
+</main>
+<aside id="aiAssistant" class="hidden w-96 flex-shrink-0 border-l border-solid border-border-dark bg-panel-dark p-4 flex flex-col h-full">
+<div class="flex items-center justify-between pb-4">
+<h3 class="text-lg font-bold text-text-primary-dark">AI Assistant</h3>
+<button id="aiCloseButton" class="text-text-secondary-dark hover:text-text-primary-dark">
+<span class="material-symbols-outlined">close</span>
+</button>
+</div>
+<div class="flex-1 overflow-y-auto space-y-4 pr-2">
+<div class="flex gap-3">
+<div class="flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-full bg-primary">
+<span class="material-symbols-outlined text-lg">auto_awesome</span>
+</div>
+<div class="rounded-lg rounded-tl-none bg-surface-dark p-3 text-sm">
+<p class="text-text-primary-dark">Hello! I'm your AI assistant. Let's get you set up. Answer a few questions to personalize your workspace.</p>
+</div>
+</div>
+<div class="flex flex-col items-start gap-2 pl-11">
+<button class="text-sm text-primary/80 hover:text-primary border border-primary/40 hover:border-primary/80 px-3 py-1.5 rounded-full transition-colors">"What is Quantum IDE?"</button>
+<button class="text-sm text-primary/80 hover:text-primary border border-primary/40 hover:border-primary/80 px-3 py-1.5 rounded-full transition-colors">"Help me get started"</button>
+</div>
+</div>
+<div class="mt-4 pt-4 border-t border-solid border-border-dark">
+<div class="relative">
+<textarea class="form-input w-full resize-none rounded-lg border-none bg-surface-dark p-3 pr-10 text-sm text-text-primary-dark placeholder:text-text-secondary-dark focus:outline-none focus:ring-2 focus:ring-primary" placeholder="Ask a question..." rows="3"></textarea>
+<button class="absolute bottom-2.5 right-2.5 flex h-7 w-7 items-center justify-center rounded-md bg-primary text-white hover:bg-primary/80">
+<span class="material-symbols-outlined text-lg">send</span>
+</button>
+</div>
+</div>
+</aside>
+</div>
+
+<!-- Floating AI Toggle Button -->
+<button id="aiToggleButton" class="flex h-14 w-14 items-center justify-center rounded-full bg-primary text-white hover:bg-primary/90 transition-all hover:scale-110">
+<span class="material-symbols-outlined text-2xl">auto_awesome</span>
+</button>
+
+<script>
+  // Toggle AI Assistant visibility
+  const aiToggleButton = document.getElementById('aiToggleButton');
+  const aiAssistant = document.getElementById('aiAssistant');
+  const aiCloseButton = document.getElementById('aiCloseButton');
+
+  aiToggleButton.addEventListener('click', function() {
+    aiAssistant.classList.remove('hidden');
+    aiToggleButton.style.display = 'none';
+  });
+
+  aiCloseButton.addEventListener('click', function() {
+    aiAssistant.classList.add('hidden');
+    aiToggleButton.style.display = 'flex';
+  });
+</script>
+
+</body></html>

@@ -1,0 +1,378 @@
+<!DOCTYPE html>
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Quantum Finance Toolbox - Plugin Details</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300..700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet"/>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings:
+            'FILL' 0,
+            'wght' 400,
+            'GRAD' 0,
+            'opsz' 24
+        }
+    </style>
+<script>
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            colors: {
+              "primary": "#9511d4",
+              "background-dark": "#0a0118",
+              "panel-dark": "#1a1128",
+              "border-dark": "#2d2438",
+              "surface-dark": "#14101f",
+              "text-primary-dark": "#e0e0ff",
+              "text-secondary-dark": "#8a8aab",
+              "electric-blue": "#5ce1e6",
+              "muted-teal": "#48c9b0",
+              "amber-orange": "#ffbf00",
+            },
+            fontFamily: {
+              "display": ["Space Grotesk", "sans-serif"]
+            },
+            borderRadius: {"DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px"},
+          },
+        },
+      }
+    </script>
+</head>
+<body class="bg-background-dark font-display text-text-primary-dark">
+<div class="flex h-screen w-full">
+<aside class="w-64 flex-shrink-0 bg-panel-dark p-4 flex flex-col justify-between border-r border-border-dark">
+<div class="flex flex-col gap-6">
+<div class="flex items-center gap-3 px-2">
+<span class="material-symbols-outlined text-primary text-2xl">hub</span>
+<div class="flex flex-col">
+<h2 class="text-base font-bold">Quantum IDE</h2>
+<p class="text-xs text-text-secondary-dark">Plugin Marketplace</p>
+</div>
+</div>
+<nav class="flex flex-col gap-2">
+<a class="flex items-center gap-3 px-3 py-2 rounded-lg text-text-secondary-dark hover:bg-primary/10 hover:text-primary" href="#">
+<span class="material-symbols-outlined text-2xl">home</span>
+<p class="text-sm font-medium leading-normal">Home</p>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 rounded-lg bg-primary/20 text-primary" href="#">
+<span class="material-symbols-outlined text-2xl" style="font-variation-settings: 'FILL' 1;">store</span>
+<p class="text-sm font-medium leading-normal">Marketplace</p>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 rounded-lg text-text-secondary-dark hover:bg-primary/10 hover:text-primary" href="#">
+<span class="material-symbols-outlined text-2xl">extension</span>
+<p class="text-sm font-medium leading-normal">My Plugins</p>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 rounded-lg text-text-secondary-dark hover:bg-primary/10 hover:text-primary" href="#">
+<span class="material-symbols-outlined text-2xl">menu_book</span>
+<p class="text-sm font-medium leading-normal">Documentation</p>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 rounded-lg text-text-secondary-dark hover:bg-primary/10 hover:text-primary" href="#">
+<span class="material-symbols-outlined text-2xl">settings</span>
+<p class="text-sm font-medium leading-normal">Settings</p>
+</a>
+</nav>
+</div>
+<div class="flex flex-col gap-4">
+<button class="flex min-w-[84px] max-w-[480px] cursor-pointer items-center justify-center overflow-hidden rounded-lg h-10 px-4 bg-primary text-white text-sm font-bold leading-normal tracking-wide hover:bg-primary/90 transition-colors">
+<span class="truncate">Contribute Plugin</span>
+</button>
+<div class="flex flex-col gap-1">
+<a class="flex items-center gap-3 px-3 py-2 rounded-lg text-text-secondary-dark hover:bg-primary/10 hover:text-primary" href="#">
+<span class="material-symbols-outlined text-2xl">logout</span>
+<p class="text-sm font-medium leading-normal">Log Out</p>
+</a>
+</div>
+</div>
+</aside>
+<div class="flex-1 flex flex-col overflow-hidden">
+<header class="flex items-center justify-between whitespace-nowrap border-b border-solid border-border-dark px-6 py-2 bg-panel-dark/50 flex-none">
+<div class="flex items-center gap-4">
+<button class="text-text-secondary-dark hover:text-primary">
+<span class="material-symbols-outlined text-2xl">arrow_back</span>
+</button>
+<div class="flex flex-col">
+<h2 class="text-lg font-bold">Quantum Finance Toolbox</h2>
+<p class="text-xs text-text-secondary-dark">by Quantum Finance Research Lab</p>
+</div>
+</div>
+<div class="flex items-center gap-4">
+<div class="flex items-center gap-2 text-sm">
+<span class="material-symbols-outlined text-amber-400" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="font-semibold">4.8</span>
+<span class="text-text-secondary-dark">(127 reviews)</span>
+</div>
+<button class="flex min-w-[120px] cursor-pointer items-center justify-center gap-2 overflow-hidden rounded-lg h-10 px-6 bg-primary text-white text-sm font-bold leading-normal tracking-[0.015em] hover:bg-primary/90 transition-colors shadow-lg shadow-primary/20">
+<span class="material-symbols-outlined text-base">download</span>
+<span class="truncate">Install Plugin</span>
+</button>
+<div class="bg-center bg-no-repeat aspect-square bg-cover rounded-full size-9" data-alt="User avatar" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuD97Un2HFIC6EjtF2xYESBmHyB9gjgG1zECl0g2lvC0ZWgJANTq-tB5uBjV3dw3tCfo7oWjieVGYipp78S3jQqAyXBdH7Yc_dd8XNhNWWDPESYOOXzpq89Ce1rs0BviiPSvotSwXiRhSTmFnp5q8-fAo9AJK9K3DdPXrA_0ia42kOFAscv7YxwR_7-LKf6u_RVL6EFuYeOoPngcBpALeYcQg9-vwOoo-okpKl9nDIfzfN3sW-BcUeqpAaSb5GAg5XZhotlqoCVW2A");'></div>
+</div>
+</header>
+<main class="flex-1 overflow-y-auto p-8">
+<div class="max-w-7xl mx-auto space-y-8">
+<section class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+<div class="lg:col-span-2 space-y-6">
+<div class="bg-surface-dark rounded-xl border border-border-dark overflow-hidden">
+<img src="https://lh3.googleusercontent.com/aida-public/AB6AXuBsvtJnWEO4ISkmg7KiS4GwlMkyS4y5p6cUCENiwLj30V2d2mwCFw86kQK1ssKCRCgrYcZKC3QVsJMtfatnwKHGzJXTPTks8ga2PsWi3hFKtAchB3wXnoEnH3SHb_-9Nd2-cUG_FItU_m1_3ec2Xs0uhXBFD5aswxOW__B_KpdV3Ef4Thkw-Ru8GkjRk-b8qVlkPSRW7U0aK8MBOimLjx9pr8payD4StAGugfsU6lUHpc2g5-jvOsFH-Y8AVgfv3ZzQyvzzNB2HqA" alt="Finance Toolbox Preview" class="w-full h-64 object-cover"/>
+</div>
+
+<div class="bg-panel-dark rounded-xl border border-border-dark p-6">
+<h3 class="text-2xl font-bold mb-4">Overview</h3>
+<p class="text-text-secondary-dark leading-relaxed mb-4">
+The Quantum Finance Toolbox is a comprehensive suite of quantum algorithms and workflows designed specifically for financial applications. Leverage quantum computing to solve complex portfolio optimization problems, enhance fraud detection systems, and accelerate risk analysis calculations.
+</p>
+<p class="text-text-secondary-dark leading-relaxed">
+Built by quantum finance experts, this toolbox provides production-ready implementations with regulatory compliance documentation, sample datasets, and detailed cost-benefit analyses comparing quantum versus classical approaches.
+</p>
+</div>
+
+<div class="bg-panel-dark rounded-xl border border-border-dark p-6">
+<h3 class="text-2xl font-bold mb-4">Key Features</h3>
+<div class="space-y-4">
+<div class="flex gap-4">
+<div class="flex-shrink-0 w-12 h-12 rounded-lg bg-primary/20 flex items-center justify-center">
+<span class="material-symbols-outlined text-primary text-2xl">account_balance</span>
+</div>
+<div>
+<h4 class="font-semibold text-lg mb-1">Portfolio Optimization (QAOA)</h4>
+<p class="text-text-secondary-dark text-sm">Quantum Approximate Optimization Algorithm implementations for asset allocation with risk constraints and regulatory requirements.</p>
+</div>
+</div>
+<div class="flex gap-4">
+<div class="flex-shrink-0 w-12 h-12 rounded-lg bg-electric-blue/20 flex items-center justify-center">
+<span class="material-symbols-outlined text-electric-blue text-2xl">shield</span>
+</div>
+<div>
+<h4 class="font-semibold text-lg mb-1">Fraud Detection ML</h4>
+<p class="text-text-secondary-dark text-sm">Quantum machine learning classifiers with enhanced feature detection capabilities for identifying fraudulent transactions.</p>
+</div>
+</div>
+<div class="flex gap-4">
+<div class="flex-shrink-0 w-12 h-12 rounded-lg bg-muted-teal/20 flex items-center justify-center">
+<span class="material-symbols-outlined text-muted-teal text-2xl">score</span>
+</div>
+<div>
+<h4 class="font-semibold text-lg mb-1">Credit Scoring Models</h4>
+<p class="text-text-secondary-dark text-sm">Quantum feature mapping for improved credit risk assessment with higher accuracy than classical models.</p>
+</div>
+</div>
+<div class="flex gap-4">
+<div class="flex-shrink-0 w-12 h-12 rounded-lg bg-amber-orange/20 flex items-center justify-center">
+<span class="material-symbols-outlined text-amber-orange text-2xl">analytics</span>
+</div>
+<div>
+<h4 class="font-semibold text-lg mb-1">Monte Carlo Acceleration</h4>
+<p class="text-text-secondary-dark text-sm">Amplitude estimation techniques for exponential speedup in risk analysis and derivative pricing simulations.</p>
+</div>
+</div>
+</div>
+</div>
+
+<div class="bg-panel-dark rounded-xl border border-border-dark p-6">
+<h3 class="text-2xl font-bold mb-4">Usage Example</h3>
+<p class="text-text-secondary-dark text-sm mb-4">Quick start guide for portfolio optimization:</p>
+<div class="bg-background-dark rounded-lg p-4 font-mono text-sm overflow-x-auto">
+<pre class="text-electric-blue"><span class="text-primary">from</span> quantum_finance <span class="text-primary">import</span> PortfolioOptimizer
+
+<span class="text-text-secondary-dark"># Initialize optimizer with risk tolerance</span>
+optimizer = PortfolioOptimizer(
+    risk_tolerance=<span class="text-amber-orange">0.7</span>,
+    num_qubits=<span class="text-amber-orange">8</span>
+)
+
+<span class="text-text-secondary-dark"># Load financial data</span>
+data = optimizer.load_market_data(
+    tickers=[<span class="text-muted-teal">"AAPL"</span>, <span class="text-muted-teal">"GOOG"</span>, <span class="text-muted-teal">"MSFT"</span>]
+)
+
+<span class="text-text-secondary-dark"># Run QAOA optimization</span>
+result = optimizer.optimize(data, iterations=<span class="text-amber-orange">100</span>)
+<span class="text-primary">print</span>(result.optimal_allocation)</pre>
+</div>
+</div>
+
+<div class="bg-panel-dark rounded-xl border border-border-dark p-6">
+<h3 class="text-2xl font-bold mb-4">Workflow Builder Integration</h3>
+<p class="text-text-secondary-dark text-sm mb-4">Preview of new blocks available after installation:</p>
+<div class="grid grid-cols-2 gap-4">
+<div class="bg-surface-dark rounded-lg p-4 border border-border-dark">
+<div class="flex items-center gap-3 mb-2">
+<div class="w-8 h-8 rounded bg-primary flex items-center justify-center">
+<span class="material-symbols-outlined text-white text-sm">account_balance</span>
+</div>
+<span class="font-semibold text-sm">Portfolio QAOA</span>
+</div>
+<p class="text-xs text-text-secondary-dark">Drag-and-drop portfolio optimization block</p>
+</div>
+<div class="bg-surface-dark rounded-lg p-4 border border-border-dark">
+<div class="flex items-center gap-3 mb-2">
+<div class="w-8 h-8 rounded bg-electric-blue flex items-center justify-center">
+<span class="material-symbols-outlined text-background-dark text-sm">shield</span>
+</div>
+<span class="font-semibold text-sm">Fraud Detector</span>
+</div>
+<p class="text-xs text-text-secondary-dark">QML-based fraud classification</p>
+</div>
+<div class="bg-surface-dark rounded-lg p-4 border border-border-dark">
+<div class="flex items-center gap-3 mb-2">
+<div class="w-8 h-8 rounded bg-muted-teal flex items-center justify-center">
+<span class="material-symbols-outlined text-background-dark text-sm">score</span>
+</div>
+<span class="font-semibold text-sm">Credit Scorer</span>
+</div>
+<p class="text-xs text-text-secondary-dark">Quantum feature mapping scorer</p>
+</div>
+<div class="bg-surface-dark rounded-lg p-4 border border-border-dark">
+<div class="flex items-center gap-3 mb-2">
+<div class="w-8 h-8 rounded bg-amber-orange flex items-center justify-center">
+<span class="material-symbols-outlined text-background-dark text-sm">analytics</span>
+</div>
+<span class="font-semibold text-sm">Monte Carlo</span>
+</div>
+<p class="text-xs text-text-secondary-dark">Amplitude estimation risk engine</p>
+</div>
+</div>
+</div>
+
+<div class="bg-panel-dark rounded-xl border border-border-dark p-6">
+<h3 class="text-2xl font-bold mb-4">Community Reviews</h3>
+<div class="space-y-4">
+<div class="border-b border-border-dark pb-4">
+<div class="flex items-center justify-between mb-2">
+<div class="flex items-center gap-2">
+<div class="w-8 h-8 rounded-full bg-primary/20 flex items-center justify-center">
+<span class="text-sm font-bold">DM</span>
+</div>
+<span class="font-semibold">David Martinez</span>
+<div class="flex text-amber-400">
+<span class="material-symbols-outlined text-sm" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="material-symbols-outlined text-sm" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="material-symbols-outlined text-sm" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="material-symbols-outlined text-sm" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="material-symbols-outlined text-sm" style="font-variation-settings: 'FILL' 1;">star</span>
+</div>
+</div>
+<span class="text-xs text-text-secondary-dark">2 weeks ago</span>
+</div>
+<p class="text-text-secondary-dark text-sm">"Excellent toolbox! The QAOA portfolio optimizer gave us 15% better risk-adjusted returns compared to our classical optimizer. Documentation is thorough and compliance features saved us months of work."</p>
+</div>
+<div class="border-b border-border-dark pb-4">
+<div class="flex items-center justify-between mb-2">
+<div class="flex items-center gap-2">
+<div class="w-8 h-8 rounded-full bg-electric-blue/20 flex items-center justify-center">
+<span class="text-sm font-bold">SC</span>
+</div>
+<span class="font-semibold">Sarah Chen</span>
+<div class="flex text-amber-400">
+<span class="material-symbols-outlined text-sm" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="material-symbols-outlined text-sm" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="material-symbols-outlined text-sm" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="material-symbols-outlined text-sm" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="material-symbols-outlined text-sm">star</span>
+</div>
+</div>
+<span class="text-xs text-text-secondary-dark">1 month ago</span>
+</div>
+<p class="text-text-secondary-dark text-sm">"Great fraud detection capabilities. Caught patterns our ML models missed. Would give 5 stars but installation took longer than expected due to dependencies."</p>
+</div>
+</div>
+</div>
+</div>
+
+<aside class="lg:col-span-1 space-y-6">
+<div class="bg-panel-dark rounded-xl border border-border-dark p-6 sticky top-6">
+<h3 class="text-lg font-bold mb-4">Plugin Information</h3>
+<div class="space-y-4">
+<div>
+<p class="text-xs text-text-secondary-dark mb-1">VERSION</p>
+<p class="font-semibold">2.1.4</p>
+</div>
+<div>
+<p class="text-xs text-text-secondary-dark mb-1">LAST UPDATED</p>
+<p class="font-semibold">Nov 3, 2025</p>
+</div>
+<div>
+<p class="text-xs text-text-secondary-dark mb-1">DOWNLOADS</p>
+<p class="font-semibold">12,847</p>
+</div>
+<div>
+<p class="text-xs text-text-secondary-dark mb-1">LICENSE</p>
+<p class="font-semibold">Commercial / Academic</p>
+</div>
+<div>
+<p class="text-xs text-text-secondary-dark mb-1">CATEGORY</p>
+<p class="font-semibold">Finance & Trading</p>
+</div>
+</div>
+
+<div class="mt-6 pt-6 border-t border-border-dark">
+<h4 class="font-semibold mb-3">Requirements</h4>
+<div class="space-y-2 text-sm">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-muted-teal text-base">check_circle</span>
+<span class="text-text-secondary-dark">Quantum IDE v3.2+</span>
+</div>
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-muted-teal text-base">check_circle</span>
+<span class="text-text-secondary-dark">Python 3.9 or higher</span>
+</div>
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-muted-teal text-base">check_circle</span>
+<span class="text-text-secondary-dark">Qiskit Finance 0.4+</span>
+</div>
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-muted-teal text-base">check_circle</span>
+<span class="text-text-secondary-dark">16+ qubits recommended</span>
+</div>
+</div>
+</div>
+
+<div class="mt-6 pt-6 border-t border-border-dark">
+<h4 class="font-semibold mb-3">Included Templates</h4>
+<ul class="space-y-2 text-sm text-text-secondary-dark">
+<li class="flex items-start gap-2">
+<span class="material-symbols-outlined text-primary text-base mt-0.5">folder</span>
+<span>4 Portfolio optimization workflows</span>
+</li>
+<li class="flex items-start gap-2">
+<span class="material-symbols-outlined text-primary text-base mt-0.5">folder</span>
+<span>3 Fraud detection models</span>
+</li>
+<li class="flex items-start gap-2">
+<span class="material-symbols-outlined text-primary text-base mt-0.5">folder</span>
+<span>2 Credit scoring pipelines</span>
+</li>
+<li class="flex items-start gap-2">
+<span class="material-symbols-outlined text-primary text-base mt-0.5">folder</span>
+<span>5 Risk analysis scenarios</span>
+</li>
+<li class="flex items-start gap-2">
+<span class="material-symbols-outlined text-primary text-base mt-0.5">dataset</span>
+<span>Sample financial datasets</span>
+</li>
+</ul>
+</div>
+
+<div class="mt-6">
+<h4 class="font-semibold mb-3">Author</h4>
+<div class="flex items-center gap-3">
+<div class="w-12 h-12 rounded-full bg-primary/20 flex items-center justify-center">
+<span class="material-symbols-outlined text-primary text-2xl">corporate_fare</span>
+</div>
+<div>
+<p class="font-semibold">Quantum Finance Research Lab</p>
+<p class="text-xs text-text-secondary-dark">Verified Publisher</p>
+</div>
+</div>
+</div>
+</div>
+</aside>
+</section>
+</div>
+</main>
+</div>
+</div>
+</body></html>
