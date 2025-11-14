@@ -74,6 +74,72 @@
         z-index: 100;
         box-shadow: 0 4px 12px rgba(149, 17, 212, 0.3);
       }
+
+      /* Dropdown menu styles */
+      .dropdown {
+        position: relative;
+      }
+
+      .dropdown-menu {
+        position: absolute;
+        top: 100%;
+        left: 0;
+        margin-top: 8px;
+        min-width: 280px;
+        background-color: #1a1128;
+        border: 1px solid #2d2438;
+        border-radius: 0.5rem;
+        box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
+        opacity: 0;
+        visibility: hidden;
+        transform: translateY(-10px);
+        transition: all 0.2s ease-in-out;
+        z-index: 1000;
+        padding: 4px;
+      }
+
+      .dropdown-menu.show {
+        opacity: 1;
+        visibility: visible;
+        transform: translateY(0);
+      }
+
+      .dropdown-item {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        padding: 8px 12px;
+        color: #e0e0ff;
+        font-size: 14px;
+        border-radius: 0.25rem;
+        cursor: pointer;
+        transition: background-color 0.15s;
+      }
+
+      .dropdown-item:hover {
+        background-color: #2d2438;
+      }
+
+      .dropdown-divider {
+        height: 1px;
+        background-color: #2d2438;
+        margin: 4px 0;
+      }
+
+      .dropdown-item.disabled {
+        color: #8a8aab;
+        cursor: default;
+      }
+
+      .dropdown-item.disabled:hover {
+        background-color: transparent;
+      }
+
+      .dropdown-shortcut {
+        margin-left: auto;
+        font-size: 12px;
+        color: #8a8aab;
+      }
     </style>
 <script>
       tailwind.config = {
@@ -105,7 +171,44 @@
 <span class="material-symbols-outlined text-primary text-2xl">hub</span>
 <h2 class="text-lg font-bold">Quantum IDE</h2>
 <div class="hidden md:flex items-center gap-6 ml-6">
-<a class="text-sm font-medium leading-normal hover:text-primary transition-colors" href="#">File</a>
+<div class="dropdown">
+<button id="fileMenuBtn" class="text-sm font-medium leading-normal hover:text-primary transition-colors">File</button>
+<div id="fileMenu" class="dropdown-menu">
+<div class="dropdown-item disabled">New Text File</div>
+<div class="dropdown-item disabled">New File ...</div>
+<div class="dropdown-divider"></div>
+<div class="dropdown-item disabled">New Window</div>
+<div class="dropdown-item disabled">New Window with Profile</div>
+<div class="dropdown-divider"></div>
+<div class="dropdown-item disabled">Open File ...</div>
+<div class="dropdown-item disabled">Open Folder ...</div>
+<div class="dropdown-item" onclick="window.location.href='quantum-ide-project-mgmt.html'">Open Projects ...</div>
+<div class="dropdown-item disabled">Open Workspace from File ...</div>
+<div class="dropdown-item disabled">Open Recent</div>
+<div class="dropdown-divider"></div>
+<div class="dropdown-item disabled">Add Folder to Workspace ...</div>
+<div class="dropdown-divider"></div>
+<div class="dropdown-item disabled">Save Workspace As ...</div>
+<div class="dropdown-item disabled">Duplicate Workspace</div>
+<div class="dropdown-divider"></div>
+<div class="dropdown-item disabled">Save</div>
+<div class="dropdown-item disabled">Save As ...</div>
+<div class="dropdown-item disabled">Save All</div>
+<div class="dropdown-divider"></div>
+<div class="dropdown-item disabled">Share</div>
+<div class="dropdown-item disabled">Auto Save</div>
+<div class="dropdown-divider"></div>
+<div class="dropdown-item disabled">Preferences</div>
+<div class="dropdown-divider"></div>
+<div class="dropdown-item disabled">Revert File</div>
+<div class="dropdown-divider"></div>
+<div class="dropdown-item disabled">Close Editor</div>
+<div class="dropdown-item disabled">Close Folder</div>
+<div class="dropdown-item disabled">Close Window</div>
+<div class="dropdown-divider"></div>
+<div class="dropdown-item disabled">Exit</div>
+</div>
+</div>
 <a class="text-sm font-medium leading-normal hover:text-primary transition-colors" href="#">Edit</a>
 <a class="text-sm font-medium leading-normal hover:text-primary transition-colors" href="#">Selection</a>
 <a class="text-sm font-medium leading-normal hover:text-primary transition-colors" href="#">View</a>
@@ -170,6 +273,17 @@
 <span class="font-medium text-sm">My Project</span>
 </div>
 <div class="pl-7 flex flex-col gap-1">
+<div class="flex items-center gap-2 mb-2 mt-2">
+<span class="material-symbols-outlined text-lg">expand_less</span>
+<span class="material-symbols-outlined text-primary text-lg">folder</span>
+<span class="font-medium text-sm">Classical Pre-processing</span>
+</div>
+<div class="flex items-center gap-2 mb-2 mt-2">
+<span class="material-symbols-outlined text-lg">expand_more</span>
+<span class="material-symbols-outlined text-primary text-lg">folder</span>
+<span class="font-medium text-sm">Quantum Algorithm</span>
+</div>
+<div class="pl-7 flex flex-col gap-1">
 <a href="quantum-ide-circuit.html" class="flex items-center gap-2 p-1 rounded hover:bg-primary/20 text-sm">
 <span class="material-symbols-outlined text-base text-blue-400">description</span>
 <span>circuit.wf</span>
@@ -178,16 +292,38 @@
 <span class="material-symbols-outlined text-base text-green-400">code</span>
 <span>grover.py</span>
 </a>
-<a href="quantum-ide-jupyter.html" class="flex items-center gap-2 p-1 rounded bg-primary/30 text-sm font-semibold">
+<a href="quantum-ide-jupyter.html" class="flex items-center gap-2 p-1 rounded hover:bg-primary/20 text-sm">
 <span class="material-symbols-outlined text-base text-yellow-400">description</span>
 <span>grover.ipynb</span>
 </a>
+</div>
+<div class="flex items-center gap-2 mb-2 mt-2">
+<span class="material-symbols-outlined text-lg">expand_less</span>
+<span class="material-symbols-outlined text-primary text-lg">folder</span>
+<span class="font-medium text-sm">Classical Post-processing</span>
+</div>
 </div>
 </div>
 </div>
 </div>
 </aside>
-<main class="flex-1 overflow-y-auto bg-background-dark p-4 sm:p-6 lg:p-8">
+<main class="flex-1 flex flex-col min-w-0">
+<div class="flex-1 flex flex-col bg-background-dark">
+<div class="flex border-b border-border-dark flex-none">
+<a class="flex items-center gap-2 border-b-2 border-transparent text-text-secondary-dark px-4 py-2 hover:bg-panel-dark/80 transition-colors" href="quantum-ide-circuit.html">
+<span class="material-symbols-outlined text-base text-blue-400">description</span>
+<p class="text-sm font-medium">circuit.wf</p>
+</a>
+<a class="flex items-center gap-2 border-b-2 border-transparent text-text-secondary-dark px-4 py-2 hover:bg-panel-dark/80 transition-colors" href="quantum-ide-code-editor.html">
+<span class="material-symbols-outlined text-base text-green-400">code</span>
+<p class="text-sm font-medium">grover.py</p>
+</a>
+<a class="flex items-center gap-2 border-b-2 border-primary text-text-primary-dark px-4 py-2 bg-panel-dark" href="quantum-ide-jupyter.html">
+<span class="material-symbols-outlined text-base text-yellow-400">description</span>
+<p class="text-sm font-medium">grover.ipynb</p>
+</a>
+</div>
+<div class="flex-1 overflow-y-auto p-4 sm:p-6 lg:p-8">
 <div class="mx-auto max-w-4xl space-y-6">
 <div class="flex flex-wrap items-center justify-between gap-3">
 <h1 class="text-3xl font-bold tracking-tight">Grover's Algorithm Implementation</h1>
@@ -297,6 +433,8 @@ plot_histogram(counts)</code></pre>
 </div>
 </div>
 </div>
+</div>
+</div>
 </main>
 <aside id="aiAssistant" class="hidden w-96 flex-shrink-0 border-l border-solid border-border-dark bg-panel-dark p-4 flex flex-col h-full">
 <div class="flex items-center justify-between pb-4">
@@ -356,6 +494,27 @@ plot_histogram(counts)</code></pre>
   aiCloseButton.addEventListener('click', function() {
     aiAssistant.classList.add('hidden');
     aiToggleButton.style.display = 'flex';
+  });
+
+  // File menu dropdown
+  const fileMenuBtn = document.getElementById('fileMenuBtn');
+  const fileMenu = document.getElementById('fileMenu');
+
+  fileMenuBtn.addEventListener('click', function(e) {
+    e.stopPropagation();
+    fileMenu.classList.toggle('show');
+  });
+
+  // Close dropdown when clicking outside
+  document.addEventListener('click', function(e) {
+    if (!fileMenu.contains(e.target) && e.target !== fileMenuBtn) {
+      fileMenu.classList.remove('show');
+    }
+  });
+
+  // Prevent dropdown from closing when clicking inside
+  fileMenu.addEventListener('click', function(e) {
+    e.stopPropagation();
   });
 </script>
 

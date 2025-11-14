@@ -82,8 +82,74 @@
             z-index: 100;
             box-shadow: 0 4px 12px rgba(149, 17, 212, 0.3);
         }
+
+        /* Dropdown menu styles */
+        .dropdown {
+          position: relative;
+        }
+
+        .dropdown-menu {
+          position: absolute;
+          top: 100%;
+          left: 0;
+          margin-top: 8px;
+          min-width: 280px;
+          background-color: #1a1128;
+          border: 1px solid #2d2438;
+          border-radius: 0.5rem;
+          box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
+          opacity: 0;
+          visibility: hidden;
+          transform: translateY(-10px);
+          transition: all 0.2s ease-in-out;
+          z-index: 1000;
+          padding: 4px;
+        }
+
+        .dropdown-menu.show {
+          opacity: 1;
+          visibility: visible;
+          transform: translateY(0);
+        }
+
+        .dropdown-item {
+          display: flex;
+          align-items: center;
+          gap: 12px;
+          padding: 8px 12px;
+          color: #e0e0ff;
+          font-size: 14px;
+          border-radius: 0.25rem;
+          cursor: pointer;
+          transition: background-color 0.15s;
+        }
+
+        .dropdown-item:hover {
+          background-color: #2d2438;
+        }
+
+        .dropdown-divider {
+          height: 1px;
+          background-color: #2d2438;
+          margin: 4px 0;
+        }
+
+        .dropdown-item.disabled {
+          color: #8a8aab;
+          cursor: default;
+        }
+
+        .dropdown-item.disabled:hover {
+          background-color: transparent;
+        }
+
+        .dropdown-shortcut {
+          margin-left: auto;
+          font-size: 12px;
+          color: #8a8aab;
+        }
     </style>
-<script>tailwind.config = {darkMode: "class", theme: {extend: {colors: {primary: "#9511d4", "background-dark": "#0a0118", "panel-dark": "#1a1128", "border-dark": "#2d2438", "text-primary-dark": "#e0e0ff", "text-secondary-dark": "#8a8aab"}, fontFamily: {display: "Space Grotesk"}, borderRadius: {DEFAULT: "0.25rem", lg: "0.5rem", xl: "0.75rem", full: "9999px"}}}};</script>
+<script>tailwind.config = {darkMode: "class", theme: {extend: {colors: {primary: "#9511d4", "background-dark": "#0a0118", "panel-dark": "#1a1128", "border-dark": "#2d2438", "surface-dark": "#14101f", "text-primary-dark": "#e0e0ff", "text-secondary-dark": "#8a8aab"}, fontFamily: {display: "Space Grotesk"}, borderRadius: {DEFAULT: "0.25rem", lg: "0.5rem", xl: "0.75rem", full: "9999px"}}}};</script>
 </head>
 <body class="bg-background-dark font-display text-text-primary-dark">
 <div class="flex flex-col h-screen w-full">
@@ -92,7 +158,44 @@
 <span class="material-symbols-outlined text-primary text-2xl">hub</span>
 <h2 class="text-lg font-bold">Quantum IDE</h2>
 <div class="hidden md:flex items-center gap-6 ml-6">
-<a class="text-sm font-medium leading-normal hover:text-primary transition-colors" href="#">File</a>
+<div class="dropdown">
+<button id="fileMenuBtn" class="text-sm font-medium leading-normal hover:text-primary transition-colors">File</button>
+<div id="fileMenu" class="dropdown-menu">
+<div class="dropdown-item disabled">New Text File</div>
+<div class="dropdown-item disabled">New File ...</div>
+<div class="dropdown-divider"></div>
+<div class="dropdown-item disabled">New Window</div>
+<div class="dropdown-item disabled">New Window with Profile</div>
+<div class="dropdown-divider"></div>
+<div class="dropdown-item disabled">Open File ...</div>
+<div class="dropdown-item disabled">Open Folder ...</div>
+<div class="dropdown-item" onclick="window.location.href='quantum-ide-project-mgmt.html'">Open Projects ...</div>
+<div class="dropdown-item disabled">Open Workspace from File ...</div>
+<div class="dropdown-item disabled">Open Recent</div>
+<div class="dropdown-divider"></div>
+<div class="dropdown-item disabled">Add Folder to Workspace ...</div>
+<div class="dropdown-divider"></div>
+<div class="dropdown-item disabled">Save Workspace As ...</div>
+<div class="dropdown-item disabled">Duplicate Workspace</div>
+<div class="dropdown-divider"></div>
+<div class="dropdown-item disabled">Save</div>
+<div class="dropdown-item disabled">Save As ...</div>
+<div class="dropdown-item disabled">Save All</div>
+<div class="dropdown-divider"></div>
+<div class="dropdown-item disabled">Share</div>
+<div class="dropdown-item disabled">Auto Save</div>
+<div class="dropdown-divider"></div>
+<div class="dropdown-item disabled">Preferences</div>
+<div class="dropdown-divider"></div>
+<div class="dropdown-item disabled">Revert File</div>
+<div class="dropdown-divider"></div>
+<div class="dropdown-item disabled">Close Editor</div>
+<div class="dropdown-item disabled">Close Folder</div>
+<div class="dropdown-item disabled">Close Window</div>
+<div class="dropdown-divider"></div>
+<div class="dropdown-item disabled">Exit</div>
+</div>
+</div>
 <a class="text-sm font-medium leading-normal hover:text-primary transition-colors" href="#">Edit</a>
 <a class="text-sm font-medium leading-normal hover:text-primary transition-colors" href="#">Selection</a>
 <a class="text-sm font-medium leading-normal hover:text-primary transition-colors" href="#">View</a>
@@ -157,11 +260,22 @@
 <span class="font-medium text-sm">My Project</span>
 </div>
 <div class="pl-7 flex flex-col gap-1">
+<div class="flex items-center gap-2 mb-2 mt-2">
+<span class="material-symbols-outlined text-lg">expand_less</span>
+<span class="material-symbols-outlined text-primary text-lg">folder</span>
+<span class="font-medium text-sm">Classical Pre-processing</span>
+</div>
+<div class="flex items-center gap-2 mb-2 mt-2">
+<span class="material-symbols-outlined text-lg">expand_more</span>
+<span class="material-symbols-outlined text-primary text-lg">folder</span>
+<span class="font-medium text-sm">Quantum Algorithm</span>
+</div>
+<div class="pl-7 flex flex-col gap-1">
 <a href="quantum-ide-circuit.html" class="flex items-center gap-2 p-1 rounded hover:bg-primary/20 text-sm">
 <span class="material-symbols-outlined text-base text-blue-400">description</span>
 <span>circuit.wf</span>
 </a>
-<a href="quantum-ide-code-editor.html" class="flex items-center gap-2 p-1 rounded bg-primary/30 text-sm font-semibold">
+<a href="quantum-ide-code-editor.html" class="flex items-center gap-2 p-1 rounded hover:bg-primary/20 text-sm">
 <span class="material-symbols-outlined text-base text-green-400">code</span>
 <span>grover.py</span>
 </a>
@@ -170,6 +284,12 @@
 <span>grover.ipynb</span>
 </a>
 </div>
+<div class="flex items-center gap-2 mb-2 mt-2">
+<span class="material-symbols-outlined text-lg">expand_less</span>
+<span class="material-symbols-outlined text-primary text-lg">folder</span>
+<span class="font-medium text-sm">Classical Post-processing</span>
+</div>
+</div>
 </div>
 </div>
 </div>
@@ -177,13 +297,17 @@
 <main class="flex-1 flex flex-col min-w-0">
 <div class="flex-1 flex flex-col bg-background-dark">
 <div class="flex border-b border-border-dark flex-none">
-<a class="flex items-center gap-2 border-b-2 border-primary text-text-primary-dark px-4 py-2 bg-panel-dark" href="#">
-<span class="material-symbols-outlined text-base text-green-400">code</span>
-<p class="text-sm font-medium">main.qpy</p>
+<a class="flex items-center gap-2 border-b-2 border-transparent text-text-secondary-dark px-4 py-2 hover:bg-panel-dark/80 transition-colors" href="quantum-ide-circuit.html">
+<span class="material-symbols-outlined text-base text-blue-400">description</span>
+<p class="text-sm font-medium">circuit.wf</p>
 </a>
-<a class="flex items-center gap-2 border-b-2 border-transparent text-text-secondary-dark px-4 py-2 hover:bg-panel-dark/80 transition-colors" href="#">
-<span class="material-symbols-outlined text-base text-yellow-400">data_object</span>
-<p class="text-sm font-medium">config.json</p>
+<a class="flex items-center gap-2 border-b-2 border-primary text-text-primary-dark px-4 py-2 bg-panel-dark" href="quantum-ide-code-editor.html">
+<span class="material-symbols-outlined text-base text-green-400">code</span>
+<p class="text-sm font-medium">grover.py</p>
+</a>
+<a class="flex items-center gap-2 border-b-2 border-transparent text-text-secondary-dark px-4 py-2 hover:bg-panel-dark/80 transition-colors" href="quantum-ide-jupyter.html">
+<span class="material-symbols-outlined text-base text-yellow-400">description</span>
+<p class="text-sm font-medium">grover.ipynb</p>
 </a>
 </div>
 <div class="flex-1 p-4 overflow-auto font-mono text-sm leading-relaxed">
@@ -210,51 +334,48 @@
 </div>
 </div>
 </main>
-<aside id="aiAssistant" class="hidden w-80 bg-panel-dark/60 p-4 flex-none border-l border-border-dark flex flex-col">
-<div class="flex items-center justify-between mb-4 flex-none">
-<div class="flex items-center gap-2">
-<span class="material-symbols-outlined text-primary">smart_toy</span>
-<h3 class="text-sm font-bold uppercase tracking-wider text-text-secondary-dark">AI Assistant</h3>
-</div>
+<aside id="aiAssistant" class="hidden w-96 flex-shrink-0 border-l border-solid border-border-dark bg-panel-dark p-4 flex flex-col h-full">
+<div class="flex items-center justify-between pb-4">
+<h3 class="text-lg font-bold">AI Assistant</h3>
 <button id="aiCloseButton" class="text-text-secondary-dark hover:text-text-primary-dark">
 <span class="material-symbols-outlined">close</span>
 </button>
 </div>
-<div class="flex-1 space-y-6 overflow-y-auto pr-2">
+<div class="flex-1 overflow-y-auto space-y-4 pr-2">
 <div class="flex gap-3">
-<div class="bg-panel-dark text-xl flex-none size-8 rounded-full flex items-center justify-center">🤖</div>
-<div class="flex flex-1 flex-col items-start gap-2 bg-panel-dark p-3 rounded-lg rounded-tl-none">
-<p class="text-text-primary-dark text-sm font-normal">
-                                Welcome! I'm your Quantum AI Assistant. How can I help you today? You can ask me to explain code, optimize a circuit, or generate an algorithm.
-                            </p>
+<div class="flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-full bg-primary">
+<span class="material-symbols-outlined text-lg">auto_awesome</span>
 </div>
+<div class="rounded-lg rounded-tl-none bg-surface-dark p-3 text-sm">
+<p>Welcome! I'm your Quantum AI Assistant. How can I help you today? You can ask me to explain code, optimize a circuit, or generate an algorithm.</p>
 </div>
-<div class="flex gap-3">
-<div class="flex-1 flex flex-col items-end gap-2 bg-primary/80 p-3 rounded-lg rounded-tr-none">
-<p class="text-white text-sm font-normal">
-                                Explain the 'cz' gate used in the code.
-                            </p>
-</div>
-<div class="bg-center bg-no-repeat aspect-square bg-cover rounded-full size-8 flex-none" data-alt="User avatar with a light lavender gradient" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuD4IxFTh7erPnLe_l1h53O16_qMkt480wz1OxTHC4kHOrqUSbRYWU4kg1558aRE69PwMH1gOMVLolvB0UmmCo2ubTsDogwcUiK1EjuNMNszNesI3xDpM9ESl5xLzWQKHlMR7OeoGDzyeHbZ1RYi-qd8M55rP8K89g0llQCjvpuQHm6HaOBamI0a_lkKGGq8bfpzemTGz9KcWOFWocZ6f7rzOYBLt09_j86M3gSskAVmMLn3jIr2RXHaP9x9kqPMJsKcd5hStfGkAw");'></div>
 </div>
 <div class="flex gap-3">
-<div class="bg-panel-dark text-xl flex-none size-8 rounded-full flex items-center justify-center">🤖</div>
-<div class="flex flex-1 flex-col items-start gap-2 bg-panel-dark p-3 rounded-lg rounded-tl-none">
-<p class="text-text-primary-dark text-sm font-normal">
-                                Of course. The Controlled-Z (CZ) gate is a two-qubit gate. It flips the phase of the target qubit if and only if the control qubit is in the state |1⟩. It's a key component in many quantum algorithms.
-                            </p>
+<div class="flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-full bg-primary">
+<span class="material-symbols-outlined text-lg">auto_awesome</span>
+</div>
+<div class="rounded-lg rounded-tl-none bg-surface-dark p-3 text-sm">
+<p>Explain the 'cz' gate used in the code.</p>
+</div>
+</div>
+<div class="flex gap-3">
+<div class="flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-full bg-primary">
+<span class="material-symbols-outlined text-lg">auto_awesome</span>
+</div>
+<div class="rounded-lg rounded-tl-none bg-surface-dark p-3 text-sm">
+<p>Of course. The Controlled-Z (CZ) gate is a two-qubit gate. It flips the phase of the target qubit if and only if the control qubit is in the state |1⟩. It's a key component in many quantum algorithms.</p>
 <div class="w-full bg-background-dark p-2 rounded text-xs font-mono">
 <span class="code-comment"># CZ gate applied to control qubit 0 and target qubit 2</span><br/>
 <span class="code-variable">circuit</span>.<span class="code-function">cz</span>(<span class="code-number">0</span>, <span class="code-number">2</span>)
-                            </div>
 </div>
 </div>
 </div>
-<div class="mt-4 flex-none">
+</div>
+<div class="mt-4 pt-4 border-t border-solid border-border-dark">
 <div class="relative">
-<input class="w-full bg-panel-dark border border-border-dark rounded-lg py-2 pl-4 pr-10 text-sm focus:ring-2 focus:ring-primary focus:border-primary transition-all" placeholder="Ask the AI assistant..." type="text"/>
-<button class="absolute inset-y-0 right-0 flex items-center pr-3 cursor-pointer text-text-secondary-dark hover:text-primary transition-colors">
-<span class="material-symbols-outlined">send</span>
+<textarea class="form-input w-full resize-none rounded-lg border-none bg-surface-dark p-3 pr-10 text-sm placeholder:text-text-secondary-dark focus:outline-none focus:ring-2 focus:ring-primary" placeholder="Ask a question..." rows="3"></textarea>
+<button class="absolute bottom-2.5 right-2.5 flex h-7 w-7 items-center justify-center rounded-md bg-primary text-white hover:bg-primary/80">
+<span class="material-symbols-outlined text-lg">send</span>
 </button>
 </div>
 </div>
@@ -287,6 +408,27 @@
   aiCloseButton.addEventListener('click', function() {
     aiAssistant.classList.add('hidden');
     aiToggleButton.style.display = 'flex';
+  });
+
+  // File menu dropdown
+  const fileMenuBtn = document.getElementById('fileMenuBtn');
+  const fileMenu = document.getElementById('fileMenu');
+
+  fileMenuBtn.addEventListener('click', function(e) {
+    e.stopPropagation();
+    fileMenu.classList.toggle('show');
+  });
+
+  // Close dropdown when clicking outside
+  document.addEventListener('click', function(e) {
+    if (!fileMenu.contains(e.target) && e.target !== fileMenuBtn) {
+      fileMenu.classList.remove('show');
+    }
+  });
+
+  // Prevent dropdown from closing when clicking inside
+  fileMenu.addEventListener('click', function(e) {
+    e.stopPropagation();
   });
 </script>
 

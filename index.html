@@ -1,0 +1,610 @@
+<!DOCTYPE html>
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Quantum IDE Onboarding</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300..700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet"/>
+<script>
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#9511d4",
+                        "background-dark": "#0a0118",
+                        "panel-dark": "#1a1128",
+                        "border-dark": "#2d2438",
+                        "surface-dark": "#14101f",
+                        "text-primary-dark": "#e0e0ff",
+                        "text-secondary-dark": "#8a8aab",
+                    },
+                    fontFamily: {
+                        "display": ["Space Grotesk", "sans-serif"]
+                    },
+                    borderRadius: {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                },
+            },
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+            font-size: 24px;
+        }
+
+        /* Tooltip styles */
+        .tooltip {
+          position: relative;
+        }
+
+        .tooltip::after {
+          content: attr(data-tooltip);
+          position: absolute;
+          left: 100%;
+          top: 50%;
+          transform: translateY(-50%);
+          margin-left: 12px;
+          padding: 6px 12px;
+          background-color: #1a1128;
+          color: #e0e0ff;
+          font-size: 12px;
+          white-space: nowrap;
+          border-radius: 4px;
+          opacity: 0;
+          pointer-events: none;
+          transition: opacity 0.2s;
+          z-index: 1000;
+          border: 1px solid #2d2438;
+        }
+
+        .tooltip:hover::after {
+          opacity: 1;
+        }
+
+        /* File explorer slide animation */
+        #fileExplorer {
+          transition: margin-left 0.3s ease-in-out, opacity 0.3s ease-in-out;
+        }
+
+        #fileExplorer.hidden {
+          margin-left: -256px;
+          opacity: 0;
+          pointer-events: none;
+        }
+
+        /* AI Assistant slide animation */
+        #aiAssistant {
+          transition: transform 0.3s ease-in-out, opacity 0.3s ease-in-out;
+        }
+
+        #aiAssistant.hidden {
+          transform: translateX(100%);
+          opacity: 0;
+          pointer-events: none;
+        }
+
+        /* Floating AI button */
+        #aiToggleButton {
+          position: fixed;
+          top: 80px;
+          right: 20px;
+          z-index: 100;
+          box-shadow: 0 4px 12px rgba(149, 17, 212, 0.3);
+        }
+
+        /* Dropdown menu styles */
+        .dropdown {
+          position: relative;
+        }
+
+        .dropdown-menu {
+          position: absolute;
+          top: 100%;
+          left: 0;
+          margin-top: 8px;
+          min-width: 280px;
+          background-color: #1a1128;
+          border: 1px solid #2d2438;
+          border-radius: 0.5rem;
+          box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
+          opacity: 0;
+          visibility: hidden;
+          transform: translateY(-10px);
+          transition: all 0.2s ease-in-out;
+          z-index: 1000;
+          padding: 4px;
+        }
+
+        .dropdown-menu.show {
+          opacity: 1;
+          visibility: visible;
+          transform: translateY(0);
+        }
+
+        .dropdown-item {
+          display: flex;
+          align-items: center;
+          gap: 12px;
+          padding: 8px 12px;
+          color: #e0e0ff;
+          font-size: 14px;
+          border-radius: 0.25rem;
+          cursor: pointer;
+          transition: background-color 0.15s;
+        }
+
+        .dropdown-item:hover {
+          background-color: #2d2438;
+        }
+
+        .dropdown-divider {
+          height: 1px;
+          background-color: #2d2438;
+          margin: 4px 0;
+        }
+
+        .dropdown-item.disabled {
+          color: #8a8aab;
+          cursor: default;
+        }
+
+        .dropdown-item.disabled:hover {
+          background-color: transparent;
+        }
+
+        .dropdown-shortcut {
+          margin-left: auto;
+          font-size: 12px;
+          color: #8a8aab;
+        }
+    </style>
+</head>
+<body class="bg-background-dark font-display text-text-primary-dark">
+<div class="flex h-screen w-full flex-col">
+<header class="flex items-center justify-between whitespace-nowrap border-b border-solid border-border-dark px-6 py-2 bg-panel-dark/50 flex-none">
+<div class="flex items-center gap-4">
+<span class="material-symbols-outlined text-primary text-2xl">hub</span>
+<h2 class="text-lg font-bold">Quantum IDE</h2>
+<div class="hidden md:flex items-center gap-6 ml-6">
+<div class="dropdown">
+<button id="fileMenuBtn" class="text-sm font-medium leading-normal hover:text-primary transition-colors">File</button>
+<div id="fileMenu" class="dropdown-menu">
+<div class="dropdown-item disabled">New Text File</div>
+<div class="dropdown-item disabled">New File ...</div>
+<div class="dropdown-divider"></div>
+<div class="dropdown-item disabled">New Window</div>
+<div class="dropdown-item disabled">New Window with Profile</div>
+<div class="dropdown-divider"></div>
+<div class="dropdown-item disabled">Open File ...</div>
+<div class="dropdown-item disabled">Open Folder ...</div>
+<div class="dropdown-item" onclick="window.location.href='quantum-ide-project-mgmt.html'">Open Projects ...</div>
+<div class="dropdown-item disabled">Open Workspace from File ...</div>
+<div class="dropdown-item disabled">Open Recent</div>
+<div class="dropdown-divider"></div>
+<div class="dropdown-item disabled">Add Folder to Workspace ...</div>
+<div class="dropdown-divider"></div>
+<div class="dropdown-item disabled">Save Workspace As ...</div>
+<div class="dropdown-item disabled">Duplicate Workspace</div>
+<div class="dropdown-divider"></div>
+<div class="dropdown-item disabled">Save</div>
+<div class="dropdown-item disabled">Save As ...</div>
+<div class="dropdown-item disabled">Save All</div>
+<div class="dropdown-divider"></div>
+<div class="dropdown-item disabled">Share</div>
+<div class="dropdown-item disabled">Auto Save</div>
+<div class="dropdown-divider"></div>
+<div class="dropdown-item disabled">Preferences</div>
+<div class="dropdown-divider"></div>
+<div class="dropdown-item disabled">Revert File</div>
+<div class="dropdown-divider"></div>
+<div class="dropdown-item disabled">Close Editor</div>
+<div class="dropdown-item disabled">Close Folder</div>
+<div class="dropdown-item disabled">Close Window</div>
+<div class="dropdown-divider"></div>
+<div class="dropdown-item disabled">Exit</div>
+</div>
+</div>
+<a class="text-sm font-medium leading-normal hover:text-primary transition-colors" href="#">Edit</a>
+<a class="text-sm font-medium leading-normal hover:text-primary transition-colors" href="#">Selection</a>
+<a class="text-sm font-medium leading-normal hover:text-primary transition-colors" href="#">View</a>
+<a class="text-sm font-medium leading-normal hover:text-primary transition-colors" href="#">Go</a>
+<a class="text-sm font-medium leading-normal hover:text-primary transition-colors" href="#">Run</a>
+<a class="text-sm font-medium leading-normal hover:text-primary transition-colors" href="#">Terminal</a>
+<a class="text-sm font-medium leading-normal hover:text-primary transition-colors" href="#">Help</a>
+</div>
+</div>
+<div class="flex items-center gap-4">
+<div class="flex gap-2">
+<button class="flex min-w-[84px] cursor-pointer items-center justify-center gap-2 overflow-hidden rounded-lg h-9 px-4 bg-primary text-white text-sm font-bold leading-normal tracking-[0.015em] hover:bg-primary/90 transition-colors">
+<span class="material-symbols-outlined text-base">play_arrow</span>
+<span class="truncate">Run</span>
+</button>
+<button class="flex min-w-[84px] cursor-pointer items-center justify-center gap-2 overflow-hidden rounded-lg h-9 px-4 bg-panel-dark/80 text-white text-sm font-bold leading-normal tracking-[0.015em] hover:bg-panel-dark transition-colors">
+<span class="material-symbols-outlined text-base">bug_report</span>
+<span class="truncate">Debug</span>
+</button>
+</div>
+<div class="bg-center bg-no-repeat aspect-square bg-cover rounded-full size-9" data-alt="User avatar image" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuAFdiP-Ym9VJlQqmuSNm76GWL-qC7893k4svLKa9za0kySenIB8i7iGvM1oB5NNALRk4Cn9LUwL3uYTzYZyeR_tXm_MWXBBz0r_llrohEdW712GT6X7z3UYUAm2uhCLSkWap8PzDeP9SY7ZLE3miyj_t8krdxRWMG0SX5P_BsaE7bz_q_0bvTciANZakhpRoMnVk1Baoh7Ee-roZLpCh4HmUgat2fmTHn13eNh7t0bADscrVXDnPHDC9d74sQ-q4m_4q8GU1fXmyQ");'></div>
+</div>
+</header>
+<div class="flex flex-1 overflow-hidden">
+<aside class="flex h-full flex-col justify-between bg-panel-dark p-3 border-r border-solid border-border-dark">
+<div class="flex flex-col gap-2">
+<button id="fileExplorerToggle" class="tooltip flex items-center justify-center rounded-lg bg-primary/20 text-primary p-3" data-tooltip="File Explorer">
+<span class="material-symbols-outlined text-2xl">folder</span>
+</button>
+<a href="quantum-ide-job-monitor.html" class="tooltip flex items-center justify-center rounded-lg text-text-secondary-dark hover:bg-surface-dark hover:text-text-primary-dark p-3" data-tooltip="Jobs">
+<span class="material-symbols-outlined text-2xl">work</span>
+</a>
+<a href="quantum-ide-export.html" class="tooltip flex items-center justify-center rounded-lg text-text-secondary-dark hover:bg-surface-dark hover:text-text-primary-dark p-3" data-tooltip="Export">
+<span class="material-symbols-outlined text-2xl">upload</span>
+</a>
+<a href="quantum-ide-marketplace.html" class="tooltip flex items-center justify-center rounded-lg text-text-secondary-dark hover:bg-surface-dark hover:text-text-primary-dark p-3" data-tooltip="Marketplace">
+<span class="material-symbols-outlined text-2xl">store</span>
+</a>
+<a href="quantum-ide-learning.html" class="tooltip flex items-center justify-center rounded-lg text-text-secondary-dark hover:bg-surface-dark hover:text-text-primary-dark p-3" data-tooltip="Help & Learn">
+<span class="material-symbols-outlined text-2xl">school</span>
+</a>
+</div>
+<div class="flex flex-col gap-2">
+<button class="tooltip flex items-center justify-center rounded-lg text-text-secondary-dark hover:bg-surface-dark hover:text-text-primary-dark p-3" data-tooltip="Settings">
+<span class="material-symbols-outlined text-2xl">settings</span>
+</button>
+</div>
+</aside>
+<aside id="fileExplorer" class="hidden flex h-full w-64 flex-col bg-panel-dark/30 border-r border-solid border-border-dark">
+<div class="flex flex-col h-full">
+<div class="p-4 border-b border-border-dark">
+<a href="quantum-ide-workflow.html" class="flex items-center gap-2 text-text-primary-dark hover:text-primary transition-colors">
+<span class="material-symbols-outlined text-lg">account_tree</span>
+<span class="text-sm font-medium">Workflow</span>
+</a>
+</div>
+<div class="flex-1 p-4 overflow-y-auto">
+<div class="flex flex-col gap-1">
+<div class="flex items-center gap-2 mb-2">
+<span class="material-symbols-outlined text-lg">expand_more</span>
+<span class="material-symbols-outlined text-primary text-lg">folder</span>
+<span class="font-medium text-sm">My Project</span>
+</div>
+<div class="pl-7 flex flex-col gap-1">
+<a href="quantum-ide-circuit.html" class="flex items-center gap-2 p-1 rounded hover:bg-primary/20 text-sm">
+<span class="material-symbols-outlined text-base text-blue-400">description</span>
+<span>circuit.wf</span>
+</a>
+<a href="quantum-ide-code-editor.html" class="flex items-center gap-2 p-1 rounded hover:bg-primary/20 text-sm">
+<span class="material-symbols-outlined text-base text-green-400">code</span>
+<span>grover.py</span>
+</a>
+<a href="quantum-ide-jupyter.html" class="flex items-center gap-2 p-1 rounded hover:bg-primary/20 text-sm">
+<span class="material-symbols-outlined text-base text-yellow-400">description</span>
+<span>grover.ipynb</span>
+</a>
+</div>
+</div>
+</div>
+</div>
+</aside>
+<main class="flex h-full flex-1 flex-col">
+<div class="flex flex-1 items-center justify-center p-8 overflow-y-auto">
+<div class="w-full max-w-2xl">
+<div class="flex w-full flex-col items-center gap-3 text-center">
+<h1 class="text-4xl font-black leading-tight tracking-[-0.033em] text-text-primary-dark">Welcome to Quantum IDE</h1>
+<p class="text-base font-normal leading-normal text-text-secondary-dark">Let's tailor your workspace to your needs.</p>
+</div>
+<div class="mt-8 flex flex-col gap-6">
+<!-- Progress Section -->
+<div class="flex flex-col gap-3">
+<div class="flex items-center justify-between">
+<p id="stepIndicator" class="text-base font-medium leading-normal text-text-primary-dark">Step 1 of 3</p>
+<p id="stepQuestion" class="text-sm font-medium leading-normal text-text-secondary-dark">What best describes your background?</p>
+</div>
+<div class="h-2 rounded-full bg-border-dark">
+<div id="progressBar" class="h-2 rounded-full bg-primary transition-all duration-300" style="width: 33%;"></div>
+</div>
+</div>
+
+<!-- Step 1 -->
+<div id="step1" class="flex flex-col gap-3">
+<label class="flex cursor-pointer items-center gap-4 rounded-lg border border-solid border-border-dark p-4 transition-colors hover:border-primary/80 has-[:checked]:border-primary has-[:checked]:bg-primary/10">
+<input checked="" class="form-radio h-5 w-5 border-2 border-border-dark bg-transparent text-primary focus:ring-0 focus:ring-offset-0" name="user_background" type="radio"/>
+<div class="flex grow flex-col">
+<p class="text-sm font-medium leading-normal text-text-primary-dark">Learning Quantum</p>
+<p class="text-sm font-normal leading-normal text-text-secondary-dark">Just starting out and exploring the basics.</p>
+</div>
+</label>
+<label class="flex cursor-pointer items-center gap-4 rounded-lg border border-solid border-border-dark p-4 transition-colors hover:border-primary/80 has-[:checked]:border-primary has-[:checked]:bg-primary/10">
+<input class="form-radio h-5 w-5 border-2 border-border-dark bg-transparent text-primary focus:ring-0 focus:ring-offset-0" name="user_background" type="radio"/>
+<div class="flex grow flex-col">
+<p class="text-sm font-medium leading-normal text-text-primary-dark">Academic Researcher</p>
+<p class="text-sm font-normal leading-normal text-text-secondary-dark">Conducting research and publishing papers.</p>
+</div>
+</label>
+<label class="flex cursor-pointer items-center gap-4 rounded-lg border border-solid border-border-dark p-4 transition-colors hover:border-primary/80 has-[:checked]:border-primary has-[:checked]:bg-primary/10">
+<input class="form-radio h-5 w-5 border-2 border-border-dark bg-transparent text-primary focus:ring-0 focus:ring-offset-0" name="user_background" type="radio"/>
+<div class="flex grow flex-col">
+<p class="text-sm font-medium leading-normal text-text-primary-dark">ML Engineer</p>
+<p class="text-sm font-normal leading-normal text-text-secondary-dark">Applying quantum principles to machine learning.</p>
+</div>
+</label>
+<label class="flex cursor-pointer items-center gap-4 rounded-lg border border-solid border-border-dark p-4 transition-colors hover:border-primary/80 has-[:checked]:border-primary has-[:checked]:bg-primary/10">
+<input class="form-radio h-5 w-5 border-2 border-border-dark bg-transparent text-primary focus:ring-0 focus:ring-offset-0" name="user_background" type="radio"/>
+<div class="flex grow flex-col">
+<p class="text-sm font-medium leading-normal text-text-primary-dark">Finance Analyst</p>
+<p class="text-sm font-normal leading-normal text-text-secondary-dark">Developing quantum models for financial markets.</p>
+</div>
+</label>
+<label class="flex cursor-pointer items-center gap-4 rounded-lg border border-solid border-border-dark p-4 transition-colors hover:border-primary/80 has-[:checked]:border-primary has-[:checked]:bg-primary/10">
+<input class="form-radio h-5 w-5 border-2 border-border-dark bg-transparent text-primary focus:ring-0 focus:ring-offset-0" name="user_background" type="radio"/>
+<div class="flex grow flex-col">
+<p class="text-sm font-medium leading-normal text-text-primary-dark">Quantum Startup Founder</p>
+<p class="text-sm font-normal leading-normal text-text-secondary-dark">Building a business with quantum technology.</p>
+</div>
+</label>
+</div>
+
+<!-- Step 2 -->
+<div id="step2" class="hidden flex-col gap-3">
+<label class="flex cursor-pointer items-center gap-4 rounded-lg border border-solid border-border-dark p-4 transition-colors hover:border-primary/80 has-[:checked]:border-primary has-[:checked]:bg-primary/10">
+<input checked="" class="form-radio h-5 w-5 border-2 border-border-dark bg-transparent text-primary focus:ring-0 focus:ring-offset-0" name="primary_interest" type="radio"/>
+<div class="flex grow flex-col">
+<p class="text-sm font-medium leading-normal text-text-primary-dark">Algorithm Development</p>
+<p class="text-sm font-normal leading-normal text-text-secondary-dark">Creating and optimizing quantum algorithms.</p>
+</div>
+</label>
+<label class="flex cursor-pointer items-center gap-4 rounded-lg border border-solid border-border-dark p-4 transition-colors hover:border-primary/80 has-[:checked]:border-primary has-[:checked]:bg-primary/10">
+<input class="form-radio h-5 w-5 border-2 border-border-dark bg-transparent text-primary focus:ring-0 focus:ring-offset-0" name="primary_interest" type="radio"/>
+<div class="flex grow flex-col">
+<p class="text-sm font-medium leading-normal text-text-primary-dark">Circuit Design</p>
+<p class="text-sm font-normal leading-normal text-text-secondary-dark">Building and visualizing quantum circuits.</p>
+</div>
+</label>
+<label class="flex cursor-pointer items-center gap-4 rounded-lg border border-solid border-border-dark p-4 transition-colors hover:border-primary/80 has-[:checked]:border-primary has-[:checked]:bg-primary/10">
+<input class="form-radio h-5 w-5 border-2 border-border-dark bg-transparent text-primary focus:ring-0 focus:ring-offset-0" name="primary_interest" type="radio"/>
+<div class="flex grow flex-col">
+<p class="text-sm font-medium leading-normal text-text-primary-dark">Simulation & Testing</p>
+<p class="text-sm font-normal leading-normal text-text-secondary-dark">Running simulations and analyzing results.</p>
+</div>
+</label>
+<label class="flex cursor-pointer items-center gap-4 rounded-lg border border-solid border-border-dark p-4 transition-colors hover:border-primary/80 has-[:checked]:border-primary has-[:checked]:bg-primary/10">
+<input class="form-radio h-5 w-5 border-2 border-border-dark bg-transparent text-primary focus:ring-0 focus:ring-offset-0" name="primary_interest" type="radio"/>
+<div class="flex grow flex-col">
+<p class="text-sm font-medium leading-normal text-text-primary-dark">Hardware Integration</p>
+<p class="text-sm font-normal leading-normal text-text-secondary-dark">Working with real quantum hardware.</p>
+</div>
+</label>
+</div>
+
+<!-- Step 3 -->
+<div id="step3" class="hidden flex-col gap-3">
+<label class="flex cursor-pointer items-center gap-4 rounded-lg border border-solid border-border-dark p-4 transition-colors hover:border-primary/80 has-[:checked]:border-primary has-[:checked]:bg-primary/10">
+<input checked="" class="form-radio h-5 w-5 border-2 border-border-dark bg-transparent text-primary focus:ring-0 focus:ring-offset-0" name="workspace_preference" type="radio"/>
+<div class="flex grow flex-col">
+<p class="text-sm font-medium leading-normal text-text-primary-dark">Visual Interface</p>
+<p class="text-sm font-normal leading-normal text-text-secondary-dark">Drag-and-drop circuit builder and visual tools.</p>
+</div>
+</label>
+<label class="flex cursor-pointer items-center gap-4 rounded-lg border border-solid border-border-dark p-4 transition-colors hover:border-primary/80 has-[:checked]:border-primary has-[:checked]:bg-primary/10">
+<input class="form-radio h-5 w-5 border-2 border-border-dark bg-transparent text-primary focus:ring-0 focus:ring-offset-0" name="workspace_preference" type="radio"/>
+<div class="flex grow flex-col">
+<p class="text-sm font-medium leading-normal text-text-primary-dark">Code Editor</p>
+<p class="text-sm font-normal leading-normal text-text-secondary-dark">Write quantum code with syntax highlighting.</p>
+</div>
+</label>
+<label class="flex cursor-pointer items-center gap-4 rounded-lg border border-solid border-border-dark p-4 transition-colors hover:border-primary/80 has-[:checked]:border-primary has-[:checked]:bg-primary/10">
+<input class="form-radio h-5 w-5 border-2 border-border-dark bg-transparent text-primary focus:ring-0 focus:ring-offset-0" name="workspace_preference" type="radio"/>
+<div class="flex grow flex-col">
+<p class="text-sm font-medium leading-normal text-text-primary-dark">Jupyter Notebooks</p>
+<p class="text-sm font-normal leading-normal text-text-secondary-dark">Interactive notebooks for research and education.</p>
+</div>
+</label>
+<label class="flex cursor-pointer items-center gap-4 rounded-lg border border-solid border-border-dark p-4 transition-colors hover:border-primary/80 has-[:checked]:border-primary has-[:checked]:bg-primary/10">
+<input class="form-radio h-5 w-5 border-2 border-border-dark bg-transparent text-primary focus:ring-0 focus:ring-offset-0" name="workspace_preference" type="radio"/>
+<div class="flex grow flex-col">
+<p class="text-sm font-medium leading-normal text-text-primary-dark">Hybrid Workflow</p>
+<p class="text-sm font-normal leading-normal text-text-secondary-dark">Mix of visual tools and code editing.</p>
+</div>
+</label>
+</div>
+
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-3">
+<button id="backButton" class="hidden flex h-10 items-center justify-center gap-2 rounded-lg border-2 border-border-dark px-5 text-sm font-bold text-text-primary-dark transition-colors hover:border-primary hover:text-primary">
+<span class="material-symbols-outlined !text-xl">arrow_back</span>
+<span>Back</span>
+</button>
+<button id="skipButton" class="text-sm font-medium text-text-secondary-dark hover:text-text-primary-dark transition-colors">Skip for now</button>
+</div>
+<button id="nextButton" class="flex h-10 items-center justify-center gap-2 rounded-lg bg-primary px-5 text-sm font-bold text-white transition-colors hover:bg-primary/90">
+<span id="buttonText">Next</span>
+<span id="buttonIcon" class="material-symbols-outlined !text-xl">arrow_forward</span>
+</button>
+</div>
+</div>
+</div>
+</div>
+</main>
+<aside id="aiAssistant" class="hidden w-96 flex-shrink-0 border-l border-solid border-border-dark bg-panel-dark p-4 flex flex-col h-full">
+<div class="flex items-center justify-between pb-4">
+<h3 class="text-lg font-bold text-text-primary-dark">AI Assistant</h3>
+<button id="aiCloseButton" class="text-text-secondary-dark hover:text-text-primary-dark">
+<span class="material-symbols-outlined">close</span>
+</button>
+</div>
+<div class="flex-1 overflow-y-auto space-y-4 pr-2">
+<div class="flex gap-3">
+<div class="flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-full bg-primary">
+<span class="material-symbols-outlined text-lg">auto_awesome</span>
+</div>
+<div class="rounded-lg rounded-tl-none bg-surface-dark p-3 text-sm">
+<p class="text-text-primary-dark">Hello! I'm your AI assistant. Let's get you set up. Answer a few questions to personalize your workspace.</p>
+</div>
+</div>
+<div class="flex flex-col items-start gap-2 pl-11">
+<button class="text-sm text-primary/80 hover:text-primary border border-primary/40 hover:border-primary/80 px-3 py-1.5 rounded-full transition-colors">"What is Quantum IDE?"</button>
+<button class="text-sm text-primary/80 hover:text-primary border border-primary/40 hover:border-primary/80 px-3 py-1.5 rounded-full transition-colors">"Help me get started"</button>
+</div>
+</div>
+<div class="mt-4 pt-4 border-t border-solid border-border-dark">
+<div class="relative">
+<textarea class="form-input w-full resize-none rounded-lg border-none bg-surface-dark p-3 pr-10 text-sm text-text-primary-dark placeholder:text-text-secondary-dark focus:outline-none focus:ring-2 focus:ring-primary" placeholder="Ask a question..." rows="3"></textarea>
+<button class="absolute bottom-2.5 right-2.5 flex h-7 w-7 items-center justify-center rounded-md bg-primary text-white hover:bg-primary/80">
+<span class="material-symbols-outlined text-lg">send</span>
+</button>
+</div>
+</div>
+</aside>
+</div>
+
+<!-- Floating AI Toggle Button -->
+<button id="aiToggleButton" class="flex h-14 w-14 items-center justify-center rounded-full bg-primary text-white hover:bg-primary/90 transition-all hover:scale-110">
+<span class="material-symbols-outlined text-2xl">auto_awesome</span>
+</button>
+
+<script>
+  // Toggle file explorer visibility
+  document.getElementById('fileExplorerToggle').addEventListener('click', function() {
+    const fileExplorer = document.getElementById('fileExplorer');
+    fileExplorer.classList.toggle('hidden');
+  });
+
+  // Toggle AI Assistant visibility
+  const aiToggleButton = document.getElementById('aiToggleButton');
+  const aiAssistant = document.getElementById('aiAssistant');
+  const aiCloseButton = document.getElementById('aiCloseButton');
+
+  aiToggleButton.addEventListener('click', function() {
+    aiAssistant.classList.remove('hidden');
+    aiToggleButton.style.display = 'none';
+  });
+
+  aiCloseButton.addEventListener('click', function() {
+    aiAssistant.classList.add('hidden');
+    aiToggleButton.style.display = 'flex';
+  });
+
+  // Onboarding step navigation
+  let currentStep = 1;
+  const totalSteps = 3;
+
+  const step1 = document.getElementById('step1');
+  const step2 = document.getElementById('step2');
+  const step3 = document.getElementById('step3');
+  const stepIndicator = document.getElementById('stepIndicator');
+  const stepQuestion = document.getElementById('stepQuestion');
+  const progressBar = document.getElementById('progressBar');
+  const nextButton = document.getElementById('nextButton');
+  const backButton = document.getElementById('backButton');
+  const skipButton = document.getElementById('skipButton');
+  const buttonText = document.getElementById('buttonText');
+  const buttonIcon = document.getElementById('buttonIcon');
+
+  const questions = [
+    'What best describes your background?',
+    'What is your primary area of interest?',
+    'How do you prefer to work?'
+  ];
+
+  function navigateToProjectManagement() {
+    window.location.href = 'quantum-ide-project-mgmt.html';
+  }
+
+  function updateStep() {
+    // Hide all steps
+    step1.classList.add('hidden');
+    step1.classList.remove('flex');
+    step2.classList.add('hidden');
+    step2.classList.remove('flex');
+    step3.classList.add('hidden');
+    step3.classList.remove('flex');
+
+    // Show current step
+    if (currentStep === 1) {
+      step1.classList.remove('hidden');
+      step1.classList.add('flex');
+    } else if (currentStep === 2) {
+      step2.classList.remove('hidden');
+      step2.classList.add('flex');
+    } else if (currentStep === 3) {
+      step3.classList.remove('hidden');
+      step3.classList.add('flex');
+    }
+
+    // Update progress bar
+    const progress = (currentStep / totalSteps) * 100;
+    progressBar.style.width = progress + '%';
+
+    // Update step indicator and question
+    stepIndicator.textContent = 'Step ' + currentStep + ' of ' + totalSteps;
+    stepQuestion.textContent = questions[currentStep - 1];
+
+    // Update button for last step
+    if (currentStep === totalSteps) {
+      buttonText.textContent = 'Complete';
+      buttonIcon.classList.add('hidden');
+    } else {
+      buttonText.textContent = 'Next';
+      buttonIcon.classList.remove('hidden');
+    }
+
+    // Show/hide back button
+    if (currentStep === 1) {
+      backButton.classList.add('hidden');
+      backButton.classList.remove('flex');
+    } else {
+      backButton.classList.remove('hidden');
+      backButton.classList.add('flex');
+    }
+  }
+
+  nextButton.addEventListener('click', function() {
+    if (currentStep < totalSteps) {
+      currentStep++;
+      updateStep();
+    } else {
+      // On complete
+      navigateToProjectManagement();
+    }
+  });
+
+  backButton.addEventListener('click', function() {
+    if (currentStep > 1) {
+      currentStep--;
+      updateStep();
+    }
+  });
+
+  skipButton.addEventListener('click', function() {
+    navigateToProjectManagement();
+  });
+
+  // File menu dropdown
+  const fileMenuBtn = document.getElementById('fileMenuBtn');
+  const fileMenu = document.getElementById('fileMenu');
+
+  fileMenuBtn.addEventListener('click', function(e) {
+    e.stopPropagation();
+    fileMenu.classList.toggle('show');
+  });
+
+  // Close dropdown when clicking outside
+  document.addEventListener('click', function(e) {
+    if (!fileMenu.contains(e.target) && e.target !== fileMenuBtn) {
+      fileMenu.classList.remove('show');
+    }
+  });
+
+  // Prevent dropdown from closing when clicking inside
+  fileMenu.addEventListener('click', function(e) {
+    e.stopPropagation();
+  });
+</script>
+
+</body></html>

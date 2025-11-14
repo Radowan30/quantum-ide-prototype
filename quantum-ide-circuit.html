@@ -73,6 +73,113 @@
         right: 20px;
         z-index: 100;
         box-shadow: 0 4px 12px rgba(149, 17, 212, 0.3);
+        cursor: move;
+        touch-action: none;
+        user-select: none;
+      }
+
+      #aiToggleButton.dragging {
+        cursor: grabbing;
+        opacity: 0.8;
+      }
+
+      /* Drag and drop styles */
+      .gate-dragging {
+        opacity: 0.5;
+        cursor: grabbing;
+      }
+
+      .gate {
+        cursor: grab;
+        user-select: none;
+      }
+
+      .gate:active {
+        cursor: grabbing;
+      }
+
+      .qubit-line {
+        position: relative;
+      }
+
+      .drop-indicator {
+        position: absolute;
+        width: 2px;
+        height: 40px;
+        background-color: #9511d4;
+        opacity: 0;
+        transition: opacity 0.2s;
+        pointer-events: none;
+      }
+
+      .drop-indicator.active {
+        opacity: 1;
+      }
+
+      /* Dropdown menu styles */
+      .dropdown {
+        position: relative;
+      }
+
+      .dropdown-menu {
+        position: absolute;
+        top: 100%;
+        left: 0;
+        margin-top: 8px;
+        min-width: 280px;
+        background-color: #1a1128;
+        border: 1px solid #2d2438;
+        border-radius: 0.5rem;
+        box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
+        opacity: 0;
+        visibility: hidden;
+        transform: translateY(-10px);
+        transition: all 0.2s ease-in-out;
+        z-index: 1000;
+        padding: 4px;
+      }
+
+      .dropdown-menu.show {
+        opacity: 1;
+        visibility: visible;
+        transform: translateY(0);
+      }
+
+      .dropdown-item {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        padding: 8px 12px;
+        color: #e0e0ff;
+        font-size: 14px;
+        border-radius: 0.25rem;
+        cursor: pointer;
+        transition: background-color 0.15s;
+      }
+
+      .dropdown-item:hover {
+        background-color: #2d2438;
+      }
+
+      .dropdown-divider {
+        height: 1px;
+        background-color: #2d2438;
+        margin: 4px 0;
+      }
+
+      .dropdown-item.disabled {
+        color: #8a8aab;
+        cursor: default;
+      }
+
+      .dropdown-item.disabled:hover {
+        background-color: transparent;
+      }
+
+      .dropdown-shortcut {
+        margin-left: auto;
+        font-size: 12px;
+        color: #8a8aab;
       }
     </style>
 <script>
@@ -108,7 +215,44 @@
 <span class="material-symbols-outlined text-primary text-2xl">hub</span>
 <h2 class="text-lg font-bold">Quantum IDE</h2>
 <div class="hidden md:flex items-center gap-6 ml-6">
-<a class="text-sm font-medium leading-normal hover:text-primary transition-colors" href="#">File</a>
+<div class="dropdown">
+<button id="fileMenuBtn" class="text-sm font-medium leading-normal hover:text-primary transition-colors">File</button>
+<div id="fileMenu" class="dropdown-menu">
+<div class="dropdown-item disabled">New Text File</div>
+<div class="dropdown-item disabled">New File ...</div>
+<div class="dropdown-divider"></div>
+<div class="dropdown-item disabled">New Window</div>
+<div class="dropdown-item disabled">New Window with Profile</div>
+<div class="dropdown-divider"></div>
+<div class="dropdown-item disabled">Open File ...</div>
+<div class="dropdown-item disabled">Open Folder ...</div>
+<div class="dropdown-item" onclick="window.location.href='quantum-ide-project-mgmt.html'">Open Projects ...</div>
+<div class="dropdown-item disabled">Open Workspace from File ...</div>
+<div class="dropdown-item disabled">Open Recent</div>
+<div class="dropdown-divider"></div>
+<div class="dropdown-item disabled">Add Folder to Workspace ...</div>
+<div class="dropdown-divider"></div>
+<div class="dropdown-item disabled">Save Workspace As ...</div>
+<div class="dropdown-item disabled">Duplicate Workspace</div>
+<div class="dropdown-divider"></div>
+<div class="dropdown-item disabled">Save</div>
+<div class="dropdown-item disabled">Save As ...</div>
+<div class="dropdown-item disabled">Save All</div>
+<div class="dropdown-divider"></div>
+<div class="dropdown-item disabled">Share</div>
+<div class="dropdown-item disabled">Auto Save</div>
+<div class="dropdown-divider"></div>
+<div class="dropdown-item disabled">Preferences</div>
+<div class="dropdown-divider"></div>
+<div class="dropdown-item disabled">Revert File</div>
+<div class="dropdown-divider"></div>
+<div class="dropdown-item disabled">Close Editor</div>
+<div class="dropdown-item disabled">Close Folder</div>
+<div class="dropdown-item disabled">Close Window</div>
+<div class="dropdown-divider"></div>
+<div class="dropdown-item disabled">Exit</div>
+</div>
+</div>
 <a class="text-sm font-medium leading-normal hover:text-primary transition-colors" href="#">Edit</a>
 <a class="text-sm font-medium leading-normal hover:text-primary transition-colors" href="#">Selection</a>
 <a class="text-sm font-medium leading-normal hover:text-primary transition-colors" href="#">View</a>
@@ -173,7 +317,18 @@
 <span class="font-medium text-sm">My Project</span>
 </div>
 <div class="pl-7 flex flex-col gap-1">
-<a href="quantum-ide-circuit.html" class="flex items-center gap-2 p-1 rounded bg-primary/30 text-sm font-semibold">
+<div class="flex items-center gap-2 mb-2 mt-2">
+<span class="material-symbols-outlined text-lg">expand_less</span>
+<span class="material-symbols-outlined text-primary text-lg">folder</span>
+<span class="font-medium text-sm">Classical Pre-processing</span>
+</div>
+<div class="flex items-center gap-2 mb-2 mt-2">
+<span class="material-symbols-outlined text-lg">expand_more</span>
+<span class="material-symbols-outlined text-primary text-lg">folder</span>
+<span class="font-medium text-sm">Quantum Algorithm</span>
+</div>
+<div class="pl-7 flex flex-col gap-1">
+<a href="quantum-ide-circuit.html" class="flex items-center gap-2 p-1 rounded hover:bg-primary/20 text-sm">
 <span class="material-symbols-outlined text-base text-blue-400">description</span>
 <span>circuit.wf</span>
 </a>
@@ -186,111 +341,120 @@
 <span>grover.ipynb</span>
 </a>
 </div>
+<div class="flex items-center gap-2 mb-2 mt-2">
+<span class="material-symbols-outlined text-lg">expand_less</span>
+<span class="material-symbols-outlined text-primary text-lg">folder</span>
+<span class="font-medium text-sm">Classical Post-processing</span>
 </div>
 </div>
 </div>
-</aside>
-<aside class="flex h-full w-64 flex-col border-r border-solid border-border-dark bg-panel-dark p-4">
-<h3 class="px-2 text-sm font-semibold tracking-wide text-text-secondary-dark mb-2">Quantum Gates</h3>
-<p class="px-2 text-xs text-text-secondary-dark mb-4">Drag &amp; drop gates onto the circuit.</p>
-<div class="grid grid-cols-3 gap-3">
-<div class="flex cursor-pointer flex-col items-center gap-2 rounded-lg p-2 transition-colors hover:bg-surface-dark">
-<div class="flex h-10 w-10 items-center justify-center rounded bg-gate-h text-lg font-bold text-background-dark">H</div>
-<span class="text-xs text-text-secondary-dark">Hadamard</span>
-</div>
-<div class="flex cursor-pointer flex-col items-center gap-2 rounded-lg p-2 transition-colors hover:bg-surface-dark">
-<div class="flex h-10 w-10 items-center justify-center rounded bg-primary text-lg font-bold text-white">X</div>
-<span class="text-xs text-text-secondary-dark">Pauli-X</span>
-</div>
-<div class="flex cursor-pointer flex-col items-center gap-2 rounded-lg p-2 transition-colors hover:bg-surface-dark">
-<div class="flex h-10 w-10 items-center justify-center rounded bg-primary text-lg font-bold text-white">Y</div>
-<span class="text-xs text-text-secondary-dark">Pauli-Y</span>
-</div>
-<div class="flex cursor-pointer flex-col items-center gap-2 rounded-lg p-2 transition-colors hover:bg-surface-dark">
-<div class="flex h-10 w-10 items-center justify-center rounded bg-primary text-lg font-bold text-white">Z</div>
-<span class="text-xs text-text-secondary-dark">Pauli-Z</span>
-</div>
-<div class="flex cursor-pointer flex-col items-center gap-2 rounded-lg p-2 transition-colors hover:bg-surface-dark">
-<div class="flex h-10 w-10 items-center justify-center rounded bg-gate-cx text-lg font-bold text-background-dark">CX</div>
-<span class="text-xs text-text-secondary-dark">CNOT</span>
-</div>
-<div class="flex cursor-pointer flex-col items-center gap-2 rounded-lg p-2 transition-colors hover:bg-surface-dark">
-<div class="flex h-10 w-10 items-center justify-center rounded bg-gate-cx text-lg font-bold text-background-dark">CZ</div>
-<span class="text-xs text-text-secondary-dark">C-Z</span>
-</div>
-<div class="flex cursor-pointer flex-col items-center gap-2 rounded-lg p-2 transition-colors hover:bg-surface-dark">
-<div class="flex h-10 w-10 items-center justify-center rounded bg-gate-m text-lg font-bold text-background-dark"><span class="material-symbols-outlined text-2xl">horizontal_distribute</span></div>
-<span class="text-xs text-text-secondary-dark">Measure</span>
-</div>
-<div class="flex cursor-pointer flex-col items-center gap-2 rounded-lg p-2 transition-colors hover:bg-surface-dark">
-<div class="flex h-10 w-10 items-center justify-center rounded bg-gate-m text-lg font-bold text-background-dark">R<sub class="text-xs">x</sub></div>
-<span class="text-xs text-text-secondary-dark">Rx Gate</span>
-</div>
-<div class="flex cursor-pointer flex-col items-center gap-2 rounded-lg p-2 transition-colors hover:bg-surface-dark">
-<div class="flex h-10 w-10 items-center justify-center rounded bg-gate-m text-lg font-bold text-background-dark">R<sub class="text-xs">y</sub></div>
-<span class="text-xs text-text-secondary-dark">Ry Gate</span>
 </div>
 </div>
 </aside>
-<main class="flex-1 overflow-auto bg-background-dark p-8">
-<div class="flex flex-col space-y-12">
-<div class="relative flex items-center">
+<main class="flex-1 flex flex-col min-w-0">
+<div class="flex-1 flex flex-col bg-background-dark">
+<div class="flex border-b border-border-dark flex-none">
+<a class="flex items-center gap-2 border-b-2 border-primary text-text-primary-dark px-4 py-2 bg-panel-dark" href="quantum-ide-circuit.html">
+<span class="material-symbols-outlined text-base text-blue-400">description</span>
+<p class="text-sm font-medium">circuit.wf</p>
+</a>
+<a class="flex items-center gap-2 border-b-2 border-transparent text-text-secondary-dark px-4 py-2 hover:bg-panel-dark/80 transition-colors" href="quantum-ide-code-editor.html">
+<span class="material-symbols-outlined text-base text-green-400">code</span>
+<p class="text-sm font-medium">grover.py</p>
+</a>
+<a class="flex items-center gap-2 border-b-2 border-transparent text-text-secondary-dark px-4 py-2 hover:bg-panel-dark/80 transition-colors" href="quantum-ide-jupyter.html">
+<span class="material-symbols-outlined text-base text-yellow-400">description</span>
+<p class="text-sm font-medium">grover.ipynb</p>
+</a>
+</div>
+<div class="flex-1 overflow-auto p-8">
+<div id="circuitCanvas" class="flex flex-col space-y-12">
+<div class="qubit-line relative flex items-center" data-qubit="0">
 <span class="w-16 flex-shrink-0 font-mono text-sm text-text-secondary-dark">q0: |0⟩</span>
 <div class="h-0.5 w-full bg-border-dark"></div>
-<div class="absolute left-16 top-1/2 flex h-full w-full -translate-y-1/2 items-center">
-<div class="absolute" style="left: 5%;">
-<div class="flex h-10 w-10 cursor-pointer items-center justify-center rounded bg-gate-h text-lg font-bold text-background-dark ring-2 ring-offset-2 ring-offset-background-dark ring-transparent transition-all hover:ring-primary">H</div>
-</div>
-<div class="absolute" style="left: 20%;">
-<div class="relative flex h-10 w-10 cursor-pointer items-center justify-center rounded-full bg-gate-cx text-lg font-bold text-background-dark ring-2 ring-offset-2 ring-offset-background-dark ring-transparent transition-all hover:ring-primary">
-<div class="h-2 w-2 rounded-full bg-background-dark"></div>
+<div class="gate-container absolute left-16 top-1/2 flex h-full w-full -translate-y-1/2 items-center" data-qubit="0">
 </div>
 </div>
-<div class="absolute" style="left: 45%;">
-<div class="flex h-10 w-10 cursor-pointer items-center justify-center rounded bg-primary text-lg font-bold text-white ring-2 ring-offset-2 ring-offset-background-dark ring-transparent transition-all hover:ring-gate-cx">X</div>
-</div>
-<div class="absolute" style="left: 85%;">
-<div class="flex h-10 w-10 cursor-pointer items-center justify-center rounded bg-gate-m text-lg font-bold text-background-dark ring-2 ring-offset-2 ring-offset-background-dark ring-transparent transition-all hover:ring-primary"><span class="material-symbols-outlined text-2xl">horizontal_distribute</span></div>
-</div>
-</div>
-</div>
-<div class="relative flex items-center">
+<div class="qubit-line relative flex items-center" data-qubit="1">
 <span class="w-16 flex-shrink-0 font-mono text-sm text-text-secondary-dark">q1: |0⟩</span>
 <div class="h-0.5 w-full bg-border-dark"></div>
-<div class="absolute top-[-2.75rem] h-[5.5rem] w-0.5 bg-gate-cx" style="left: calc(4rem + 20% + 1.25rem - 1px);"></div>
-<div class="absolute left-16 top-1/2 flex h-full w-full -translate-y-1/2 items-center">
-<div class="absolute" style="left: 5%;">
-<div class="flex h-10 w-10 cursor-pointer items-center justify-center rounded bg-gate-h text-lg font-bold text-background-dark ring-2 ring-offset-2 ring-offset-background-dark ring-transparent transition-all hover:ring-primary">H</div>
-</div>
-<div class="absolute" style="left: 20%;">
-<div class="flex h-10 w-10 cursor-pointer items-center justify-center rounded border-2 border-gate-cx bg-transparent text-lg font-bold text-gate-cx ring-2 ring-offset-2 ring-offset-background-dark ring-transparent transition-all hover:ring-primary">+</div>
-</div>
-<div class="absolute" style="left: 85%;">
-<div class="flex h-10 w-10 cursor-pointer items-center justify-center rounded bg-gate-m text-lg font-bold text-background-dark ring-2 ring-offset-2 ring-offset-background-dark ring-transparent transition-all hover:ring-primary"><span class="material-symbols-outlined text-2xl">horizontal_distribute</span></div>
+<div class="gate-container absolute left-16 top-1/2 flex h-full w-full -translate-y-1/2 items-center" data-qubit="1">
 </div>
 </div>
-</div>
-<div class="relative flex items-center">
+<div class="qubit-line relative flex items-center" data-qubit="2">
 <span class="w-16 flex-shrink-0 font-mono text-sm text-text-secondary-dark">q2: |0⟩</span>
 <div class="h-0.5 w-full bg-border-dark"></div>
-<div class="absolute left-16 top-1/2 flex h-full w-full -translate-y-1/2 items-center">
-<div class="absolute" style="left: 5%;">
-<div class="flex h-10 w-10 cursor-pointer items-center justify-center rounded bg-gate-h text-lg font-bold text-background-dark ring-2 ring-offset-2 ring-offset-background-dark ring-transparent transition-all hover:ring-primary">H</div>
-</div>
-<div class="absolute" style="left: 85%;">
-<div class="flex h-10 w-10 cursor-pointer items-center justify-center rounded bg-gate-m text-lg font-bold text-background-dark ring-2 ring-offset-2 ring-offset-background-dark ring-transparent transition-all hover:ring-primary"><span class="material-symbols-outlined text-2xl">horizontal_distribute</span></div>
-</div>
+<div class="gate-container absolute left-16 top-1/2 flex h-full w-full -translate-y-1/2 items-center" data-qubit="2">
 </div>
 </div>
 <div class="relative flex items-center pt-2">
 <span class="w-16 flex-shrink-0 font-mono text-sm text-text-secondary-dark">c: 3</span>
 <div class="h-1 w-full rounded-full bg-border-dark/50" style="background-size: 10px 10px; background-image: repeating-linear-gradient(45deg, #2d2438 0, #2d2438 5px, transparent 5px, transparent 10px);"></div>
-<div class="absolute h-10 w-0.5 bg-gate-m/80" style="left: calc(4rem + 85% + 1.25rem - 1px); top: -2.5rem;"></div>
-<div class="absolute h-10 w-0.5 bg-gate-m/80" style="left: calc(4rem + 85% + 1.25rem - 1px); top: -8.5rem;"></div>
-<div class="absolute h-10 w-0.5 bg-gate-m/80" style="left: calc(4rem + 85% + 1.25rem - 1px); top: -14.5rem;"></div>
+</div>
+</div>
 </div>
 </div>
 </main>
+<aside class="flex h-full w-64 flex-col border-l border-solid border-border-dark bg-panel-dark p-4 overflow-y-auto">
+<h3 class="px-2 text-sm font-semibold tracking-wide text-text-secondary-dark mb-2">Quantum Gates</h3>
+<p class="px-2 text-xs text-text-secondary-dark mb-4">Drag & drop gates onto the circuit.</p>
+<div id="gatePanel" class="grid grid-cols-3 gap-3">
+<div class="gate-slot" data-gate-type="H">
+<div class="gate flex cursor-grab flex-col items-center gap-2 rounded-lg p-2 transition-colors hover:bg-surface-dark" draggable="true" data-gate-type="H">
+<div class="flex h-10 w-10 items-center justify-center rounded bg-gate-h text-lg font-bold text-background-dark">H</div>
+<span class="text-xs text-text-secondary-dark">Hadamard</span>
+</div>
+</div>
+<div class="gate-slot" data-gate-type="X">
+<div class="gate flex cursor-grab flex-col items-center gap-2 rounded-lg p-2 transition-colors hover:bg-surface-dark" draggable="true" data-gate-type="X">
+<div class="flex h-10 w-10 items-center justify-center rounded bg-primary text-lg font-bold text-white">X</div>
+<span class="text-xs text-text-secondary-dark">Pauli-X</span>
+</div>
+</div>
+<div class="gate-slot" data-gate-type="Y">
+<div class="gate flex cursor-grab flex-col items-center gap-2 rounded-lg p-2 transition-colors hover:bg-surface-dark" draggable="true" data-gate-type="Y">
+<div class="flex h-10 w-10 items-center justify-center rounded bg-primary text-lg font-bold text-white">Y</div>
+<span class="text-xs text-text-secondary-dark">Pauli-Y</span>
+</div>
+</div>
+<div class="gate-slot" data-gate-type="Z">
+<div class="gate flex cursor-grab flex-col items-center gap-2 rounded-lg p-2 transition-colors hover:bg-surface-dark" draggable="true" data-gate-type="Z">
+<div class="flex h-10 w-10 items-center justify-center rounded bg-primary text-lg font-bold text-white">Z</div>
+<span class="text-xs text-text-secondary-dark">Pauli-Z</span>
+</div>
+</div>
+<div class="gate-slot" data-gate-type="CX">
+<div class="gate flex cursor-grab flex-col items-center gap-2 rounded-lg p-2 transition-colors hover:bg-surface-dark" draggable="true" data-gate-type="CX">
+<div class="flex h-10 w-10 items-center justify-center rounded bg-gate-cx text-lg font-bold text-background-dark">CX</div>
+<span class="text-xs text-text-secondary-dark">CNOT</span>
+</div>
+</div>
+<div class="gate-slot" data-gate-type="CZ">
+<div class="gate flex cursor-grab flex-col items-center gap-2 rounded-lg p-2 transition-colors hover:bg-surface-dark" draggable="true" data-gate-type="CZ">
+<div class="flex h-10 w-10 items-center justify-center rounded bg-gate-cx text-lg font-bold text-background-dark">CZ</div>
+<span class="text-xs text-text-secondary-dark">C-Z</span>
+</div>
+</div>
+<div class="gate-slot" data-gate-type="M">
+<div class="gate flex cursor-grab flex-col items-center gap-2 rounded-lg p-2 transition-colors hover:bg-surface-dark" draggable="true" data-gate-type="M">
+<div class="flex h-10 w-10 items-center justify-center rounded bg-gate-m text-lg font-bold text-background-dark"><span class="material-symbols-outlined text-2xl">horizontal_distribute</span></div>
+<span class="text-xs text-text-secondary-dark">Measure</span>
+</div>
+</div>
+<div class="gate-slot" data-gate-type="RX">
+<div class="gate flex cursor-grab flex-col items-center gap-2 rounded-lg p-2 transition-colors hover:bg-surface-dark" draggable="true" data-gate-type="RX">
+<div class="flex h-10 w-10 items-center justify-center rounded bg-gate-m text-lg font-bold text-background-dark">R<sub class="text-xs">x</sub></div>
+<span class="text-xs text-text-secondary-dark">Rx Gate</span>
+</div>
+</div>
+<div class="gate-slot" data-gate-type="RY">
+<div class="gate flex cursor-grab flex-col items-center gap-2 rounded-lg p-2 transition-colors hover:bg-surface-dark" draggable="true" data-gate-type="RY">
+<div class="flex h-10 w-10 items-center justify-center rounded bg-gate-m text-lg font-bold text-background-dark">R<sub class="text-xs">y</sub></div>
+<span class="text-xs text-text-secondary-dark">Ry Gate</span>
+</div>
+</div>
+</div>
+</aside>
 <aside id="aiAssistant" class="hidden w-96 flex-shrink-0 border-l border-solid border-border-dark bg-panel-dark p-4 flex flex-col h-full">
 <div class="flex items-center justify-between pb-4">
 <h3 class="text-lg font-bold">AI Assistant</h3>
@@ -298,7 +462,7 @@
 <span class="material-symbols-outlined">close</span>
 </button>
 </div>
-<div class="flex-1 overflow-y-auto space-y-4 pr-2">
+<div id="chatMessages" class="flex-1 overflow-y-auto space-y-4 pr-2">
 <div class="flex gap-3">
 <div class="flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-full bg-primary">
 <span class="material-symbols-outlined text-lg">auto_awesome</span>
@@ -307,9 +471,10 @@
 <p>This is a quantum circuit builder. Drag gates from the left panel onto the qubit lines to build your algorithm. What would you like to build today?</p>
 </div>
 </div>
-<div class="flex flex-col items-start gap-2 pl-11">
-<button class="text-sm text-primary hover:text-primary/80 border border-primary/40 hover:border-primary px-3 py-1.5 rounded-full transition-colors">"Suggest a gate for entanglement"</button>
-<button class="text-sm text-primary hover:text-primary/80 border border-primary/40 hover:border-primary px-3 py-1.5 rounded-full transition-colors">"How do I create a Bell state?"</button>
+<div id="suggestionButtons" class="flex flex-col items-start gap-2 pl-11">
+<button class="suggestion-btn text-sm text-primary hover:text-primary/80 border border-primary/40 hover:border-primary px-3 py-1.5 rounded-full transition-colors" data-message="Create quantum circuit for me">"Create quantum circuit for me"</button>
+<button class="suggestion-btn text-sm text-primary hover:text-primary/80 border border-primary/40 hover:border-primary px-3 py-1.5 rounded-full transition-colors" data-message="Suggest a gate for entanglement">"Suggest a gate for entanglement"</button>
+<button class="suggestion-btn text-sm text-primary hover:text-primary/80 border border-primary/40 hover:border-primary px-3 py-1.5 rounded-full transition-colors" data-message="How do I create a Bell state?">"How do I create a Bell state?"</button>
 </div>
 </div>
 <div class="mt-4 pt-4 border-t border-solid border-border-dark">
@@ -349,6 +514,302 @@
   aiCloseButton.addEventListener('click', function() {
     aiAssistant.classList.add('hidden');
     aiToggleButton.style.display = 'flex';
+  });
+
+  // Make AI button draggable
+  let isDraggingButton = false;
+  let buttonOffsetX = 0;
+  let buttonOffsetY = 0;
+  let hasMoved = false;
+
+  aiToggleButton.addEventListener('mousedown', function(e) {
+    isDraggingButton = true;
+    hasMoved = false;
+    buttonOffsetX = e.clientX - aiToggleButton.offsetLeft;
+    buttonOffsetY = e.clientY - aiToggleButton.offsetTop;
+    aiToggleButton.classList.add('dragging');
+    e.preventDefault();
+  });
+
+  document.addEventListener('mousemove', function(e) {
+    if (isDraggingButton) {
+      hasMoved = true;
+      const x = e.clientX - buttonOffsetX;
+      const y = e.clientY - buttonOffsetY;
+
+      // Keep button within viewport
+      const maxX = window.innerWidth - aiToggleButton.offsetWidth;
+      const maxY = window.innerHeight - aiToggleButton.offsetHeight;
+
+      const boundedX = Math.max(0, Math.min(x, maxX));
+      const boundedY = Math.max(0, Math.min(y, maxY));
+
+      aiToggleButton.style.left = boundedX + 'px';
+      aiToggleButton.style.top = boundedY + 'px';
+      aiToggleButton.style.right = 'auto';
+    }
+  });
+
+  document.addEventListener('mouseup', function(e) {
+    if (isDraggingButton) {
+      isDraggingButton = false;
+      aiToggleButton.classList.remove('dragging');
+
+      // If the button wasn't moved, treat it as a click
+      if (!hasMoved) {
+        aiAssistant.classList.remove('hidden');
+        aiToggleButton.style.display = 'none';
+      }
+    }
+  });
+
+  // Drag and Drop functionality
+  let draggedGate = null;
+  let draggedFromCircuit = false;
+  let originalParent = null;
+  let originalGateType = null;
+
+  // Get gate HTML based on type
+  function getGateHTML(gateType) {
+    const gateConfigs = {
+      'H': { bg: 'bg-gate-h', text: 'text-background-dark', content: 'H' },
+      'X': { bg: 'bg-primary', text: 'text-white', content: 'X' },
+      'Y': { bg: 'bg-primary', text: 'text-white', content: 'Y' },
+      'Z': { bg: 'bg-primary', text: 'text-white', content: 'Z' },
+      'CX': { bg: 'bg-gate-cx', text: 'text-background-dark', content: 'CX' },
+      'CZ': { bg: 'bg-gate-cx', text: 'text-background-dark', content: 'CZ' },
+      'M': { bg: 'bg-gate-m', text: 'text-background-dark', content: '<span class="material-symbols-outlined text-2xl">horizontal_distribute</span>' },
+      'RX': { bg: 'bg-gate-m', text: 'text-background-dark', content: 'R<sub class="text-xs">x</sub>' },
+      'RY': { bg: 'bg-gate-m', text: 'text-background-dark', content: 'R<sub class="text-xs">y</sub>' }
+    };
+
+    const config = gateConfigs[gateType];
+    return `<div class="flex h-10 w-10 items-center justify-center rounded ${config.bg} text-lg font-bold ${config.text}">${config.content}</div>`;
+  }
+
+  // Handle drag start
+  document.addEventListener('dragstart', function(e) {
+    if (e.target.classList.contains('gate') || e.target.classList.contains('circuit-gate')) {
+      draggedGate = e.target;
+      originalGateType = e.target.getAttribute('data-gate-type');
+
+      if (e.target.classList.contains('circuit-gate')) {
+        draggedFromCircuit = true;
+        originalParent = e.target.parentElement;
+      } else {
+        draggedFromCircuit = false;
+      }
+
+      e.target.classList.add('gate-dragging');
+      e.dataTransfer.effectAllowed = 'move';
+      e.dataTransfer.setData('text/html', e.target.innerHTML);
+    }
+  });
+
+  // Handle drag end
+  document.addEventListener('dragend', function(e) {
+    if (e.target.classList.contains('gate') || e.target.classList.contains('circuit-gate')) {
+      e.target.classList.remove('gate-dragging');
+      draggedGate = null;
+      draggedFromCircuit = false;
+      originalParent = null;
+      originalGateType = null;
+    }
+  });
+
+  // Handle drag over gate containers
+  document.addEventListener('dragover', function(e) {
+    const gateContainer = e.target.closest('.gate-container');
+    const gatePanel = e.target.closest('#gatePanel');
+
+    if (gateContainer || gatePanel) {
+      e.preventDefault();
+      e.dataTransfer.dropEffect = 'move';
+    }
+  });
+
+  // Handle drop on circuit
+  document.addEventListener('drop', function(e) {
+    e.preventDefault();
+
+    const gateContainer = e.target.closest('.gate-container');
+    const gateSlot = e.target.closest('.gate-slot');
+
+    // Drop on circuit
+    if (gateContainer && draggedGate) {
+      const rect = gateContainer.getBoundingClientRect();
+      const x = e.clientX - rect.left;
+      const containerWidth = rect.width;
+      const percentage = (x / containerWidth) * 100;
+
+      // Create new gate on circuit
+      const newGate = document.createElement('div');
+      newGate.className = 'circuit-gate absolute cursor-grab';
+      newGate.draggable = true;
+      newGate.setAttribute('data-gate-type', originalGateType);
+      newGate.style.left = percentage + '%';
+      newGate.innerHTML = getGateHTML(originalGateType) + '<div class="absolute -top-6 left-1/2 -translate-x-1/2 opacity-0 hover:opacity-100 transition-opacity"><button class="text-red-500 text-xs" onclick="this.closest(\'.circuit-gate\').remove()">×</button></div>';
+
+      // Add ring styles
+      const gateDiv = newGate.querySelector('div');
+      gateDiv.className += ' ring-2 ring-offset-2 ring-offset-background-dark ring-transparent transition-all hover:ring-primary';
+
+      gateContainer.appendChild(newGate);
+
+      // If dragged from circuit, remove original
+      if (draggedFromCircuit && originalParent) {
+        draggedGate.remove();
+      }
+    }
+
+    // Drop back to gate panel
+    if (gateSlot && draggedGate && draggedFromCircuit) {
+      const slotGateType = gateSlot.getAttribute('data-gate-type');
+      if (slotGateType === originalGateType) {
+        // Remove from circuit
+        draggedGate.remove();
+      }
+    }
+  });
+
+  // File menu dropdown
+  const fileMenuBtn = document.getElementById('fileMenuBtn');
+  const fileMenu = document.getElementById('fileMenu');
+
+  fileMenuBtn.addEventListener('click', function(e) {
+    e.stopPropagation();
+    fileMenu.classList.toggle('show');
+  });
+
+  // Close dropdown when clicking outside
+  document.addEventListener('click', function(e) {
+    if (!fileMenu.contains(e.target) && e.target !== fileMenuBtn) {
+      fileMenu.classList.remove('show');
+    }
+  });
+
+  // Prevent dropdown from closing when clicking inside
+  fileMenu.addEventListener('click', function(e) {
+    e.stopPropagation();
+  });
+
+  // AI Assistant suggestion button handlers
+  const chatMessages = document.getElementById('chatMessages');
+  const suggestionButtons = document.querySelectorAll('.suggestion-btn');
+
+  function addUserMessage(message) {
+    const userMessageHTML = `
+      <div class="flex justify-end">
+        <div class="rounded-lg rounded-tr-none bg-primary/20 p-3 text-sm max-w-[80%]">
+          <p>${message}</p>
+        </div>
+      </div>
+    `;
+    chatMessages.insertAdjacentHTML('beforeend', userMessageHTML);
+    chatMessages.scrollTop = chatMessages.scrollHeight;
+  }
+
+  function addAIMessage(message) {
+    const aiMessageHTML = `
+      <div class="flex gap-3">
+        <div class="flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-full bg-primary">
+          <span class="material-symbols-outlined text-lg">auto_awesome</span>
+        </div>
+        <div class="rounded-lg rounded-tl-none bg-surface-dark p-3 text-sm">
+          <p>${message}</p>
+        </div>
+      </div>
+    `;
+    chatMessages.insertAdjacentHTML('beforeend', aiMessageHTML);
+    chatMessages.scrollTop = chatMessages.scrollHeight;
+  }
+
+  function createCircuitGate(gateType, qubitIndex, percentage) {
+    const gateContainer = document.querySelector(`[data-qubit="${qubitIndex}"] .gate-container`);
+    if (!gateContainer) return;
+
+    const newGate = document.createElement('div');
+    newGate.className = 'circuit-gate absolute cursor-grab';
+    newGate.draggable = true;
+    newGate.setAttribute('data-gate-type', gateType);
+    newGate.style.left = percentage + '%';
+    newGate.innerHTML = getGateHTML(gateType) + '<div class="absolute -top-6 left-1/2 -translate-x-1/2 opacity-0 hover:opacity-100 transition-opacity"><button class="text-red-500 text-xs" onclick="this.closest(\'.circuit-gate\').remove()">×</button></div>';
+
+    // Add ring styles
+    const gateDiv = newGate.querySelector('div');
+    gateDiv.className += ' ring-2 ring-offset-2 ring-offset-background-dark ring-transparent transition-all hover:ring-primary';
+
+    gateContainer.appendChild(newGate);
+  }
+
+  function generateQuantumCircuit() {
+    // Create a simple quantum circuit (Bell state preparation)
+    // H gate on qubit 0
+    createCircuitGate('H', 0, 20);
+
+    // X gates on qubits 1 and 2
+    setTimeout(() => {
+      createCircuitGate('X', 1, 20);
+    }, 300);
+
+    setTimeout(() => {
+      createCircuitGate('X', 2, 20);
+    }, 600);
+
+    // CX gate on qubit 0
+    setTimeout(() => {
+      createCircuitGate('CX', 0, 50);
+    }, 900);
+
+    // H gate on qubit 1
+    setTimeout(() => {
+      createCircuitGate('H', 1, 50);
+    }, 1200);
+
+    // Measure gates
+    setTimeout(() => {
+      createCircuitGate('M', 0, 80);
+      createCircuitGate('M', 1, 80);
+      createCircuitGate('M', 2, 80);
+    }, 1500);
+  }
+
+  suggestionButtons.forEach(button => {
+    button.addEventListener('click', function() {
+      const message = this.getAttribute('data-message');
+
+      // Add user message
+      addUserMessage(message);
+
+      // Hide suggestion buttons after first click
+      document.getElementById('suggestionButtons').style.display = 'none';
+
+      // Handle different messages
+      if (message === 'Create quantum circuit for me') {
+        // Show AI thinking message after 1 second
+        setTimeout(() => {
+          addAIMessage('Sure! I\'ll create a quantum circuit for you. This will demonstrate a basic quantum algorithm with Hadamard gates, Pauli-X gates, a CNOT gate, and measurements.');
+        }, 1000);
+
+        // Start generating circuit after 2 seconds
+        setTimeout(() => {
+          generateQuantumCircuit();
+
+          // Add completion message after circuit is generated
+          setTimeout(() => {
+            addAIMessage('Circuit created! I\'ve added a Hadamard gate for superposition, some Pauli-X gates, a CNOT gate for entanglement, and measurement gates. You can drag gates around to modify the circuit or remove them by putting them back in the quantum gates palette.');
+          }, 2000);
+        }, 2000);
+      } else if (message === 'Suggest a gate for entanglement') {
+        setTimeout(() => {
+          addAIMessage('For creating entanglement between qubits, I recommend using the <strong>CNOT (CX)</strong> gate or the <strong>CZ (Controlled-Z)</strong> gate. These are two-qubit gates that create quantum correlations between qubits. Try dragging a CX gate onto your circuit!');
+        }, 1500);
+      } else if (message === 'How do I create a Bell state?') {
+        setTimeout(() => {
+          addAIMessage('To create a Bell state, follow these steps:<br>1. Apply a Hadamard (H) gate to the first qubit to create superposition<br>2. Apply a CNOT (CX) gate with the first qubit as control<br>3. This creates maximum entanglement between the qubits!');
+        }, 1500);
+      }
+    });
   });
 </script>
 

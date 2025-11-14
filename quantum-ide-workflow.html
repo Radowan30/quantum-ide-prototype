@@ -75,6 +75,117 @@
             z-index: 100;
             box-shadow: 0 4px 12px rgba(149, 17, 212, 0.3);
         }
+
+        /* Dropdown menu styles */
+        .dropdown {
+          position: relative;
+        }
+
+        .dropdown-menu {
+          position: absolute;
+          top: 100%;
+          left: 0;
+          margin-top: 8px;
+          min-width: 280px;
+          background-color: #1a1128;
+          border: 1px solid #2d2438;
+          border-radius: 0.5rem;
+          box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
+          opacity: 0;
+          visibility: hidden;
+          transform: translateY(-10px);
+          transition: all 0.2s ease-in-out;
+          z-index: 1000;
+          padding: 4px;
+        }
+
+        .dropdown-menu.show {
+          opacity: 1;
+          visibility: visible;
+          transform: translateY(0);
+        }
+
+        .dropdown-item {
+          display: flex;
+          align-items: center;
+          gap: 12px;
+          padding: 8px 12px;
+          color: #e0e0ff;
+          font-size: 14px;
+          border-radius: 0.25rem;
+          cursor: pointer;
+          transition: background-color 0.15s;
+        }
+
+        .dropdown-item:hover {
+          background-color: #2d2438;
+        }
+
+        .dropdown-divider {
+          height: 1px;
+          background-color: #2d2438;
+          margin: 4px 0;
+        }
+
+        .dropdown-item.disabled {
+          color: #8a8aab;
+          cursor: default;
+        }
+
+        .dropdown-item.disabled:hover {
+          background-color: transparent;
+        }
+
+        .dropdown-shortcut {
+          margin-left: auto;
+          font-size: 12px;
+          color: #8a8aab;
+        }
+      /* Node dragging styles */
+      .workflow-node {
+        cursor: move;
+        user-select: none;
+      }
+
+      .workflow-node:active {
+        cursor: grabbing;
+      }
+
+      .workflow-node.dragging {
+        opacity: 0.7;
+        z-index: 1000;
+      }
+
+      /* Connection port styles */
+      .connection-port {
+        transition: all 0.2s;
+      }
+
+      .connection-port:hover {
+        transform: scale(1.3);
+        box-shadow: 0 0 12px rgba(149, 17, 212, 0.8);
+      }
+
+      /* Pulsating line animation */
+      @keyframes pulse {
+        0%, 100% {
+          stroke-opacity: 0.8;
+          stroke-width: 2.5;
+        }
+        50% {
+          stroke-opacity: 1;
+          stroke-width: 3.5;
+        }
+      }
+
+      .flow-line {
+        animation: pulse 2s ease-in-out infinite;
+      }
+
+      /* Gradient definition for quantum algorithm node */
+      .quantum-gradient {
+        background: linear-gradient(135deg, #5b7cff 0%, #6ba3ff 100%);
+      }
     </style>
 </head>
 <body class="bg-background-dark text-text-primary-dark font-display">
@@ -84,7 +195,44 @@
 <span class="material-symbols-outlined text-primary text-2xl">hub</span>
 <h2 class="text-lg font-bold">Quantum IDE</h2>
 <div class="hidden md:flex items-center gap-6 ml-6">
-<a class="text-sm font-medium leading-normal hover:text-primary transition-colors" href="#">File</a>
+<div class="dropdown">
+<button id="fileMenuBtn" class="text-sm font-medium leading-normal hover:text-primary transition-colors">File</button>
+<div id="fileMenu" class="dropdown-menu">
+<div class="dropdown-item disabled">New Text File</div>
+<div class="dropdown-item disabled">New File ...</div>
+<div class="dropdown-divider"></div>
+<div class="dropdown-item disabled">New Window</div>
+<div class="dropdown-item disabled">New Window with Profile</div>
+<div class="dropdown-divider"></div>
+<div class="dropdown-item disabled">Open File ...</div>
+<div class="dropdown-item disabled">Open Folder ...</div>
+<div class="dropdown-item" onclick="window.location.href='quantum-ide-project-mgmt.html'">Open Projects ...</div>
+<div class="dropdown-item disabled">Open Workspace from File ...</div>
+<div class="dropdown-item disabled">Open Recent</div>
+<div class="dropdown-divider"></div>
+<div class="dropdown-item disabled">Add Folder to Workspace ...</div>
+<div class="dropdown-divider"></div>
+<div class="dropdown-item disabled">Save Workspace As ...</div>
+<div class="dropdown-item disabled">Duplicate Workspace</div>
+<div class="dropdown-divider"></div>
+<div class="dropdown-item disabled">Save</div>
+<div class="dropdown-item disabled">Save As ...</div>
+<div class="dropdown-item disabled">Save All</div>
+<div class="dropdown-divider"></div>
+<div class="dropdown-item disabled">Share</div>
+<div class="dropdown-item disabled">Auto Save</div>
+<div class="dropdown-divider"></div>
+<div class="dropdown-item disabled">Preferences</div>
+<div class="dropdown-divider"></div>
+<div class="dropdown-item disabled">Revert File</div>
+<div class="dropdown-divider"></div>
+<div class="dropdown-item disabled">Close Editor</div>
+<div class="dropdown-item disabled">Close Folder</div>
+<div class="dropdown-item disabled">Close Window</div>
+<div class="dropdown-divider"></div>
+<div class="dropdown-item disabled">Exit</div>
+</div>
+</div>
 <a class="text-sm font-medium leading-normal hover:text-primary transition-colors" href="#">Edit</a>
 <a class="text-sm font-medium leading-normal hover:text-primary transition-colors" href="#">Selection</a>
 <a class="text-sm font-medium leading-normal hover:text-primary transition-colors" href="#">View</a>
@@ -149,6 +297,17 @@
 <span class="font-medium text-sm">My Project</span>
 </div>
 <div class="pl-7 flex flex-col gap-1">
+<div class="flex items-center gap-2 mb-2 mt-2">
+<span class="material-symbols-outlined text-lg">expand_less</span>
+<span class="material-symbols-outlined text-primary text-lg">folder</span>
+<span class="font-medium text-sm">Classical Pre-processing</span>
+</div>
+<div class="flex items-center gap-2 mb-2 mt-2">
+<span class="material-symbols-outlined text-lg">expand_more</span>
+<span class="material-symbols-outlined text-primary text-lg">folder</span>
+<span class="font-medium text-sm">Quantum Algorithm</span>
+</div>
+<div class="pl-7 flex flex-col gap-1">
 <a href="quantum-ide-circuit.html" class="flex items-center gap-2 p-1 rounded hover:bg-primary/20 text-sm">
 <span class="material-symbols-outlined text-base text-blue-400">description</span>
 <span>circuit.wf</span>
@@ -162,6 +321,12 @@
 <span>grover.ipynb</span>
 </a>
 </div>
+<div class="flex items-center gap-2 mb-2 mt-2">
+<span class="material-symbols-outlined text-lg">expand_less</span>
+<span class="material-symbols-outlined text-primary text-lg">folder</span>
+<span class="font-medium text-sm">Classical Post-processing</span>
+</div>
+</div>
 </div>
 </div>
 </div>
@@ -169,8 +334,8 @@
 <main class="flex-1 flex flex-col h-full">
 <header class="flex-shrink-0 flex justify-between items-center gap-2 px-6 py-3 border-b border-border-dark">
 <div class="flex flex-col">
-<h1 class="text-text-primary-dark tracking-light text-xl font-bold leading-tight">Quantum Algorithm</h1>
-<p class="text-text-secondary-dark text-sm">Project Alpha</p>
+<h1 class="text-text-primary-dark tracking-light text-xl font-bold leading-tight">Process Workflow</h1>
+<p class="text-text-secondary-dark text-sm">My Project</p>
 </div>
 <div class="flex gap-2 items-center">
 <button class="p-2 text-text-primary-dark rounded-lg hover:bg-surface-dark"><span class="material-symbols-outlined">add</span></button>
@@ -182,90 +347,51 @@
 <button class="p-2 text-text-primary-dark rounded-lg hover:bg-surface-dark"><span class="material-symbols-outlined">zoom_out_map</span></button>
 </div>
 </header>
-<div class="flex-1 relative bg-[radial-gradient(circle_at_center,_rgba(149,17,212,0.03)_1px,_transparent_1px)] bg-[length:20px_20px] p-8 overflow-auto">
-<svg class="absolute top-0 left-0 w-full h-full pointer-events-none" xmlns="http://www.w3.org/2000/svg">
+<div id="workflowCanvas" class="flex-1 relative bg-[radial-gradient(circle_at_center,_rgba(149,17,212,0.03)_1px,_transparent_1px)] bg-[length:20px_20px] overflow-hidden">
+<svg id="connectionSvg" class="absolute top-0 left-0 w-full h-full pointer-events-none" xmlns="http://www.w3.org/2000/svg">
 <defs>
-<lineargradient id="line-gradient" x1="0%" x2="100%" y1="0%" y2="0%">
+<linearGradient id="line-gradient" x1="0%" x2="100%" y1="0%" y2="0%">
 <stop offset="0%" style="stop-color:#5ce1e6;stop-opacity:1"></stop>
 <stop offset="100%" style="stop-color:#9511d4;stop-opacity:1"></stop>
-</lineargradient>
+</linearGradient>
 </defs>
-<path d="M 128 170 C 220 170, 220 120, 312 120" fill="none" stroke="url(#line-gradient)" stroke-width="2.5"></path>
-<path d="M 440 120 C 532 120, 532 245, 624 245" fill="none" stroke="url(#line-gradient)" stroke-width="2.5"></path>
 </svg>
-<div class="relative w-full h-full">
-<div class="absolute top-32 left-8 w-48 rounded-lg bg-block-purple shadow-2xl shadow-primary/20 border border-primary/50 ring-2 ring-primary/30">
-<div class="flex items-center justify-between p-3 border-b border-primary/30">
-<h3 class="font-bold text-sm">Classical Pre-processing</h3>
-<span class="material-symbols-outlined text-sm">info</span>
-</div>
-<div class="p-3 relative">
-<p class="text-xs text-text-secondary-dark">Preprocessing of data in a classical system.</p>
-<div class="absolute -right-1.5 top-1/2 -translate-y-1/2 w-3 h-3 rounded-full bg-primary ring-2 ring-background-dark cursor-pointer"></div>
-</div>
-</div>
-<div class="absolute top-20 left-80 w-48 rounded-lg bg-block-purple shadow-2xl shadow-primary/20 border border-primary/50">
-<div class="flex items-center justify-between p-3 border-b border-primary/30">
-<h3 class="font-bold text-sm">Quantum Algorithm</h3>
-<span class="material-symbols-outlined text-sm">info</span>
-</div>
-<div class="p-3 relative">
-<p class="text-xs text-text-secondary-dark">Applying QAOA algorithm.</p>
-<div class="absolute -left-1.5 top-1/2 -translate-y-1/2 w-3 h-3 rounded-full bg-primary ring-2 ring-background-dark cursor-pointer"></div>
-<div class="absolute -right-1.5 top-1/2 -translate-y-1/2 w-3 h-3 rounded-full bg-primary ring-2 ring-background-dark cursor-pointer"></div>
-</div>
-</div>
-<div class="absolute top-44 left-[24rem] opacity-80 hover:opacity-100 transition-opacity">
-<div class="flex items-center gap-2 p-3 rounded-lg border border-dashed border-ai-teal bg-ai-teal/10 cursor-pointer">
-<span class="material-symbols-outlined text-ai-teal">auto_awesome</span>
-<div class="flex flex-col">
-<p class="text-ai-teal text-sm font-medium">AI Suggestion</p>
-<p class="text-text-secondary-dark text-xs">Add a Noise Simulation block?</p>
-</div>
-</div>
-</div>
-<div class="absolute top-52 left-[39rem] w-48 rounded-lg bg-block-purple shadow-2xl shadow-primary/20 border border-primary/50">
-<div class="flex items-center justify-between p-3 border-b border-primary/50">
-<h3 class="font-bold text-sm">Classical Post-processing</h3>
-<span class="material-symbols-outlined text-sm">info</span>
-</div>
-<div class="p-3 relative">
-<p class="text-xs text-text-secondary-dark">Processing the data after measurement from the quantum system.</p>
-<div class="absolute -left-1.5 top-1/2 -translate-y-1/2 w-3 h-3 rounded-full bg-primary ring-2 ring-background-dark cursor-pointer"></div>
-<div class="absolute -right-1.5 top-1/2 -translate-y-1/2 w-3 h-3 rounded-full bg-primary ring-2 ring-background-dark cursor-pointer"></div>
-</div>
-</div>
+<div id="nodesContainer" class="relative w-full h-full p-8">
+<!-- Nodes will be dynamically created here -->
 </div>
 </div>
 </main>
-<aside id="aiAssistant" class="hidden flex h-full w-80 flex-col border-l border-border-dark bg-panel-dark">
-<div class="flex items-center justify-between p-4 border-b border-border-dark">
-<div class="flex items-center gap-3">
-<span class="material-symbols-outlined text-ai-teal">auto_awesome</span>
-<h2 class="text-text-primary-dark text-lg font-bold">AI Assistant</h2>
-</div>
+<aside id="aiAssistant" class="hidden w-96 flex-shrink-0 border-l border-solid border-border-dark bg-panel-dark p-4 flex flex-col h-full">
+<div class="flex items-center justify-between pb-4">
+<h3 class="text-lg font-bold">AI Assistant</h3>
 <button id="aiCloseButton" class="text-text-secondary-dark hover:text-text-primary-dark">
 <span class="material-symbols-outlined">close</span>
 </button>
 </div>
-<div class="flex-1 flex flex-col p-4 gap-4 overflow-y-auto">
-<div class="flex flex-col gap-2 items-start">
-<p class="text-xs text-text-secondary-dark">User</p>
-<div class="bg-surface-dark rounded-lg p-3 text-sm max-w-xs">
+<div class="flex-1 overflow-y-auto space-y-4 pr-2">
+<div class="flex gap-3">
+<div class="flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-full bg-primary">
+<span class="material-symbols-outlined text-lg">auto_awesome</span>
+</div>
+<div class="rounded-lg rounded-tl-none bg-surface-dark p-3 text-sm">
 <p>How should I build this workflow?</p>
 </div>
 </div>
-<div class="flex flex-col gap-2 items-start">
-<p class="text-xs text-text-secondary-dark">AI Assistant</p>
-<div class="bg-ai-teal/10 border border-ai-teal/50 rounded-lg p-3 text-sm max-w-xs text-text-primary-dark">
+<div class="flex gap-3">
+<div class="flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-full bg-primary">
+<span class="material-symbols-outlined text-lg">auto_awesome</span>
+</div>
+<div class="rounded-lg rounded-tl-none bg-surface-dark p-3 text-sm">
 <p>To get started, you can connect the <code class="bg-surface-dark px-1 py-0.5 rounded text-xs text-primary">Quantum Algorithm</code> to the <code class="bg-surface-dark px-1 py-0.5 rounded text-xs text-primary">Classical Post-processing</code> to ensure data flow. What's your goal for this 'Quantum Algorithm'?</p>
 </div>
 </div>
 </div>
-<div class="p-4 border-t border-border-dark">
+<div class="mt-4 pt-4 border-t border-solid border-border-dark">
 <div class="relative">
-<input class="form-input flex w-full min-w-0 flex-1 resize-none overflow-hidden rounded-lg text-text-primary-dark focus:outline-0 focus:ring-0 border border-border-dark bg-background-dark focus:border-primary h-12 placeholder:text-text-secondary-dark pl-4 pr-10 text-base font-normal leading-normal" placeholder="Ask AI Assistant..."/>
-<span class="material-symbols-outlined absolute right-3 top-1/2 -translate-y-1/2 text-text-secondary-dark">send</span>
+<textarea class="form-input w-full resize-none rounded-lg border-none bg-surface-dark p-3 pr-10 text-sm placeholder:text-text-secondary-dark focus:outline-none focus:ring-2 focus:ring-primary" placeholder="Ask a question..." rows="3"></textarea>
+<button class="absolute bottom-2.5 right-2.5 flex h-7 w-7 items-center justify-center rounded-md bg-primary text-white hover:bg-primary/80">
+<span class="material-symbols-outlined text-lg">send</span>
+</button>
 </div>
 </div>
 </aside>
@@ -297,6 +423,317 @@
   aiCloseButton.addEventListener('click', function() {
     aiAssistant.classList.add('hidden');
     aiToggleButton.style.display = 'flex';
+  });
+
+  // File menu dropdown
+  const fileMenuBtn = document.getElementById('fileMenuBtn');
+  const fileMenu = document.getElementById('fileMenu');
+
+  fileMenuBtn.addEventListener('click', function(e) {
+    e.stopPropagation();
+    fileMenu.classList.toggle('show');
+  });
+
+  // Close dropdown when clicking outside
+  document.addEventListener('click', function(e) {
+    if (!fileMenu.contains(e.target) && e.target !== fileMenuBtn) {
+      fileMenu.classList.remove('show');
+    }
+  });
+
+  // Prevent dropdown from closing when clicking inside
+  fileMenu.addEventListener('click', function(e) {
+    e.stopPropagation();
+  });
+
+  // Workflow Node Management
+  const nodesContainer = document.getElementById('nodesContainer');
+  const connectionSvg = document.getElementById('connectionSvg');
+
+  let nodes = [];
+  let connections = [];
+  let nodeIdCounter = 0;
+  let draggedNode = null;
+  let dragOffset = { x: 0, y: 0 };
+  let connectingFrom = null;
+  let tempLine = null;
+  let isConnecting = false;
+
+  // Node class
+  class WorkflowNode {
+    constructor(id, title, description, x, y, type = 'default') {
+      this.id = id;
+      this.title = title;
+      this.description = description;
+      this.x = x;
+      this.y = y;
+      this.type = type;
+      this.element = null;
+      this.inputPort = null;
+      this.outputPort = null;
+      this.createNode();
+    }
+
+    createNode() {
+      const node = document.createElement('div');
+      node.className = 'workflow-node absolute w-48 rounded-lg shadow-2xl border';
+      node.setAttribute('data-node-id', this.id);
+      node.style.left = this.x + 'px';
+      node.style.top = this.y + 'px';
+
+      // Apply different styles based on type
+      if (this.type === 'quantum') {
+        node.classList.add('quantum-gradient', 'border-blue-400', 'shadow-blue-400/20');
+      } else {
+        node.classList.add('bg-block-purple', 'border-primary/50', 'shadow-primary/20');
+      }
+
+      node.innerHTML = `
+        <div class="flex items-center justify-between p-3 border-b ${this.type === 'quantum' ? 'border-blue-300/30' : 'border-primary/30'}">
+          <h3 class="font-bold text-m text-white">${this.title}</h3>
+          <span class="material-symbols-outlined text-sm text-white">info</span>
+        </div>
+        <div class="p-3 relative">
+          <p class="text-xs text-white-400">${this.description}</p>
+          <div class="connection-port input-port absolute -left-1.5 top-1/2 -translate-y-1/2 w-3 h-3 rounded-full bg-primary ring-2 ring-background-dark cursor-pointer hover:bg-ai-teal" data-port-type="input"></div>
+          <div class="connection-port output-port absolute -right-1.5 top-1/2 -translate-y-1/2 w-3 h-3 rounded-full bg-primary ring-2 ring-background-dark cursor-pointer hover:bg-ai-teal" data-port-type="output"></div>
+        </div>
+      `;
+
+      this.element = node;
+      this.inputPort = node.querySelector('.input-port');
+      this.outputPort = node.querySelector('.output-port');
+
+      // Add drag listeners to the node
+      node.addEventListener('mousedown', (e) => this.startDrag(e));
+
+      // Add double-click listener for quantum nodes
+      if (this.type === 'quantum') {
+        node.addEventListener('dblclick', (e) => {
+          if (!e.target.classList.contains('connection-port')) {
+            window.location.href = 'quantum-ide-circuit.html';
+          }
+        });
+      }
+
+      // Add connection listeners to ports
+      this.outputPort.addEventListener('mousedown', (e) => {
+        e.stopPropagation();
+        e.preventDefault();
+        this.startConnection(e);
+      });
+
+      nodesContainer.appendChild(node);
+    }
+
+    startDrag(e) {
+      if (e.target.classList.contains('connection-port')) return;
+
+      draggedNode = this;
+      const rect = this.element.getBoundingClientRect();
+      const canvasRect = nodesContainer.getBoundingClientRect();
+
+      dragOffset.x = e.clientX - rect.left;
+      dragOffset.y = e.clientY - rect.top;
+
+      this.element.classList.add('dragging');
+      e.preventDefault();
+    }
+
+    moveTo(x, y) {
+      this.x = x;
+      this.y = y;
+      this.element.style.left = x + 'px';
+      this.element.style.top = y + 'px';
+      updateConnections();
+    }
+
+    getPortPosition(portType) {
+      const port = portType === 'input' ? this.inputPort : this.outputPort;
+
+      // Get the actual port element's position on screen
+      const portRect = port.getBoundingClientRect();
+      const canvasRect = nodesContainer.getBoundingClientRect();
+
+      // Calculate center of the port relative to the canvas
+      return {
+        x: portRect.left + portRect.width / 2 - canvasRect.left,
+        y: portRect.top + portRect.height / 2 - canvasRect.top
+      };
+    }
+
+    startConnection(e) {
+      isConnecting = true;
+      connectingFrom = this;
+
+      // Create temporary line
+      tempLine = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+      tempLine.setAttribute('fill', 'none');
+      tempLine.setAttribute('stroke', 'url(#line-gradient)');
+      tempLine.setAttribute('stroke-width', '2.5');
+      tempLine.setAttribute('opacity', '0.5');
+      connectionSvg.appendChild(tempLine);
+    }
+  }
+
+  // Connection management
+  function createConnection(fromNode, toNode) {
+    // Check if connection already exists
+    const exists = connections.some(conn =>
+      conn.from === fromNode && conn.to === toNode
+    );
+
+    if (!exists) {
+      connections.push({ from: fromNode, to: toNode });
+      updateConnections();
+    }
+  }
+
+  function updateConnections() {
+    // Clear existing paths
+    const existingPaths = connectionSvg.querySelectorAll('path:not([id])');
+    existingPaths.forEach(path => path.remove());
+
+    // Draw all connections
+    connections.forEach(conn => {
+      const fromPos = conn.from.getPortPosition('output');
+      const toPos = conn.to.getPortPosition('input');
+
+      const path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+      const midX = (fromPos.x + toPos.x) / 2;
+
+      const d = `M ${fromPos.x} ${fromPos.y} C ${midX} ${fromPos.y}, ${midX} ${toPos.y}, ${toPos.x} ${toPos.y}`;
+
+      path.setAttribute('d', d);
+      path.setAttribute('fill', 'none');
+      path.setAttribute('stroke', 'url(#line-gradient)');
+      path.setAttribute('stroke-width', '2.5');
+      path.classList.add('flow-line');
+
+      connectionSvg.appendChild(path);
+    });
+  }
+
+  // Mouse move handler for dragging
+  document.addEventListener('mousemove', (e) => {
+    if (draggedNode && !isConnecting) {
+      const canvasRect = nodesContainer.getBoundingClientRect();
+      const x = e.clientX - canvasRect.left - dragOffset.x;
+      const y = e.clientY - canvasRect.top - dragOffset.y;
+
+      draggedNode.moveTo(x, y);
+    } else if (isConnecting && connectingFrom && tempLine) {
+      // Update temporary line while dragging
+      const canvasRect = nodesContainer.getBoundingClientRect();
+      const fromPos = connectingFrom.getPortPosition('output');
+      const toX = e.clientX - canvasRect.left;
+      const toY = e.clientY - canvasRect.top;
+
+      const midX = (fromPos.x + toX) / 2;
+      const d = `M ${fromPos.x} ${fromPos.y} C ${midX} ${fromPos.y}, ${midX} ${toY}, ${toX} ${toY}`;
+      tempLine.setAttribute('d', d);
+    }
+  });
+
+  // Mouse up handler
+  document.addEventListener('mouseup', (e) => {
+    if (draggedNode && !isConnecting) {
+      draggedNode.element.classList.remove('dragging');
+      draggedNode = null;
+    } else if (isConnecting) {
+      // Check if mouse is over an input port
+      const target = document.elementFromPoint(e.clientX, e.clientY);
+
+      if (target && target.classList.contains('connection-port') &&
+          target.getAttribute('data-port-type') === 'input') {
+        // Find the node that owns this port
+        const targetNodeElement = target.closest('.workflow-node');
+        if (targetNodeElement) {
+          const targetNodeId = targetNodeElement.getAttribute('data-node-id');
+          const targetNode = nodes.find(n => n.id == targetNodeId);
+
+          if (targetNode && targetNode !== connectingFrom) {
+            createConnection(connectingFrom, targetNode);
+          }
+        }
+      }
+
+      // Clean up temporary line
+      if (tempLine) {
+        tempLine.remove();
+        tempLine = null;
+      }
+
+      isConnecting = false;
+      connectingFrom = null;
+    }
+  });
+
+  // Initialize default nodes
+  function initializeWorkflow() {
+    // Create initial nodes
+    const preProcessNode = new WorkflowNode(
+      nodeIdCounter++,
+      'Classical Pre-processing',
+      'Preprocessing of data in a classical system.',
+      50,
+      120,
+      'default'
+    );
+    nodes.push(preProcessNode);
+
+    const quantumNode = new WorkflowNode(
+      nodeIdCounter++,
+      'Quantum Algorithm',
+      'Applying Grovers algorithm.',
+      350,
+      100,
+      'quantum'
+    );
+    nodes.push(quantumNode);
+
+    const postProcessNode = new WorkflowNode(
+      nodeIdCounter++,
+      'Classical Post-processing',
+      'Processing the data after measurement from the quantum system.',
+      650,
+      200,
+      'default'
+    );
+    nodes.push(postProcessNode);
+
+    // Create connections after a short delay to ensure ports are rendered
+    setTimeout(() => {
+      createConnection(preProcessNode, quantumNode);
+      createConnection(quantumNode, postProcessNode);
+    }, 100);
+
+    // Create AI suggestion near quantum node
+    createAISuggestion(quantumNode);
+  }
+
+  function createAISuggestion(targetNode) {
+    const suggestion = document.createElement('div');
+    suggestion.className = 'absolute opacity-80 hover:opacity-100 transition-opacity';
+    suggestion.style.left = (targetNode.x + 220) + 'px';
+    suggestion.style.top = (targetNode.y + 60) + 'px';
+
+    suggestion.innerHTML = `
+      <div class="flex items-center gap-2 p-3 rounded-lg border border-dashed border-ai-teal bg-ai-teal/10 cursor-pointer">
+        <span class="material-symbols-outlined text-ai-teal">auto_awesome</span>
+        <div class="flex flex-col">
+          <p class="text-ai-teal text-sm font-medium">AI Suggestion</p>
+          <p class="text-text-secondary-dark text-xs">Add a Noise Simulation block?</p>
+        </div>
+      </div>
+    `;
+
+    nodesContainer.appendChild(suggestion);
+  }
+
+  // Initialize on page load
+  window.addEventListener('DOMContentLoaded', () => {
+    initializeWorkflow();
   });
 </script>
 
