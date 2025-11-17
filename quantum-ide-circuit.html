@@ -368,6 +368,18 @@
 </a>
 </div>
 <div class="flex-1 overflow-auto p-8">
+<div class="flex items-center gap-4 mb-6">
+<span class="text-sm font-medium text-text-secondary-dark">Qubits:</span>
+<div class="flex items-center gap-2">
+<button id="removeQubitBtn" class="flex h-8 w-8 items-center justify-center rounded bg-surface-dark hover:bg-border-dark transition-colors text-text-primary-dark disabled:opacity-50 disabled:cursor-not-allowed" title="Remove qubit">
+<span class="material-symbols-outlined text-lg">remove</span>
+</button>
+<span id="qubitCount" class="text-sm font-mono text-text-primary-dark min-w-[2ch] text-center">3</span>
+<button id="addQubitBtn" class="flex h-8 w-8 items-center justify-center rounded bg-surface-dark hover:bg-border-dark transition-colors text-text-primary-dark" title="Add qubit">
+<span class="material-symbols-outlined text-lg">add</span>
+</button>
+</div>
+</div>
 <div id="circuitCanvas" class="flex flex-col space-y-12">
 <div class="qubit-line relative flex items-center" data-qubit="0">
 <span class="w-16 flex-shrink-0 font-mono text-sm text-text-secondary-dark">q0: |0⟩</span>
@@ -387,7 +399,7 @@
 <div class="gate-container absolute left-16 top-1/2 flex h-full w-full -translate-y-1/2 items-center" data-qubit="2">
 </div>
 </div>
-<div class="relative flex items-center pt-2">
+<div id="classicalBitLine" class="relative flex items-center pt-2">
 <span class="w-16 flex-shrink-0 font-mono text-sm text-text-secondary-dark">c: 3</span>
 <div class="h-1 w-full rounded-full bg-border-dark/50" style="background-size: 10px 10px; background-image: repeating-linear-gradient(45deg, #2d2438 0, #2d2438 5px, transparent 5px, transparent 10px);"></div>
 </div>
@@ -692,6 +704,56 @@
   fileMenu.addEventListener('click', function(e) {
     e.stopPropagation();
   });
+
+  // Qubit management functionality
+  let qubitCount = 3;
+  const addQubitBtn = document.getElementById('addQubitBtn');
+  const removeQubitBtn = document.getElementById('removeQubitBtn');
+  const qubitCountDisplay = document.getElementById('qubitCount');
+  const circuitCanvas = document.getElementById('circuitCanvas');
+  const classicalBitLine = document.getElementById('classicalBitLine');
+
+  function updateQubitCount() {
+    qubitCountDisplay.textContent = qubitCount;
+    removeQubitBtn.disabled = qubitCount <= 1;
+
+    // Update classical bit line count
+    const classicalBitSpan = classicalBitLine.querySelector('span');
+    classicalBitSpan.textContent = `c: ${qubitCount}`;
+  }
+
+  function createQubitLine(qubitIndex) {
+    const qubitLine = document.createElement('div');
+    qubitLine.className = 'qubit-line relative flex items-center';
+    qubitLine.setAttribute('data-qubit', qubitIndex);
+    qubitLine.innerHTML = `
+      <span class="w-16 flex-shrink-0 font-mono text-sm text-text-secondary-dark">q${qubitIndex}: |0⟩</span>
+      <div class="h-0.5 w-full bg-border-dark"></div>
+      <div class="gate-container absolute left-16 top-1/2 flex h-full w-full -translate-y-1/2 items-center" data-qubit="${qubitIndex}">
+      </div>
+    `;
+    return qubitLine;
+  }
+
+  addQubitBtn.addEventListener('click', function() {
+    const newQubitLine = createQubitLine(qubitCount);
+    circuitCanvas.insertBefore(newQubitLine, classicalBitLine);
+    qubitCount++;
+    updateQubitCount();
+  });
+
+  removeQubitBtn.addEventListener('click', function() {
+    if (qubitCount > 1) {
+      const qubitLines = circuitCanvas.querySelectorAll('.qubit-line');
+      const lastQubitLine = qubitLines[qubitLines.length - 1];
+      lastQubitLine.remove();
+      qubitCount--;
+      updateQubitCount();
+    }
+  });
+
+  // Initialize button states
+  updateQubitCount();
 
   // AI Assistant suggestion button handlers
   const chatMessages = document.getElementById('chatMessages');
