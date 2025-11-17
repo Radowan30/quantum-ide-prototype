@@ -181,6 +181,33 @@
         font-size: 12px;
         color: #8a8aab;
       }
+
+      /* Probability histogram styling */
+      #probabilityHistogram {
+        background-color: #14101f;
+        border-radius: 0.5rem;
+      }
+
+      /* Resize handle styling */
+      .resize-handle {
+        position: absolute;
+        left: 0;
+        top: 0;
+        bottom: 0;
+        width: 4px;
+        cursor: ew-resize;
+        background-color: transparent;
+        transition: background-color 0.2s;
+        z-index: 1000;
+      }
+
+      .resize-handle:hover {
+        background-color: #9511d4;
+      }
+
+      .resize-handle.resizing {
+        background-color: #9511d4;
+      }
     </style>
 <script>
       tailwind.config = {
@@ -407,10 +434,11 @@
 </div>
 </div>
 </main>
-<aside class="flex h-full w-64 flex-col border-l border-solid border-border-dark bg-panel-dark p-4 overflow-y-auto">
+<aside id="rightPane" class="flex h-full w-80 flex-col border-l border-solid border-border-dark bg-panel-dark p-4 overflow-y-auto relative">
+<div id="resizeHandle" class="resize-handle"></div>
 <h3 class="px-2 text-sm font-semibold tracking-wide text-text-secondary-dark mb-2">Quantum Gates</h3>
 <p class="px-2 text-xs text-text-secondary-dark mb-4">Drag & drop gates onto the circuit.</p>
-<div id="gatePanel" class="grid grid-cols-3 gap-3">
+<div id="gatePanel" class="grid grid-cols-3 gap-3 max-h-96 overflow-y-auto pb-4">
 <div class="gate-slot" data-gate-type="H">
 <div class="gate flex cursor-grab flex-col items-center gap-2 rounded-lg p-2 transition-colors hover:bg-surface-dark" draggable="true" data-gate-type="H">
 <div class="flex h-10 w-10 items-center justify-center rounded bg-gate-h text-lg font-bold text-background-dark">H</div>
@@ -463,6 +491,130 @@
 <div class="gate flex cursor-grab flex-col items-center gap-2 rounded-lg p-2 transition-colors hover:bg-surface-dark" draggable="true" data-gate-type="RY">
 <div class="flex h-10 w-10 items-center justify-center rounded bg-gate-m text-lg font-bold text-background-dark">R<sub class="text-xs">y</sub></div>
 <span class="text-xs text-text-secondary-dark">Ry Gate</span>
+</div>
+</div>
+<div class="gate-slot" data-gate-type="RZ">
+<div class="gate flex cursor-grab flex-col items-center gap-2 rounded-lg p-2 transition-colors hover:bg-surface-dark" draggable="true" data-gate-type="RZ">
+<div class="flex h-10 w-10 items-center justify-center rounded bg-gate-m text-lg font-bold text-background-dark">R<sub class="text-xs">z</sub></div>
+<span class="text-xs text-text-secondary-dark">Rz Gate</span>
+</div>
+</div>
+<div class="gate-slot" data-gate-type="S">
+<div class="gate flex cursor-grab flex-col items-center gap-2 rounded-lg p-2 transition-colors hover:bg-surface-dark" draggable="true" data-gate-type="S">
+<div class="flex h-10 w-10 items-center justify-center rounded bg-primary text-lg font-bold text-white">S</div>
+<span class="text-xs text-text-secondary-dark">S Gate</span>
+</div>
+</div>
+<div class="gate-slot" data-gate-type="T">
+<div class="gate flex cursor-grab flex-col items-center gap-2 rounded-lg p-2 transition-colors hover:bg-surface-dark" draggable="true" data-gate-type="T">
+<div class="flex h-10 w-10 items-center justify-center rounded bg-primary text-lg font-bold text-white">T</div>
+<span class="text-xs text-text-secondary-dark">T Gate</span>
+</div>
+</div>
+<div class="gate-slot" data-gate-type="SWAP">
+<div class="gate flex cursor-grab flex-col items-center gap-2 rounded-lg p-2 transition-colors hover:bg-surface-dark" draggable="true" data-gate-type="SWAP">
+<div class="flex h-10 w-10 items-center justify-center rounded bg-gate-cx text-lg font-bold text-background-dark">⇄</div>
+<span class="text-xs text-text-secondary-dark">SWAP</span>
+</div>
+</div>
+<div class="gate-slot" data-gate-type="TOFFOLI">
+<div class="gate flex cursor-grab flex-col items-center gap-2 rounded-lg p-2 transition-colors hover:bg-surface-dark" draggable="true" data-gate-type="TOFFOLI">
+<div class="flex h-10 w-10 items-center justify-center rounded bg-gate-cx text-sm font-bold text-background-dark">CCX</div>
+<span class="text-xs text-text-secondary-dark">Toffoli</span>
+</div>
+</div>
+<div class="gate-slot" data-gate-type="SX">
+<div class="gate flex cursor-grab flex-col items-center gap-2 rounded-lg p-2 transition-colors hover:bg-surface-dark" draggable="true" data-gate-type="SX">
+<div class="flex h-10 w-10 items-center justify-center rounded bg-gate-h text-lg font-bold text-background-dark">√X</div>
+<span class="text-xs text-text-secondary-dark">√X Gate</span>
+</div>
+</div>
+<div class="gate-slot" data-gate-type="I">
+<div class="gate flex cursor-grab flex-col items-center gap-2 rounded-lg p-2 transition-colors hover:bg-surface-dark" draggable="true" data-gate-type="I">
+<div class="flex h-10 w-10 items-center justify-center rounded bg-primary text-lg font-bold text-white">I</div>
+<span class="text-xs text-text-secondary-dark">Identity</span>
+</div>
+</div>
+<div class="gate-slot" data-gate-type="U">
+<div class="gate flex cursor-grab flex-col items-center gap-2 rounded-lg p-2 transition-colors hover:bg-surface-dark" draggable="true" data-gate-type="U">
+<div class="flex h-10 w-10 items-center justify-center rounded bg-gate-m text-lg font-bold text-background-dark">U</div>
+<span class="text-xs text-text-secondary-dark">U Gate</span>
+</div>
+</div>
+<div class="gate-slot" data-gate-type="P">
+<div class="gate flex cursor-grab flex-col items-center gap-2 rounded-lg p-2 transition-colors hover:bg-surface-dark" draggable="true" data-gate-type="P">
+<div class="flex h-10 w-10 items-center justify-center rounded bg-gate-m text-lg font-bold text-background-dark">P</div>
+<span class="text-xs text-text-secondary-dark">Phase</span>
+</div>
+</div>
+</div>
+
+<!-- State Vector Section -->
+<div class="mt-6 pt-6 border-t border-border-dark">
+<h3 class="px-2 text-sm font-semibold tracking-wide text-text-secondary-dark mb-2">State Vector</h3>
+<p class="px-2 text-xs text-text-secondary-dark mb-4">Current quantum state amplitudes</p>
+<div id="stateVectorDisplay" class="px-2 space-y-2 max-h-48 overflow-y-auto">
+<div class="flex items-center justify-between text-xs font-mono">
+<span class="text-text-secondary-dark">|000⟩:</span>
+<span class="text-text-primary-dark">1.000 + 0.000i</span>
+</div>
+<div class="flex items-center justify-between text-xs font-mono">
+<span class="text-text-secondary-dark">|001⟩:</span>
+<span class="text-text-primary-dark opacity-50">0.000 + 0.000i</span>
+</div>
+<div class="flex items-center justify-between text-xs font-mono">
+<span class="text-text-secondary-dark">|010⟩:</span>
+<span class="text-text-primary-dark opacity-50">0.000 + 0.000i</span>
+</div>
+<div class="flex items-center justify-between text-xs font-mono">
+<span class="text-text-secondary-dark">|011⟩:</span>
+<span class="text-text-primary-dark opacity-50">0.000 + 0.000i</span>
+</div>
+<div class="flex items-center justify-between text-xs font-mono">
+<span class="text-text-secondary-dark">|100⟩:</span>
+<span class="text-text-primary-dark opacity-50">0.000 + 0.000i</span>
+</div>
+<div class="flex items-center justify-between text-xs font-mono">
+<span class="text-text-secondary-dark">|101⟩:</span>
+<span class="text-text-primary-dark opacity-50">0.000 + 0.000i</span>
+</div>
+<div class="flex items-center justify-between text-xs font-mono">
+<span class="text-text-secondary-dark">|110⟩:</span>
+<span class="text-text-primary-dark opacity-50">0.000 + 0.000i</span>
+</div>
+<div class="flex items-center justify-between text-xs font-mono">
+<span class="text-text-secondary-dark">|111⟩:</span>
+<span class="text-text-primary-dark opacity-50">0.000 + 0.000i</span>
+</div>
+</div>
+</div>
+
+<!-- Probability Histogram Section -->
+<div class="mt-6 pt-6 border-t border-border-dark">
+<div class="flex items-center justify-between px-2 mb-2">
+<h3 class="text-sm font-semibold tracking-wide text-text-secondary-dark">Probability Histogram</h3>
+<div class="flex items-center gap-2">
+<button id="zoomOutBtn" class="flex h-6 w-6 items-center justify-center rounded bg-surface-dark hover:bg-border-dark transition-colors text-text-primary-dark text-sm" title="Zoom out">
+<span class="material-symbols-outlined text-base">remove</span>
+</button>
+<span id="zoomLevel" class="text-xs text-text-secondary-dark min-w-[3ch] text-center">100%</span>
+<button id="zoomInBtn" class="flex h-6 w-6 items-center justify-center rounded bg-surface-dark hover:bg-border-dark transition-colors text-text-primary-dark text-sm" title="Zoom in">
+<span class="material-symbols-outlined text-base">add</span>
+</button>
+</div>
+</div>
+<p class="px-2 text-xs text-text-secondary-dark mb-4">Measurement outcome probabilities</p>
+<div class="px-2 max-h-96 overflow-y-auto pb-4">
+<canvas id="probabilityHistogram" style="display: block;"></canvas>
+<div class="mt-3 text-xs font-mono">
+<div class="flex items-center justify-between">
+<span class="text-text-secondary-dark">Most likely state:</span>
+<span id="mostLikelyState" class="text-text-primary-dark">|000⟩</span>
+</div>
+<div class="flex items-center justify-between mt-1">
+<span class="text-text-secondary-dark">Probability:</span>
+<span id="mostLikelyProb" class="text-text-primary-dark">100.0%</span>
+</div>
 </div>
 </div>
 </div>
@@ -592,10 +744,22 @@
       'CZ': { bg: 'bg-gate-cx', text: 'text-background-dark', content: 'CZ' },
       'M': { bg: 'bg-gate-m', text: 'text-background-dark', content: '<span class="material-symbols-outlined text-2xl">horizontal_distribute</span>' },
       'RX': { bg: 'bg-gate-m', text: 'text-background-dark', content: 'R<sub class="text-xs">x</sub>' },
-      'RY': { bg: 'bg-gate-m', text: 'text-background-dark', content: 'R<sub class="text-xs">y</sub>' }
+      'RY': { bg: 'bg-gate-m', text: 'text-background-dark', content: 'R<sub class="text-xs">y</sub>' },
+      'RZ': { bg: 'bg-gate-m', text: 'text-background-dark', content: 'R<sub class="text-xs">z</sub>' },
+      'S': { bg: 'bg-primary', text: 'text-white', content: 'S' },
+      'T': { bg: 'bg-primary', text: 'text-white', content: 'T' },
+      'SWAP': { bg: 'bg-gate-cx', text: 'text-background-dark', content: '⇄' },
+      'TOFFOLI': { bg: 'bg-gate-cx', text: 'text-background-dark', content: 'CCX' },
+      'SX': { bg: 'bg-gate-h', text: 'text-background-dark', content: '√X' },
+      'I': { bg: 'bg-primary', text: 'text-white', content: 'I' },
+      'U': { bg: 'bg-gate-m', text: 'text-background-dark', content: 'U' },
+      'P': { bg: 'bg-gate-m', text: 'text-background-dark', content: 'P' }
     };
 
     const config = gateConfigs[gateType];
+    if (!config) {
+      return `<div class="flex h-10 w-10 items-center justify-center rounded bg-primary text-lg font-bold text-white">${gateType}</div>`;
+    }
     return `<div class="flex h-10 w-10 items-center justify-center rounded ${config.bg} text-lg font-bold ${config.text}">${config.content}</div>`;
   }
 
@@ -740,6 +904,10 @@
     circuitCanvas.insertBefore(newQubitLine, classicalBitLine);
     qubitCount++;
     updateQubitCount();
+    // Reinitialize quantum state with new qubit count
+    quantumState = new QuantumState(qubitCount);
+    updateStateVectorDisplay();
+    drawProbabilityHistogram();
   });
 
   removeQubitBtn.addEventListener('click', function() {
@@ -749,11 +917,396 @@
       lastQubitLine.remove();
       qubitCount--;
       updateQubitCount();
+      // Reinitialize quantum state with new qubit count
+      quantumState = new QuantumState(qubitCount);
+      updateStateVectorDisplay();
+      drawProbabilityHistogram();
     }
   });
 
   // Initialize button states
   updateQubitCount();
+
+  // Right pane resize functionality
+  const rightPane = document.getElementById('rightPane');
+  const resizeHandle = document.getElementById('resizeHandle');
+  let isResizing = false;
+
+  resizeHandle.addEventListener('mousedown', function(e) {
+    isResizing = true;
+    resizeHandle.classList.add('resizing');
+    e.preventDefault();
+  });
+
+  document.addEventListener('mousemove', function(e) {
+    if (!isResizing) return;
+
+    // Get the right pane's current position
+    const rect = rightPane.getBoundingClientRect();
+    const newWidth = rect.right - e.clientX;
+
+    // Set min and max widths
+    const minWidth = 280;
+    const maxWidth = window.innerWidth * 0.5; // Max 50% of screen
+
+    const boundedWidth = Math.max(minWidth, Math.min(newWidth, maxWidth));
+    rightPane.style.width = boundedWidth + 'px';
+  });
+
+  document.addEventListener('mouseup', function() {
+    if (isResizing) {
+      isResizing = false;
+      resizeHandle.classList.remove('resizing');
+    }
+  });
+
+  // Quantum State Simulation
+  class QuantumState {
+    constructor(numQubits) {
+      this.numQubits = numQubits;
+      this.stateSize = Math.pow(2, numQubits);
+      this.state = new Array(this.stateSize).fill(null).map(() => ({real: 0, imag: 0}));
+      this.state[0] = {real: 1, imag: 0}; // Initialize to |0...0⟩
+    }
+
+    applyGate(gateType, qubit) {
+      const newState = new Array(this.stateSize).fill(null).map(() => ({real: 0, imag: 0}));
+
+      for (let i = 0; i < this.stateSize; i++) {
+        const bitValue = (i >> qubit) & 1;
+
+        if (gateType === 'H') {
+          // Hadamard gate
+          const i0 = i & ~(1 << qubit); // Set qubit to 0
+          const i1 = i | (1 << qubit);  // Set qubit to 1
+
+          const factor = 1 / Math.sqrt(2);
+          if (bitValue === 0) {
+            newState[i].real += factor * this.state[i0].real;
+            newState[i].imag += factor * this.state[i0].imag;
+            newState[i].real += factor * this.state[i1].real;
+            newState[i].imag += factor * this.state[i1].imag;
+          } else {
+            newState[i].real += factor * this.state[i0].real;
+            newState[i].imag += factor * this.state[i0].imag;
+            newState[i].real -= factor * this.state[i1].real;
+            newState[i].imag -= factor * this.state[i1].imag;
+          }
+        } else if (gateType === 'X') {
+          // Pauli-X gate (bit flip)
+          const flipped = i ^ (1 << qubit);
+          newState[i].real = this.state[flipped].real;
+          newState[i].imag = this.state[flipped].imag;
+        } else if (gateType === 'Y') {
+          // Pauli-Y gate
+          const flipped = i ^ (1 << qubit);
+          if (bitValue === 0) {
+            newState[i].real = this.state[flipped].imag;
+            newState[i].imag = -this.state[flipped].real;
+          } else {
+            newState[i].real = -this.state[flipped].imag;
+            newState[i].imag = this.state[flipped].real;
+          }
+        } else if (gateType === 'Z') {
+          // Pauli-Z gate
+          if (bitValue === 1) {
+            newState[i].real = -this.state[i].real;
+            newState[i].imag = -this.state[i].imag;
+          } else {
+            newState[i].real = this.state[i].real;
+            newState[i].imag = this.state[i].imag;
+          }
+        } else {
+          // For gates not implemented, keep state unchanged
+          newState[i].real = this.state[i].real;
+          newState[i].imag = this.state[i].imag;
+        }
+      }
+
+      this.state = newState;
+    }
+
+    getBlochAngles(qubit) {
+      // Calculate reduced density matrix for single qubit
+      const alpha = {real: 0, imag: 0};
+      const beta = {real: 0, imag: 0};
+
+      for (let i = 0; i < this.stateSize; i++) {
+        if (((i >> qubit) & 1) === 0) {
+          alpha.real += this.state[i].real * this.state[i].real + this.state[i].imag * this.state[i].imag;
+        } else {
+          beta.real += this.state[i].real * this.state[i].real + this.state[i].imag * this.state[i].imag;
+        }
+      }
+
+      alpha.real = Math.sqrt(alpha.real);
+      beta.real = Math.sqrt(beta.real);
+
+      const theta = 2 * Math.acos(Math.max(0, Math.min(1, alpha.real)));
+      const phi = 0; // Simplified for visualization
+
+      return {theta, phi};
+    }
+  }
+
+  let quantumState = new QuantumState(qubitCount);
+
+  // Histogram zoom state
+  let histogramZoom = 1.0; // 100%
+  const baseHeight = 300;
+
+  // Draw Probability Histogram
+  function drawProbabilityHistogram() {
+    const canvas = document.getElementById('probabilityHistogram');
+    if (!canvas) return;
+
+    // Get parent container width dynamically
+    const parentWidth = canvas.parentElement.clientWidth;
+    const baseWidth = parentWidth - 16; // Account for padding
+
+    // Set canvas size based on zoom level
+    const displayWidth = baseWidth;
+    const displayHeight = baseHeight * histogramZoom;
+
+    // Set actual canvas resolution (for crisp rendering)
+    const dpr = window.devicePixelRatio || 1;
+    canvas.width = displayWidth * dpr;
+    canvas.height = displayHeight * dpr;
+
+    // Set display size
+    canvas.style.width = displayWidth + 'px';
+    canvas.style.height = displayHeight + 'px';
+
+    const ctx = canvas.getContext('2d');
+    ctx.scale(dpr, dpr);
+
+    const width = displayWidth;
+    const height = displayHeight;
+    const padding = 40 * histogramZoom;
+    const leftPadding = 50 * histogramZoom;
+    const chartHeight = height - padding * 2;
+    const chartWidth = width - leftPadding - padding;
+
+    // Clear canvas
+    ctx.clearRect(0, 0, width, height);
+
+    // Calculate probabilities
+    const probabilities = [];
+    let mostLikelyIndex = 0;
+    let mostLikelyProb = 0;
+
+    for (let i = 0; i < quantumState.stateSize; i++) {
+      const amplitude = quantumState.state[i];
+      const prob = amplitude.real * amplitude.real + amplitude.imag * amplitude.imag;
+      probabilities.push(prob);
+
+      if (prob > mostLikelyProb) {
+        mostLikelyProb = prob;
+        mostLikelyIndex = i;
+      }
+    }
+
+    // Scale is always 0-100%
+    const maxScale = 1.0;
+
+    const barWidth = chartWidth / quantumState.stateSize;
+    const gap = Math.min(2, barWidth * 0.1);
+
+    // Draw Y-axis gridlines and labels
+    ctx.strokeStyle = '#2d2438';
+    ctx.lineWidth = 1 * histogramZoom;
+    ctx.fillStyle = '#8a8aab';
+    ctx.font = (9 * histogramZoom) + 'px Space Grotesk';
+    ctx.textAlign = 'right';
+
+    for (let i = 0; i <= 5; i++) {
+      const percent = (i * 20);
+      const y = height - padding - (chartHeight * i / 5);
+
+      // Gridline
+      ctx.beginPath();
+      ctx.moveTo(leftPadding, y);
+      ctx.lineTo(width - padding, y);
+      ctx.stroke();
+
+      // Label
+      ctx.fillText(percent + '%', leftPadding - 5 * histogramZoom, y + 3 * histogramZoom);
+    }
+
+    // Draw bars
+    probabilities.forEach((prob, i) => {
+      const barHeight = (prob / maxScale) * chartHeight;
+      const x = leftPadding + i * barWidth + gap / 2;
+      const y = height - padding - barHeight;
+
+      // Bar color - gradient from primary to lighter shade
+      const gradient = ctx.createLinearGradient(x, y, x, height - padding);
+      gradient.addColorStop(0, '#9511d4');
+      gradient.addColorStop(1, '#b891ff');
+
+      ctx.fillStyle = gradient;
+      ctx.fillRect(x, y, barWidth - gap, barHeight);
+
+      // Draw bar outline for non-zero probabilities
+      if (prob > 0.001) {
+        ctx.strokeStyle = '#e0e0ff';
+        ctx.lineWidth = 1 * histogramZoom;
+        ctx.strokeRect(x, y, barWidth - gap, barHeight);
+      }
+    });
+
+    // Draw axes
+    ctx.strokeStyle = '#8a8aab';
+    ctx.lineWidth = 2 * histogramZoom;
+
+    // X-axis
+    ctx.beginPath();
+    ctx.moveTo(leftPadding, height - padding);
+    ctx.lineTo(width - padding, height - padding);
+    ctx.stroke();
+
+    // Y-axis
+    ctx.beginPath();
+    ctx.moveTo(leftPadding, padding);
+    ctx.lineTo(leftPadding, height - padding);
+    ctx.stroke();
+
+    // Draw labels for basis states (if not too many)
+    ctx.fillStyle = '#8a8aab';
+    ctx.font = (9 * histogramZoom) + 'px Space Grotesk';
+    ctx.textAlign = 'center';
+
+    if (quantumState.stateSize <= 16) {
+      probabilities.forEach((prob, i) => {
+        const x = leftPadding + i * barWidth + barWidth / 2;
+        const label = '|' + i.toString(2).padStart(quantumState.numQubits, '0') + '⟩';
+
+        ctx.save();
+        ctx.translate(x, height - padding + 5 * histogramZoom);
+        ctx.rotate(-Math.PI / 4);
+        ctx.fillText(label, 0, 0);
+        ctx.restore();
+      });
+    } else {
+      // For larger systems, just show first, middle, and last
+      const x0 = leftPadding + barWidth / 2;
+      const xMid = leftPadding + (quantumState.stateSize / 2) * barWidth;
+      const xLast = leftPadding + (quantumState.stateSize - 1) * barWidth + barWidth / 2;
+
+      ctx.fillText('|0...0⟩', x0, height - padding + 15 * histogramZoom);
+      ctx.fillText('...', xMid, height - padding + 15 * histogramZoom);
+      ctx.fillText('|1...1⟩', xLast, height - padding + 15 * histogramZoom);
+    }
+
+    // Draw Y-axis label
+    ctx.save();
+    ctx.translate(15 * histogramZoom, height / 2);
+    ctx.rotate(-Math.PI / 2);
+    ctx.fillStyle = '#8a8aab';
+    ctx.font = (10 * histogramZoom) + 'px Space Grotesk';
+    ctx.textAlign = 'center';
+    ctx.fillText('Probability', 0, 0);
+    ctx.restore();
+
+    // Update most likely state display
+    const mostLikelyStateLabel = '|' + mostLikelyIndex.toString(2).padStart(quantumState.numQubits, '0') + '⟩';
+    document.getElementById('mostLikelyState').textContent = mostLikelyStateLabel;
+    document.getElementById('mostLikelyProb').textContent = (mostLikelyProb * 100).toFixed(1) + '%';
+  }
+
+  // Update state vector display
+  function updateStateVectorDisplay() {
+    const stateVectorDisplay = document.getElementById('stateVectorDisplay');
+    stateVectorDisplay.innerHTML = '';
+
+    for (let i = 0; i < quantumState.stateSize; i++) {
+      const amplitude = quantumState.state[i];
+      const magnitude = Math.sqrt(amplitude.real * amplitude.real + amplitude.imag * amplitude.imag);
+      const binaryString = i.toString(2).padStart(quantumState.numQubits, '0');
+
+      const div = document.createElement('div');
+      div.className = 'flex items-center justify-between text-xs font-mono';
+      div.innerHTML = `
+        <span class="text-text-secondary-dark">|${binaryString}⟩:</span>
+        <span class="text-text-primary-dark ${magnitude < 0.001 ? 'opacity-50' : ''}">${amplitude.real.toFixed(3)} ${amplitude.imag >= 0 ? '+' : '-'} ${Math.abs(amplitude.imag).toFixed(3)}i</span>
+      `;
+      stateVectorDisplay.appendChild(div);
+    }
+  }
+
+
+  // Simulate circuit and update displays
+  function simulateCircuit() {
+    quantumState = new QuantumState(qubitCount);
+
+    // Collect all gates from the circuit
+    const gates = [];
+    const qubitLines = circuitCanvas.querySelectorAll('.qubit-line');
+
+    qubitLines.forEach((line, qubitIndex) => {
+      const gateContainer = line.querySelector('.gate-container');
+      const circuitGates = gateContainer.querySelectorAll('.circuit-gate');
+
+      circuitGates.forEach(gate => {
+        const gateType = gate.getAttribute('data-gate-type');
+        const position = parseFloat(gate.style.left);
+        gates.push({gateType, qubit: qubitIndex, position});
+      });
+    });
+
+    // Sort gates by position (left to right)
+    gates.sort((a, b) => a.position - b.position);
+
+    // Apply gates in order
+    gates.forEach(gate => {
+      quantumState.applyGate(gate.gateType, gate.qubit);
+    });
+
+    // Update displays
+    updateStateVectorDisplay();
+    drawProbabilityHistogram();
+  }
+
+  // Histogram zoom controls
+  const zoomInBtn = document.getElementById('zoomInBtn');
+  const zoomOutBtn = document.getElementById('zoomOutBtn');
+  const zoomLevelDisplay = document.getElementById('zoomLevel');
+
+  function updateZoomLevel() {
+    const percent = Math.round(histogramZoom * 100);
+    zoomLevelDisplay.textContent = percent + '%';
+    drawProbabilityHistogram();
+  }
+
+  zoomInBtn.addEventListener('click', function() {
+    if (histogramZoom < 3.0) { // Max 300%
+      histogramZoom += 0.25;
+      updateZoomLevel();
+    }
+  });
+
+  zoomOutBtn.addEventListener('click', function() {
+    if (histogramZoom > 0.5) { // Min 50%
+      histogramZoom -= 0.25;
+      updateZoomLevel();
+    }
+  });
+
+  // Initial draw
+  updateStateVectorDisplay();
+  drawProbabilityHistogram();
+
+  // Set up mutation observer to watch for circuit changes
+  const circuitObserver = new MutationObserver(() => {
+    simulateCircuit();
+  });
+
+  circuitObserver.observe(circuitCanvas, {
+    childList: true,
+    subtree: true,
+    attributes: true,
+    attributeFilter: ['style']
+  });
 
   // AI Assistant suggestion button handlers
   const chatMessages = document.getElementById('chatMessages');
