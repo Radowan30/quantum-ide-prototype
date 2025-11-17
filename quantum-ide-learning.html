@@ -317,55 +317,428 @@
 </div>
 </aside>
 <main class="flex-1 overflow-y-auto bg-background-dark p-8">
-<div class="mx-auto max-w-4xl">
-<div class="text-center">
+<div class="mx-auto max-w-7xl">
+<div class="text-center mb-8">
 <h1 class="text-4xl font-bold tracking-tight text-text-primary-dark">Learning Quantum</h1>
 <p class="mt-3 text-lg text-text-secondary-dark">Explore tutorials, explanations, and exercises to master quantum computing.</p>
 </div>
-<div class="relative my-8">
+<div class="relative mb-8 max-w-2xl mx-auto">
 <span class="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-text-secondary-dark">search</span>
 <input class="w-full rounded-full border-2 border-border-dark bg-surface-dark py-3 pl-12 pr-4 text-text-primary-dark placeholder-text-secondary-dark focus:border-primary focus:outline-none focus:ring-0" placeholder="Search for quantum concepts..." type="text"/>
 </div>
-<div class="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
-<div class="rounded-xl border border-border-dark bg-surface-dark p-6 transition-all hover:border-primary/50 hover:shadow-2xl hover:shadow-primary/10">
-<div class="flex h-12 w-12 items-center justify-center rounded-lg bg-primary/20">
-<span class="material-symbols-outlined text-3xl text-primary">looks_one</span>
-</div>
-<h3 class="mt-4 text-xl font-bold text-text-primary-dark">Introduction to Quantum</h3>
-<p class="mt-2 text-text-secondary-dark">Start with the basics: qubits, superposition, and the foundational principles of quantum mechanics.</p>
-</div>
-<div class="rounded-xl border border-border-dark bg-surface-dark p-6 transition-all hover:border-primary/50 hover:shadow-2xl hover:shadow-primary/10">
-<div class="flex h-12 w-12 items-center justify-center rounded-lg bg-primary/20">
-<span class="material-symbols-outlined text-3xl text-primary">looks_two</span>
-</div>
-<h3 class="mt-4 text-xl font-bold text-text-primary-dark">Quantum Gates &amp; Circuits</h3>
-<p class="mt-2 text-text-secondary-dark">Learn to build and understand quantum circuits, the building blocks of quantum algorithms.</p>
-</div>
-<div class="rounded-xl border border-border-dark bg-surface-dark p-6 transition-all hover:border-primary/50 hover:shadow-2xl hover:shadow-primary/10">
-<div class="flex h-12 w-12 items-center justify-center rounded-lg bg-primary/20">
-<span class="material-symbols-outlined text-3xl text-primary">looks_3</span>
-</div>
-<h3 class="mt-4 text-xl font-bold text-text-primary-dark">Key Quantum Algorithms</h3>
-<p class="mt-2 text-text-secondary-dark">Dive into famous algorithms like Shor's and Grover's, and understand their power.</p>
-</div>
-<div class="col-span-1 rounded-xl border border-border-dark bg-surface-dark p-6 transition-all hover:border-primary/50 hover:shadow-2xl hover:shadow-primary/10 md:col-span-2 lg:col-span-3">
-<div class="flex flex-col items-start md:flex-row md:items-center">
-<div class="flex h-12 w-12 items-center justify-center rounded-lg bg-primary/20">
-<span class="material-symbols-outlined text-3xl text-primary">exercise</span>
-</div>
-<div class="mt-4 md:ml-6 md:mt-0">
-<h3 class="text-xl font-bold text-text-primary-dark">Interactive Exercises</h3>
-<p class="mt-1 text-text-secondary-dark">Apply your knowledge with hands-on coding challenges and circuit simulations.</p>
-</div>
-<button class="mt-4 ml-auto w-full shrink-0 rounded-lg bg-primary px-5 py-2.5 font-semibold text-white transition-colors hover:bg-primary/90 md:w-auto">View Exercises</button>
+
+<div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
+<!-- Main Content Column -->
+<div class="lg:col-span-2 space-y-6">
+
+<!-- Progress & Gamification Section -->
+<div class="rounded-xl border border-border-dark bg-surface-dark p-6">
+<div class="flex items-center justify-between mb-4">
+<h2 class="text-xl font-bold text-text-primary-dark">Your Progress</h2>
+<div class="flex items-center gap-2 text-sm">
+<span class="material-symbols-outlined text-primary">local_fire_department</span>
+<span class="text-text-primary-dark font-semibold">7 Day Streak!</span>
 </div>
 </div>
+<div class="mb-4">
+<div class="flex items-center justify-between text-sm mb-2">
+<span class="text-text-secondary-dark">Overall Mastery</span>
+<span class="text-text-primary-dark font-semibold">68%</span>
+</div>
+<div class="w-full bg-border-dark rounded-full h-3">
+<div class="bg-gradient-to-r from-primary to-purple-400 h-3 rounded-full transition-all duration-500" style="width: 68%"></div>
+</div>
+</div>
+<div class="grid grid-cols-3 gap-3">
+<div class="bg-panel-dark rounded-lg p-3 text-center">
+<div class="text-2xl font-bold text-primary">12</div>
+<div class="text-xs text-text-secondary-dark mt-1">Lessons Complete</div>
+</div>
+<div class="bg-panel-dark rounded-lg p-3 text-center">
+<div class="text-2xl font-bold text-primary">3</div>
+<div class="text-xs text-text-secondary-dark mt-1">Badges Earned</div>
+</div>
+<div class="bg-panel-dark rounded-lg p-3 text-center">
+<div class="text-2xl font-bold text-primary">2450</div>
+<div class="text-xs text-text-secondary-dark mt-1">Total XP</div>
+</div>
+</div>
+</div>
+
+<!-- Concept Mastery Progress Bars -->
+<div class="rounded-xl border border-border-dark bg-surface-dark p-6">
+<h2 class="text-xl font-bold text-text-primary-dark mb-4">Concept Mastery</h2>
+<div class="space-y-4">
+<div>
+<div class="flex items-center justify-between mb-2">
+<span class="text-sm text-text-primary-dark">Qubits</span>
+<span class="text-sm font-semibold text-primary">85%</span>
+</div>
+<div class="w-full bg-border-dark rounded-full h-2.5">
+<div class="bg-gradient-to-r from-primary to-purple-400 h-2.5 rounded-full transition-all duration-500" style="width: 85%"></div>
+</div>
+</div>
+<div>
+<div class="flex items-center justify-between mb-2">
+<span class="text-sm text-text-primary-dark">Gates</span>
+<span class="text-sm font-semibold text-primary">72%</span>
+</div>
+<div class="w-full bg-border-dark rounded-full h-2.5">
+<div class="bg-gradient-to-r from-primary to-purple-400 h-2.5 rounded-full transition-all duration-500" style="width: 72%"></div>
+</div>
+</div>
+<div>
+<div class="flex items-center justify-between mb-2">
+<span class="text-sm text-text-primary-dark">Circuits</span>
+<span class="text-sm font-semibold text-primary">68%</span>
+</div>
+<div class="w-full bg-border-dark rounded-full h-2.5">
+<div class="bg-gradient-to-r from-primary to-purple-400 h-2.5 rounded-full transition-all duration-500" style="width: 68%"></div>
+</div>
+</div>
+<div>
+<div class="flex items-center justify-between mb-2">
+<span class="text-sm text-text-primary-dark">Entanglement</span>
+<span class="text-sm font-semibold text-text-secondary-dark">45%</span>
+</div>
+<div class="w-full bg-border-dark rounded-full h-2.5">
+<div class="bg-gradient-to-r from-primary to-purple-400 h-2.5 rounded-full transition-all duration-500" style="width: 45%"></div>
+</div>
+</div>
+<div>
+<div class="flex items-center justify-between mb-2">
+<span class="text-sm text-text-primary-dark">Algorithms</span>
+<span class="text-sm font-semibold text-text-secondary-dark">38%</span>
+</div>
+<div class="w-full bg-border-dark rounded-full h-2.5">
+<div class="bg-gradient-to-r from-primary to-purple-400 h-2.5 rounded-full transition-all duration-500" style="width: 38%"></div>
+</div>
+</div>
+<div>
+<div class="flex items-center justify-between mb-2">
+<span class="text-sm text-text-primary-dark">Quantum Protocols</span>
+<span class="text-sm font-semibold text-text-secondary-dark">25%</span>
+</div>
+<div class="w-full bg-border-dark rounded-full h-2.5">
+<div class="bg-gradient-to-r from-primary to-purple-400 h-2.5 rounded-full transition-all duration-500" style="width: 25%"></div>
+</div>
+</div>
+</div>
+</div>
+
+<!-- Achievement Badges -->
+<div class="rounded-xl border border-border-dark bg-surface-dark p-6">
+<h2 class="text-xl font-bold text-text-primary-dark mb-4">Achievement Badges</h2>
+<div class="grid grid-cols-4 gap-3">
+<div class="flex flex-col items-center p-3 rounded-lg bg-gradient-to-br from-primary/20 to-purple-500/20 border border-primary/30">
+<span class="material-symbols-outlined text-3xl text-primary mb-1">verified</span>
+<span class="text-xs text-center text-text-primary-dark font-medium">Quantum Novice</span>
+</div>
+<div class="flex flex-col items-center p-3 rounded-lg bg-gradient-to-br from-primary/20 to-purple-500/20 border border-primary/30">
+<span class="material-symbols-outlined text-3xl text-primary mb-1">emoji_events</span>
+<span class="text-xs text-center text-text-primary-dark font-medium">First Circuit</span>
+</div>
+<div class="flex flex-col items-center p-3 rounded-lg bg-gradient-to-br from-primary/20 to-purple-500/20 border border-primary/30">
+<span class="material-symbols-outlined text-3xl text-primary mb-1">workspace_premium</span>
+<span class="text-xs text-center text-text-primary-dark font-medium">7-Day Streak</span>
+</div>
+<div class="flex flex-col items-center p-3 rounded-lg bg-panel-dark/50 border border-border-dark opacity-40">
+<span class="material-symbols-outlined text-3xl text-text-secondary-dark mb-1">military_tech</span>
+<span class="text-xs text-center text-text-secondary-dark">Algorithm Master</span>
+</div>
+<div class="flex flex-col items-center p-3 rounded-lg bg-panel-dark/50 border border-border-dark opacity-40">
+<span class="material-symbols-outlined text-3xl text-text-secondary-dark mb-1">stars</span>
+<span class="text-xs text-center text-text-secondary-dark">100 Exercises</span>
+</div>
+<div class="flex flex-col items-center p-3 rounded-lg bg-panel-dark/50 border border-border-dark opacity-40">
+<span class="material-symbols-outlined text-3xl text-text-secondary-dark mb-1">psychology</span>
+<span class="text-xs text-center text-text-secondary-dark">Theory Expert</span>
+</div>
+<div class="flex flex-col items-center p-3 rounded-lg bg-panel-dark/50 border border-border-dark opacity-40">
+<span class="material-symbols-outlined text-3xl text-text-secondary-dark mb-1">groups</span>
+<span class="text-xs text-center text-text-secondary-dark">Community Helper</span>
+</div>
+<div class="flex flex-col items-center p-3 rounded-lg bg-panel-dark/50 border border-border-dark opacity-40">
+<span class="material-symbols-outlined text-3xl text-text-secondary-dark mb-1">school</span>
+<span class="text-xs text-center text-text-secondary-dark">PhD Level</span>
+</div>
+</div>
+</div>
+</div>
+
+<!-- Sidebar Column -->
+<div class="lg:col-span-1">
+<!-- Quick Reference -->
+<div class="mb-6 rounded-xl border border-border-dark bg-surface-dark p-4">
+<h3 class="text-lg font-bold text-text-primary-dark mb-3 flex items-center gap-2">
+<span class="material-symbols-outlined text-primary">menu_book</span>
+Quick Reference
+</h3>
+<div class="space-y-2">
+<a href="#" class="flex items-center gap-2 p-2 rounded hover:bg-panel-dark transition-colors text-sm">
+<span class="material-symbols-outlined text-base text-primary">book</span>
+<span class="text-text-primary-dark">Glossary</span>
+</a>
+<a href="#" class="flex items-center gap-2 p-2 rounded hover:bg-panel-dark transition-colors text-sm">
+<span class="material-symbols-outlined text-base text-primary">calculate</span>
+<span class="text-text-primary-dark">Formula Sheet</span>
+</a>
+<a href="#" class="flex items-center gap-2 p-2 rounded hover:bg-panel-dark transition-colors text-sm">
+<span class="material-symbols-outlined text-base text-primary">article</span>
+<span class="text-text-primary-dark">Recommended Papers</span>
+</a>
+<a href="#" class="flex items-center gap-2 p-2 rounded hover:bg-panel-dark transition-colors text-sm">
+<span class="material-symbols-outlined text-base text-primary">library_books</span>
+<span class="text-text-primary-dark">Textbook References</span>
+</a>
+</div>
+</div>
+
+<!-- Community & Peer Learning -->
+<div class="mb-6 rounded-xl border border-border-dark bg-surface-dark p-4">
+<h3 class="text-lg font-bold text-text-primary-dark mb-3 flex items-center gap-2">
+<span class="material-symbols-outlined text-primary">forum</span>
+Community
+</h3>
+<div class="space-y-3">
+<a href="#" class="block p-3 rounded-lg bg-panel-dark hover:bg-border-dark transition-colors">
+<div class="flex items-start gap-2">
+<span class="material-symbols-outlined text-primary text-base">chat</span>
+<div class="flex-1 min-w-0">
+<p class="text-sm font-medium text-text-primary-dark">Discussion Forums</p>
+<p class="text-xs text-text-secondary-dark mt-0.5">234 active threads</p>
+</div>
+</div>
+</a>
+<a href="#" class="block p-3 rounded-lg bg-panel-dark hover:bg-border-dark transition-colors">
+<div class="flex items-start gap-2">
+<span class="material-symbols-outlined text-primary text-base">share</span>
+<div class="flex-1 min-w-0">
+<p class="text-sm font-medium text-text-primary-dark">Shared Solutions</p>
+<p class="text-xs text-text-secondary-dark mt-0.5">Browse peer code</p>
+</div>
+</div>
+</a>
+<a href="#" class="block p-3 rounded-lg bg-panel-dark hover:bg-border-dark transition-colors">
+<div class="flex items-start gap-2">
+<span class="material-symbols-outlined text-primary text-base">groups</span>
+<div class="flex-1 min-w-0">
+<p class="text-sm font-medium text-text-primary-dark">Study Groups</p>
+<p class="text-xs text-text-secondary-dark mt-0.5">Join or create groups</p>
+</div>
+</div>
+</a>
+</div>
+</div>
+
+<!-- Leaderboard -->
+<div class="rounded-xl border border-border-dark bg-surface-dark p-4">
+<h3 class="text-lg font-bold text-text-primary-dark mb-3 flex items-center gap-2">
+<span class="material-symbols-outlined text-primary">leaderboard</span>
+Weekly Leaderboard
+</h3>
+<div class="space-y-2">
+<div class="flex items-center gap-3 p-2 rounded bg-primary/10">
+<div class="flex items-center justify-center w-6 h-6 rounded-full bg-primary text-white text-xs font-bold">1</div>
+<div class="flex-1 min-w-0">
+<p class="text-sm font-medium text-text-primary-dark truncate">QuantumExplorer</p>
+<p class="text-xs text-text-secondary-dark">890 XP</p>
+</div>
+</div>
+<div class="flex items-center gap-3 p-2 rounded">
+<div class="flex items-center justify-center w-6 h-6 rounded-full bg-text-secondary-dark text-background-dark text-xs font-bold">2</div>
+<div class="flex-1 min-w-0">
+<p class="text-sm font-medium text-text-primary-dark truncate">AliceInQuantum</p>
+<p class="text-xs text-text-secondary-dark">745 XP</p>
+</div>
+</div>
+<div class="flex items-center gap-3 p-2 rounded">
+<div class="flex items-center justify-center w-6 h-6 rounded-full bg-text-secondary-dark text-background-dark text-xs font-bold">3</div>
+<div class="flex-1 min-w-0">
+<p class="text-sm font-medium text-text-primary-dark truncate">SchrödingerFan</p>
+<p class="text-xs text-text-secondary-dark">680 XP</p>
+</div>
+</div>
+<div class="flex items-center gap-3 p-2 rounded bg-primary/5">
+<div class="flex items-center justify-center w-6 h-6 rounded-full bg-border-dark text-text-primary-dark text-xs font-bold">8</div>
+<div class="flex-1 min-w-0">
+<p class="text-sm font-medium text-primary truncate">You</p>
+<p class="text-xs text-text-secondary-dark">450 XP</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+
+<!-- Personalized Learning Path Dashboard -->
+<div class="rounded-xl border border-primary/30 bg-gradient-to-br from-primary/5 to-purple-500/5 p-6">
+<h2 class="text-xl font-bold text-text-primary-dark mb-4">Your Learning Path</h2>
+<div class="grid grid-cols-1 md:grid-cols-3 gap-3 mb-4">
+<div class="bg-surface-dark rounded-lg p-3 border border-border-dark">
+<div class="text-xs text-text-secondary-dark mb-1">Current Module</div>
+<div class="text-base font-bold text-primary">Quantum Gates & Circuits</div>
+<div class="text-xs text-text-secondary-dark mt-0.5">Module 2 of 5 • 75% complete</div>
+</div>
+<div class="bg-surface-dark rounded-lg p-3 border border-border-dark">
+<div class="text-xs text-text-secondary-dark mb-1">Suggested Next</div>
+<div class="text-base font-bold text-text-primary-dark">Quantum Algorithms</div>
+<div class="text-xs text-text-secondary-dark mt-0.5">Est. 2.5 hours</div>
+</div>
+<div class="bg-surface-dark rounded-lg p-3 border border-border-dark">
+<div class="text-xs text-text-secondary-dark mb-1">Time to Completion</div>
+<div class="text-base font-bold text-text-primary-dark">~3.5 hours</div>
+<div class="text-xs text-text-secondary-dark mt-0.5">Based on your pace</div>
+</div>
+</div>
+<button class="w-full rounded-lg bg-primary px-4 py-2.5 font-semibold text-white transition-colors hover:bg-primary/90">
+Continue Learning
+</button>
+</div>
+
+<!-- Comprehensive Curriculum Modules -->
+<div class="space-y-3">
+<h2 class="text-xl font-bold text-text-primary-dark mb-4">Curriculum Modules</h2>
+
+<!-- Module 1: Quantum Fundamentals -->
+<div class="rounded-lg border border-primary/50 bg-surface-dark p-4">
+<div class="flex items-center justify-between mb-2">
+<div class="flex items-center gap-3">
+<div class="flex h-10 w-10 items-center justify-center rounded-lg bg-primary text-white">
+<span class="material-symbols-outlined text-xl">looks_one</span>
+</div>
+<div>
+<h3 class="text-base font-bold text-text-primary-dark">Quantum Fundamentals</h3>
+<p class="text-xs text-text-secondary-dark">Qubits, superposition, and measurement</p>
+</div>
+</div>
+<span class="text-xs font-semibold text-primary">✓ Complete</span>
+</div>
+</div>
+
+<!-- Module 2: Quantum Gates & Circuits -->
+<div class="rounded-lg border border-primary bg-surface-dark p-4">
+<div class="flex items-center justify-between mb-3">
+<div class="flex items-center gap-3">
+<div class="flex h-10 w-10 items-center justify-center rounded-lg bg-primary text-white">
+<span class="material-symbols-outlined text-xl">looks_two</span>
+</div>
+<div>
+<h3 class="text-base font-bold text-text-primary-dark">Quantum Gates & Circuits</h3>
+<p class="text-xs text-text-secondary-dark">Building blocks of quantum computation</p>
+</div>
+</div>
+<div class="text-right">
+<span class="text-xs font-semibold text-primary">75% Complete</span>
+<div class="w-20 h-1.5 bg-border-dark rounded-full mt-1">
+<div class="h-1.5 bg-primary rounded-full" style="width: 75%"></div>
+</div>
+</div>
+</div>
+<div class="space-y-1.5">
+<div class="flex items-center gap-2 p-2 rounded bg-panel-dark/50 text-xs">
+<span class="material-symbols-outlined text-primary text-sm">check_circle</span>
+<span class="text-text-primary-dark flex-1">Single-Qubit Gates</span>
+<span class="text-text-secondary-dark">30 min</span>
+</div>
+<div class="flex items-center gap-2 p-2 rounded bg-panel-dark/50 text-xs">
+<span class="material-symbols-outlined text-primary text-sm">check_circle</span>
+<span class="text-text-primary-dark flex-1">Multi-Qubit Gates</span>
+<span class="text-text-secondary-dark">35 min</span>
+</div>
+<div class="flex items-center gap-2 p-2 rounded bg-primary/20 border border-primary text-xs">
+<span class="material-symbols-outlined text-primary text-sm">play_circle</span>
+<span class="text-text-primary-dark flex-1 font-semibold">Circuit Builder Practice</span>
+<span class="text-primary">Active</span>
+</div>
+</div>
+</div>
+
+<!-- Module 3: Quantum Algorithms -->
+<div class="rounded-lg border border-border-dark bg-surface-dark/50 p-4 opacity-70">
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-3">
+<div class="flex h-10 w-10 items-center justify-center rounded-lg bg-border-dark text-text-secondary-dark">
+<span class="material-symbols-outlined text-xl">looks_3</span>
+</div>
+<div>
+<h3 class="text-base font-bold text-text-primary-dark">Quantum Algorithms</h3>
+<p class="text-xs text-text-secondary-dark">Grover's, Shor's, and quantum speedups</p>
+</div>
+</div>
+<span class="px-2 py-1 rounded-full bg-border-dark text-xs font-semibold text-text-secondary-dark">Locked</span>
+</div>
+</div>
+
+<!-- Module 4: Quantum Machine Learning -->
+<div class="rounded-lg border border-border-dark bg-surface-dark/50 p-4 opacity-70">
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-3">
+<div class="flex h-10 w-10 items-center justify-center rounded-lg bg-border-dark text-text-secondary-dark">
+<span class="material-symbols-outlined text-xl">looks_4</span>
+</div>
+<div>
+<h3 class="text-base font-bold text-text-primary-dark">Quantum Machine Learning</h3>
+<p class="text-xs text-text-secondary-dark">QML algorithms and applications</p>
+</div>
+</div>
+<span class="px-2 py-1 rounded-full bg-border-dark text-xs font-semibold text-text-secondary-dark">Locked</span>
+</div>
+</div>
+
+<!-- Module 5: Error Correction -->
+<div class="rounded-lg border border-border-dark bg-surface-dark/50 p-4 opacity-70">
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-3">
+<div class="flex h-10 w-10 items-center justify-center rounded-lg bg-border-dark text-text-secondary-dark">
+<span class="material-symbols-outlined text-xl">looks_5</span>
+</div>
+<div>
+<h3 class="text-base font-bold text-text-primary-dark">Error Correction Basics</h3>
+<p class="text-xs text-text-secondary-dark">Protecting quantum information from noise</p>
+</div>
+</div>
+<span class="px-2 py-1 rounded-full bg-border-dark text-xs font-semibold text-text-secondary-dark">Locked</span>
+</div>
+</div>
+</div>
+
+<!-- Hands-on Integrated Exercises -->
+<div class="rounded-xl border border-primary/50 bg-gradient-to-br from-primary/10 to-purple-500/10 p-5">
+<div class="flex items-center gap-3 mb-4">
+<div class="flex h-10 w-10 items-center justify-center rounded-lg bg-primary/20">
+<span class="material-symbols-outlined text-2xl text-primary">code</span>
+</div>
+<div>
+<h3 class="text-lg font-bold text-text-primary-dark">Hands-on Practice</h3>
+<p class="text-xs text-text-secondary-dark">Apply what you've learned in the IDE</p>
+</div>
+</div>
+<div class="grid grid-cols-2 gap-2 mb-3">
+<a href="quantum-ide-circuit.html" class="flex items-center gap-2 p-3 rounded-lg bg-surface-dark hover:bg-panel-dark transition-colors border border-border-dark">
+<span class="material-symbols-outlined text-primary text-xl">hub</span>
+<div>
+<p class="text-sm font-semibold text-text-primary-dark">Circuit Builder</p>
+<p class="text-xs text-text-secondary-dark">Build circuits</p>
+</div>
+</a>
+<a href="quantum-ide-jupyter.html" class="flex items-center gap-2 p-3 rounded-lg bg-surface-dark hover:bg-panel-dark transition-colors border border-border-dark">
+<span class="material-symbols-outlined text-primary text-xl">description</span>
+<div>
+<p class="text-sm font-semibold text-text-primary-dark">Jupyter</p>
+<p class="text-xs text-text-secondary-dark">Run programs</p>
+</div>
+</a>
+</div>
+<button class="w-full rounded-lg bg-primary px-4 py-2 text-sm font-semibold text-white transition-colors hover:bg-primary/90">
+Start Practice Exercise
+</button>
 </div>
 </div>
 </main>
 <aside id="aiAssistant" class="hidden w-96 flex-shrink-0 border-l border-solid border-border-dark bg-panel-dark p-4 flex flex-col h-full">
 <div class="flex items-center justify-between pb-4">
-<h3 class="text-lg font-bold">AI Assistant</h3>
+<h3 class="text-lg font-bold">AI Tutor</h3>
 <button id="aiCloseButton" class="text-text-secondary-dark hover:text-text-primary-dark">
 <span class="material-symbols-outlined">close</span>
 </button>
@@ -376,12 +749,59 @@
 <span class="material-symbols-outlined text-lg">auto_awesome</span>
 </div>
 <div class="rounded-lg rounded-tl-none bg-surface-dark p-3 text-sm">
-<p>Hello! How can I help you explore the world of quantum computing today?</p>
+<p>I'm your adaptive quantum tutor! I can help you with:</p>
+<ul class="mt-2 ml-4 space-y-1 text-xs text-text-secondary-dark list-disc">
+<li>Interactive visualizations (Bloch spheres, state animations)</li>
+<li>Embedded quizzes and exercises</li>
+<li>Immediate feedback on problems</li>
+<li>Personalized pacing based on your performance</li>
+</ul>
 </div>
 </div>
+
+<!-- Interactive Visualization Example -->
+<div class="flex gap-3">
+<div class="flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-full bg-primary">
+<span class="material-symbols-outlined text-lg">auto_awesome</span>
+</div>
+<div class="rounded-lg rounded-tl-none bg-surface-dark p-3 text-sm">
+<p class="mb-2">Let me show you how a Hadamard gate affects a qubit:</p>
+<div class="bg-panel-dark rounded p-3 mb-2">
+<canvas id="miniBlochSphere" width="180" height="180" class="w-full"></canvas>
+</div>
+<p class="text-xs text-text-secondary-dark">The qubit transitions from |0⟩ to a superposition state (|+⟩)</p>
+</div>
+</div>
+
+<!-- Embedded Quiz Example -->
+<div class="flex gap-3">
+<div class="flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-full bg-primary">
+<span class="material-symbols-outlined text-lg">auto_awesome</span>
+</div>
+<div class="rounded-lg rounded-tl-none bg-surface-dark p-3 text-sm">
+<p class="font-semibold mb-2">Quick Check:</p>
+<p class="mb-3">What does the X gate do to a qubit in state |0⟩?</p>
+<div class="space-y-2">
+<button class="w-full text-left p-2 rounded bg-panel-dark hover:bg-border-dark transition-colors text-xs">
+A) Puts it in superposition
+</button>
+<button class="w-full text-left p-2 rounded bg-panel-dark hover:bg-border-dark transition-colors text-xs">
+B) Flips it to |1⟩
+</button>
+<button class="w-full text-left p-2 rounded bg-panel-dark hover:bg-border-dark transition-colors text-xs">
+C) Measures it
+</button>
+<button class="w-full text-left p-2 rounded bg-panel-dark hover:bg-border-dark transition-colors text-xs">
+D) Does nothing
+</button>
+</div>
+</div>
+</div>
+
 <div class="flex flex-col items-start gap-2 pl-11">
-<button class="text-sm text-primary/80 hover:text-primary border border-primary/40 hover:border-primary/80 px-3 py-1.5 rounded-full transition-colors">"I'm new to quantum computing"</button>
-<button class="text-sm text-primary/80 hover:text-primary border border-primary/40 hover:border-primary/80 px-3 py-1.5 rounded-full transition-colors">"Explain quantum entanglement"</button>
+<button class="text-sm text-primary/80 hover:text-primary border border-primary/40 hover:border-primary/80 px-3 py-1.5 rounded-full transition-colors">"Explain superposition with animation"</button>
+<button class="text-sm text-primary/80 hover:text-primary border border-primary/40 hover:border-primary/80 px-3 py-1.5 rounded-full transition-colors">"Give me a practice problem"</button>
+<button class="text-sm text-primary/80 hover:text-primary border border-primary/40 hover:border-primary/80 px-3 py-1.5 rounded-full transition-colors">"Adjust difficulty level"</button>
 </div>
 </div>
 <div class="mt-4 pt-4 border-t border-solid border-border-dark">
@@ -443,6 +863,88 @@
   fileMenu.addEventListener('click', function(e) {
     e.stopPropagation();
   });
+
+  // Draw mini Bloch sphere for AI Tutor visualization
+  function drawMiniBlochSphere() {
+    const canvas = document.getElementById('miniBlochSphere');
+    if (!canvas) return;
+
+    const ctx = canvas.getContext('2d');
+    const centerX = canvas.width / 2;
+    const centerY = canvas.height / 2;
+    const radius = 60;
+
+    // Clear canvas
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+    // Draw sphere outline
+    ctx.beginPath();
+    ctx.arc(centerX, centerY, radius, 0, 2 * Math.PI);
+    ctx.strokeStyle = '#2d2438';
+    ctx.lineWidth = 2;
+    ctx.stroke();
+
+    // Draw axes
+    ctx.strokeStyle = '#8a8aab';
+    ctx.lineWidth = 1;
+
+    // Z-axis
+    ctx.beginPath();
+    ctx.moveTo(centerX, centerY - radius - 15);
+    ctx.lineTo(centerX, centerY + radius + 15);
+    ctx.stroke();
+
+    // X-axis
+    ctx.beginPath();
+    ctx.moveTo(centerX - radius - 15, centerY);
+    ctx.lineTo(centerX + radius + 15, centerY);
+    ctx.stroke();
+
+    // Labels
+    ctx.fillStyle = '#e0e0ff';
+    ctx.font = '12px Space Grotesk';
+    ctx.textAlign = 'center';
+    ctx.fillText('|0⟩', centerX, centerY - radius - 20);
+    ctx.fillText('|1⟩', centerX, centerY + radius + 28);
+    ctx.fillText('X', centerX + radius + 20, centerY + 4);
+
+    // Draw state vector (pointing to |+⟩ state)
+    const theta = Math.PI / 2; // 90 degrees
+    const phi = 0;
+    const x = radius * Math.sin(theta) * Math.cos(phi);
+    const z = radius * Math.cos(theta);
+
+    ctx.beginPath();
+    ctx.moveTo(centerX, centerY);
+    ctx.lineTo(centerX + x, centerY - z);
+    ctx.strokeStyle = '#9511d4';
+    ctx.lineWidth = 3;
+    ctx.stroke();
+
+    // Draw state point
+    ctx.beginPath();
+    ctx.arc(centerX + x, centerY - z, 5, 0, 2 * Math.PI);
+    ctx.fillStyle = '#9511d4';
+    ctx.fill();
+
+    // Label the state
+    ctx.fillStyle = '#e0e0ff';
+    ctx.font = 'bold 11px Space Grotesk';
+    ctx.fillText('|+⟩', centerX + x + 15, centerY - z);
+  }
+
+  // Draw mini Bloch sphere when AI assistant is opened
+  const aiToggleButton = document.getElementById('aiToggleButton');
+  const originalToggleHandler = aiToggleButton.onclick;
+
+  aiToggleButton.addEventListener('click', function() {
+    setTimeout(drawMiniBlochSphere, 100);
+  });
+
+  // Initial draw if already visible
+  if (!document.getElementById('aiAssistant').classList.contains('hidden')) {
+    drawMiniBlochSphere();
+  }
 </script>
 
 </body></html>
